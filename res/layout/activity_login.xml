@@ -1,0 +1,297 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:gravity="center"
+    android:orientation="vertical" >
+
+    <Button
+        android:id="@+id/button1"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:onClick="saveLog"
+        
+        android:text="保存日志" />
+
+    <RelativeLayout
+        android:layout_width="306.75dp"
+        android:layout_height="wrap_content"
+        android:orientation="vertical" >
+
+        <ScrollView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" >
+
+            <LinearLayout
+                android:id="@+id/llTextContainer"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:focusable="true"
+                android:focusableInTouchMode="true"
+                android:orientation="vertical"
+                android:paddingLeft="8dp"
+                android:paddingRight="8dp" >
+
+                <RelativeLayout
+                    android:id="@+id/RelativeLayoutServerIP"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_horizontal"
+                    android:layout_marginBottom="10dp"
+                    android:background="@drawable/te_mobile_login_input_line" >
+
+                    <View
+                        android:layout_width="18dp"
+                        android:layout_height="18dp"
+                        android:layout_centerVertical="true"
+                        android:layout_marginLeft="15dp"
+                        android:background="@drawable/te_mobile_login_input_img_service" />
+
+                    <EditText
+                        android:id="@+id/et_server_ip"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_centerVertical="true"
+                        android:layout_marginRight="40dp"
+                        android:background="#00000000"
+                        android:hint="@string/serviceaddr"
+                        android:inputType="textVisiblePassword"
+                        android:maxLength="101"
+                        android:paddingLeft="41dp"
+                        android:singleLine="true"
+                        android:text=""
+                        android:textAppearance="?android:attr/textAppearanceMedium"
+                        android:textColor="#000000"
+                        android:textColorHint="#7d9bc4"
+                        android:textCursorDrawable="@drawable/tp_edit_text_cursor"
+                        android:textSize="13sp" />
+                </RelativeLayout>
+
+                <RelativeLayout
+                    android:id="@+id/RelativeLayout1"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_horizontal"
+                    android:background="@drawable/te_mobile_login_input_line" >
+
+                    <View
+                        android:layout_width="18dp"
+                        android:layout_height="18dp"
+                        android:layout_centerVertical="true"
+                        android:layout_marginLeft="15dp"
+                        android:background="@drawable/te_mobile_login_input_img_account" />
+
+                    <EditText
+                        android:id="@+id/et_username"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_centerVertical="true"
+                        android:layout_marginRight="40dp"
+                        android:background="#00000000"
+                        android:hint="@string/account"
+                        android:inputType="textVisiblePassword"
+                        android:maxLength="320"
+                        android:paddingLeft="41dp"
+                        android:singleLine="true"
+                        android:text=""
+                        android:textAppearance="?android:attr/textAppearanceMedium"
+                        android:textColor="#000000"
+                        android:textColorHint="#7d9bc4"
+                        android:textCursorDrawable="@drawable/tp_edit_text_cursor"
+                        android:textSize="13sp" />
+                </RelativeLayout>
+
+                <RelativeLayout
+                    android:id="@+id/RelativeLayout01"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_horizontal"
+                    android:layout_marginBottom="10dp"
+                    android:layout_marginTop="10dp"
+                    android:background="@drawable/te_mobile_login_input_line" >
+
+                    <View
+                        android:layout_width="18dp"
+                        android:layout_height="18dp"
+                        android:layout_centerVertical="true"
+                        android:layout_marginLeft="15dp"
+                        android:background="@drawable/te_mobile_login_input_img_pass" />
+
+                    <EditText
+                        android:id="@+id/et_password"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_centerVertical="true"
+                        android:layout_marginRight="40dp"
+                        android:background="#00000000"
+                        android:hint="@string/iphonepassword"
+                        android:imeOptions="actionDone"
+                        android:inputType="textPassword"
+                        android:maxLength="320"
+                        android:paddingLeft="41dp"
+                        android:singleLine="true"
+                        android:text=""
+                        android:textAppearance="?android:attr/textAppearanceMedium"
+                        android:textColor="#000000"
+                        android:textColorHint="#7d9bc4"
+                        android:textCursorDrawable="@drawable/tp_edit_text_cursor"
+                        android:textSize="13sp" >
+                    </EditText>
+                </RelativeLayout>
+
+                <TextView 
+                    android:id="@+id/tv_login_more"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="more"
+                    android:clickable="true"
+                    android:onClick=""/>
+                <LinearLayout
+                    android:id="@+id/linearlayout_login_more"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:visibility="gone"
+                    android:orientation="vertical" >
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_centerVertical="true"
+                        android:layout_marginLeft="15dp"
+                        android:layout_marginRight="15dp"
+                        android:text="port:" />
+
+                    <RelativeLayout
+                        android:id="@+id/RelativeLayoutPort"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center_horizontal"
+                        android:layout_marginBottom="10dp"
+                        android:background="@drawable/te_mobile_login_input_line" >
+
+                        <View
+                            android:layout_width="18dp"
+                            android:layout_height="18dp"
+                            android:layout_centerVertical="true"
+                            android:layout_marginLeft="15dp"
+                            android:background="@drawable/te_mobile_login_input_img_service" />
+
+                        <EditText
+                            android:id="@+id/et_server_port"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_centerVertical="true"
+                            android:layout_marginRight="40dp"
+                            android:background="#00000000"
+                            android:hint="请输端口号"
+                            android:inputType="textVisiblePassword"
+                            android:maxLength="101"
+                            android:paddingLeft="41dp"
+                            android:singleLine="true"
+                            android:text=""
+                            android:textAppearance="?android:attr/textAppearanceMedium"
+                            android:textColor="#000000"
+                            android:textColorHint="#7d9bc4"
+                            android:textCursorDrawable="@drawable/tp_edit_text_cursor"
+                            android:textSize="13sp" />
+                    </RelativeLayout>
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_centerVertical="true"
+                        android:layout_marginLeft="15dp"
+                        android:layout_marginRight="15dp"
+                        android:text="sipURI:" />
+
+                    <RelativeLayout
+                        android:id="@+id/RelativeLayoutSipServerIP"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center_horizontal"
+                        android:layout_marginBottom="10dp"
+                        android:background="@drawable/te_mobile_login_input_line" >
+
+                        <View
+                            android:layout_width="18dp"
+                            android:layout_height="18dp"
+                            android:layout_centerVertical="true"
+                            android:layout_marginLeft="15dp"
+                            android:background="@drawable/te_mobile_login_input_img_service" />
+
+                        <EditText
+                            android:id="@+id/et_sip_server_ip"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_centerVertical="true"
+                            android:layout_marginRight="40dp"
+                            android:background="#00000000"
+                            android:hint="请输入sipURI"
+                            android:inputType="textVisiblePassword"
+                            android:maxLength="101"
+                            android:paddingLeft="41dp"
+                            android:singleLine="true"
+                            android:text=""
+                            android:textAppearance="?android:attr/textAppearanceMedium"
+                            android:textColor="#000000"
+                            android:textColorHint="#7d9bc4"
+                            android:textCursorDrawable="@drawable/tp_edit_text_cursor"
+                            android:textSize="13sp" />
+                    </RelativeLayout>
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_centerVertical="true"
+                        android:layout_marginLeft="15dp"
+                        android:layout_marginRight="15dp"
+                        android:text="licenseServer:" />
+
+                    <RelativeLayout
+                        android:id="@+id/RelativeLayoutLicenseServer"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center_horizontal"
+                        android:layout_marginBottom="10dp"
+                        android:background="@drawable/te_mobile_login_input_line" >
+
+                        <View
+                            android:layout_width="18dp"
+                            android:layout_height="18dp"
+                            android:layout_centerVertical="true"
+                            android:layout_marginLeft="15dp"
+                            android:background="@drawable/te_mobile_login_input_img_service" />
+
+                        <EditText
+                            android:id="@+id/et_license_server"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_centerVertical="true"
+                            android:layout_marginRight="40dp"
+                            android:background="#00000000"
+                            android:hint="license服务器地址"
+                            android:inputType="textVisiblePassword"
+                            android:maxLength="101"
+                            android:paddingLeft="41dp"
+                            android:singleLine="true"
+                            android:text=""
+                            android:textAppearance="?android:attr/textAppearanceMedium"
+                            android:textColor="#000000"
+                            android:textColorHint="#7d9bc4"
+                            android:textCursorDrawable="@drawable/tp_edit_text_cursor"
+                            android:textSize="13sp" />
+                    </RelativeLayout>
+                </LinearLayout>
+
+                <Button
+                    android:id="@+id/btn_login"
+                    android:layout_width="fill_parent"
+                    android:layout_height="43dp"
+                    android:layout_marginTop="22dp"
+                    android:text="登录"
+                    android:textSize="15sp" />
+            </LinearLayout>
+        </ScrollView>
+    </RelativeLayout>
+
+</LinearLayout>

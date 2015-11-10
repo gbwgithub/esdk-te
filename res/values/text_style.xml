@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <style name="text_style_12px_8">
+        <item name="android:textSize">8sp</item>
+    </style>
+    <style name="text_style_14px_10">
+        <item name="android:textSize">10sp</item>
+    </style>
+    <style name="text_style_18px_13">
+        <item name="android:textSize">13sp</item>
+    </style>
+    <style name="text_style_20px_14">
+        <item name="android:textSize">14sp</item>
+    </style>
+    <style name="text_style_22px_15">
+        <item name="android:textSize">15sp</item>
+    </style>
+    <style name="text_style_24px_16">
+        <item name="android:textSize">16sp</item>
+    </style>
+    <style name="text_style_36px_24">
+        <item name="android:textSize">24sp</item>
+    </style>
+    <style name="text_style_48px_32">
+        <item name="android:textSize">32sp</item>
+    </style>
+    <style name="text_style_52px_35">
+        <item name="android:textSize">35sp</item>
+    </style>
+
+</resources>

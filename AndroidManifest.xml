@@ -1,0 +1,134 @@
+<?xml version="1.0" encoding="utf-8"?>
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    package="com.huawei.te.example"
+    android:versionCode="1"
+    android:versionName="1.0" >
+
+    <uses-sdk
+        android:minSdkVersion="17"
+        android:targetSdkVersion="21" />
+
+    <permission
+        android:name="com.huawei.TEMobile"
+        android:protectionLevel="signature" >
+    </permission>
+
+    <uses-permission android:name="com.huawei.TEMobile" />
+    <uses-permission android:name="android.permission.ACCESS_WIFI_STATE" >
+    </uses-permission>
+    <uses-permission android:name="android.permission.RECORD_AUDIO" >
+    </uses-permission>
+    <uses-permission android:name="android.permission.INTERNET" >
+    </uses-permission>
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" >
+    </uses-permission>
+    <uses-permission android:name="android.permission.MODIFY_AUDIO_SETTINGS" >
+    </uses-permission>
+    <uses-permission android:name="android.permission.STATUS_BAR" >
+    </uses-permission>
+    <uses-permission android:name="android.permission.VIBRATE" >
+    </uses-permission>
+    <uses-permission android:name="android.permission.INSTALL_PACKAGES" >
+    </uses-permission>
+    <uses-permission android:name="android.permission.DELETE_PACKAGES" >
+    </uses-permission>
+    <uses-permission android:name="android.permission.GET_TASKS" >
+    </uses-permission>
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" >
+    </uses-permission>
+    <uses-permission android:name="android.permission.RESTART_PACKAGES" >
+    </uses-permission>
+    <uses-permission android:name="android.permission.WAKE_LOCK" >
+    </uses-permission>
+    <uses-permission android:name="android.permission.DEVICE_POWER" >
+    </uses-permission>
+    <uses-permission android:name="android.permission.BROADCAST_STICKY" >
+    </uses-permission>
+    <uses-permission android:name="android.permission.BLUETOOTH" >
+    </uses-permission>
+    <uses-permission android:name="android.permission.READ_PHONE_STATE" >
+    </uses-permission>
+    <uses-permission android:name="android.permission.PROCESS_OUTGOING_CALLS" >
+    </uses-permission>
+    <uses-permission android:name="android.permission.SYSTEM_ALERT_WINDOW" />
+    <uses-permission android:name="android.permission.CHANGE_WIFI_STATE" >
+    </uses-permission>
+    <uses-permission android:name="android.permission.CONTROL_LOCATION_UPDATES" >
+    </uses-permission>
+    <uses-permission android:name="android.permission.CAMERA" >
+    </uses-permission>
+
+    <uses-feature
+        android:name="android.hardware.camera"
+        android:required="false" />
+    <uses-feature
+        android:name="android.hardware.camera.autofocus"
+        android:required="false" />
+
+    <uses-permission android:name="android.permission.ACCESS_SURFACE_FLINGER" />
+    <uses-permission android:name="android.permission.CHANGE_CONFIGURATION" />
+    <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED" />
+    <uses-permission android:name="android.permission.BATTERY_STATS" />
+
+    <application
+        android:name="com.huawei.te.example.App"
+        android:allowBackup="false"
+        android:icon="@drawable/te_logo_app"
+        android:label="@string/app_name"
+        android:theme="@style/AppTheme"
+        android:windowSoftInputMode="adjustResize|stateAlwaysHidden" >
+        <activity
+            android:name=".activity.LoginActivity"
+            android:label="@string/app_name"
+            android:screenOrientation="landscape" >
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
+        <activity
+            android:name=".activity.CallActivity"
+            android:label="@string/app_name"
+            android:screenOrientation="landscape" >
+        </activity>
+        <activity
+            android:name=".activity.CallComingActivity"
+            android:label="@string/app_name"
+            android:screenOrientation="landscape" >
+        </activity>
+        <activity
+            android:name=".activity.VideoInfoActivity"
+            android:configChanges="locale|keyboardHidden|keyboard"
+            android:exported="false"
+            android:launchMode="singleTop"
+            android:screenOrientation="unspecified"
+            android:theme="@android:style/Theme.Translucent"
+            android:windowSoftInputMode="adjustResize|stateAlwaysHidden" >
+        </activity>
+
+        <service android:name="com.huawei.service.eSpaceService" />
+        <service android:name="com.huawei.esdk.te.LocalHideRenderServer" />
+
+        <receiver android:name="com.huawei.app.application.StartUpReceiver" >
+            <intent-filter>
+                <action android:name="com.huawei.TEMobile.startup" />
+
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </receiver>
+        <receiver
+            android:name="com.huawei.app.receiver.EnterPriseSearchReceiver"
+            android:permission="com.huawei.TE_Mobile" >
+            <intent-filter>
+                <action android:name="com.huawei.TEMobile.service.search" />
+            </intent-filter>
+        </receiver>
+        <receiver android:name="com.huawei.te.example.NetConnectStatus" >
+            <intent-filter>
+                <action android:name="android.net.conn.CONNECTIVITY_CHANGE" />
+            </intent-filter>
+        </receiver>
+    </application>
+
+</manifest>

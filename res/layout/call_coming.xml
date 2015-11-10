@@ -1,0 +1,137 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/callComing"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
+    android:background="#88000000"
+    android:gravity="center"
+    android:orientation="vertical"
+    android:tag="400" >
+
+    <RelativeLayout
+        android:id="@+id/call_coming_background"
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent"
+        android:orientation="vertical" >
+
+        <View
+            android:id="@+id/incoming_head_blank"
+            android:layout_width="match_parent"
+            android:layout_height="20dp"
+            android:layout_alignParentTop="true"
+            android:layout_marginTop="0dp" >
+        </View>
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_above="@+id/incoming_select_btn"
+            android:layout_below="@+id/incoming_head_blank"
+            android:layout_centerVertical="true"
+            android:gravity="center_vertical" >
+
+            <LinearLayout
+                android:id="@+id/img_incoming_view"
+                android:layout_width="fill_parent"
+                android:layout_height="211.333dp"
+                android:gravity="center_horizontal"
+                android:orientation="vertical" >
+
+                <RelativeLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="121.333dp" >
+
+                    <ImageView
+                        android:id="@+id/img_incoming"
+                        android:layout_width="121.333dp"
+                        android:layout_height="121.333dp"
+                        android:layout_centerHorizontal="true"
+                        android:background="@anim/te_pad_head_background_anim" />
+
+                    <ImageView
+                        android:id="@+id/img_incoming_head"
+                        android:layout_width="81.333dp"
+                        android:layout_height="81.333dp"
+                        android:layout_centerHorizontal="true"
+                        android:layout_marginTop="20dp" />
+                </RelativeLayout>
+
+                <TextView
+                    android:id="@+id/incoming_name"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentTop="true"
+                    android:layout_gravity="center_horizontal"
+                    android:layout_marginTop="12dp"
+                    android:maxWidth="500dp"
+                    android:text="sadasddsd"
+                    android:textColor="#ffffff"
+                    android:textSize="28sp" />
+
+                <TextView
+                    android:id="@+id/incoming_number"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="6dp"
+                    android:maxWidth="500dp"
+                    android:text="asdaadasd"
+                    android:textColor="#ffffff"
+                    android:textSize="14sp" />
+            </LinearLayout>
+        </RelativeLayout>
+
+        <LinearLayout
+            android:id="@+id/incoming_select_btn"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_alignParentBottom="true"
+            android:layout_gravity="center_horizontal"
+            android:layout_marginBottom="0dp"
+            android:gravity="center_horizontal"
+            android:orientation="vertical" >
+
+            <Button
+                android:id="@+id/accept"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="6.666dp"
+                android:layout_marginLeft="8dp"
+                android:layout_marginRight="8dp"
+                android:background="@drawable/te_phone_receive_btn"
+                android:focusable="false"
+                android:gravity="center"
+                android:text="视频接听"
+                android:textColor="#ffffff"
+                android:textSize="18sp" />
+
+            <Button
+                android:id="@+id/callaccept"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="6.666dp"
+                android:layout_marginLeft="8dp"
+                android:layout_marginRight="8dp"
+                android:background="@drawable/te_phone_receive_btn"
+                android:focusable="false"
+                android:gravity="center"
+                android:text="语音接听"
+                android:textColor="#ffffff"
+                android:textSize="18sp" />
+
+            <Button
+                android:id="@+id/refuse"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="10.666dp"
+                android:layout_marginLeft="8dp"
+                android:layout_marginRight="8dp"
+                android:background="@drawable/te_mobile_logout_btn"
+                android:focusable="false"
+                android:gravity="center"
+                android:text="拒绝"
+                android:textColor="#ffffff"
+                android:textSize="18sp" />
+        </LinearLayout>
+    </RelativeLayout>
+
+</LinearLayout>

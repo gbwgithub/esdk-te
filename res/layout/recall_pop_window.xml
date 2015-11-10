@@ -1,0 +1,166 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/pop"
+    android:layout_width="312dp"
+    android:layout_height="281.50dp"
+    android:layout_gravity="center"
+    android:orientation="vertical" >
+
+    <LinearLayout
+        android:layout_width="311dp"
+        android:layout_height="62.50dp"
+        android:layout_gravity="center"
+        android:background="@drawable/te_pad_dial_top"
+        android:orientation="vertical" >
+
+        <EditText
+            android:id="@+id/recallNum"
+            android:layout_width="280.50dp"
+            android:layout_height="44.50dp"
+            android:layout_marginLeft="15.75dp"
+            android:layout_marginTop="9dp"
+            android:layout_marginRight="15.75dp"
+            android:background="@drawable/translucent"
+            android:ellipsize="start"
+            android:gravity="left"
+            android:singleLine="true"
+            android:textColor="#ffffff"
+            android:textSize="30sp"
+            />
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_gravity="center"
+        android:orientation="vertical" >
+
+        <!-- 第一行 -->
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="54.50dp"
+            android:gravity="center"
+            android:orientation="horizontal" >
+
+            <Button
+                android:id="@+id/one"
+                android:layout_width="104dp"
+                android:layout_height="match_parent"
+                android:background="@drawable/te_pad_dial_01"
+                android:gravity="center" />
+
+            <Button
+                android:id="@+id/two"
+                android:layout_width="104dp"
+                android:layout_height="match_parent"
+                android:background="@drawable/te_pad_dial_02"
+                android:gravity="center" />
+
+            <Button
+                android:id="@+id/three"
+                android:layout_width="104dp"
+                android:layout_height="match_parent"
+                android:background="@drawable/te_pad_dial_03"
+                android:gravity="center" />
+        </LinearLayout>
+        <!-- end 第一行 -->
+
+
+        <!-- 第二行 -->
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="54.50dp"
+            android:gravity="center"
+            android:orientation="horizontal" >
+
+            <Button
+                android:id="@+id/four"
+                android:layout_width="104dp"
+                android:layout_height="match_parent"
+                android:background="@drawable/te_pad_dial_04"
+                android:gravity="center" />
+
+            <Button
+                android:id="@+id/five"
+                android:layout_width="104dp"
+                android:layout_height="match_parent"
+                android:background="@drawable/te_pad_dial_05"
+                android:gravity="center" />
+
+            <Button
+                android:id="@+id/six"
+                android:layout_width="104dp"
+                android:layout_height="match_parent"
+                android:background="@drawable/te_pad_dial_06"
+                android:gravity="center" />
+        </LinearLayout>
+        <!-- end 第二行 -->
+
+
+        <!-- 第三行 -->
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="54.50dp"
+            android:gravity="center"
+            android:orientation="horizontal" >
+
+            <Button
+                android:id="@+id/seven"
+                android:layout_width="104dp"
+                android:layout_height="match_parent"
+                android:background="@drawable/te_pad_dial_07"
+                android:gravity="center" />
+
+            <Button
+                android:id="@+id/eight"
+                android:layout_width="104dp"
+                android:layout_height="match_parent"
+                android:background="@drawable/te_pad_dial_08"
+                android:gravity="center" />
+
+            <Button
+                android:id="@+id/nine"
+                android:layout_width="104dp"
+                android:layout_height="match_parent"
+                android:background="@drawable/te_pad_dial_09"
+                android:gravity="center" />
+        </LinearLayout>
+        <!-- end 第三行 -->
+
+
+        <!-- 第四行 -->
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="55.50dp"
+            android:gravity="center"
+            android:orientation="horizontal" >
+
+            <Button
+                android:id="@+id/star"
+                android:layout_width="104dp"
+                android:layout_height="match_parent"
+                android:background="@drawable/te_pad_dial_star"
+                android:gravity="center" />
+
+            <Button
+                android:id="@+id/zero"
+                android:layout_width="104dp"
+                android:layout_height="match_parent"
+                android:background="@drawable/te_pad_dial_00"
+                android:gravity="center" />
+
+            <Button
+                android:id="@+id/jing"
+                android:layout_width="104dp"
+                android:layout_height="match_parent"
+                android:background="@drawable/te_pad_dial_pound"
+                android:gravity="center" />
+        </LinearLayout>
+        <!-- end 第四行 -->
+    </LinearLayout>
+
+</LinearLayout>

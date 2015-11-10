@@ -1,0 +1,108 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/video_chatlayout"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
+    android:background="@color/black"
+    android:orientation="horizontal" >
+
+    <com.huawei.esdk.te.VariationView
+        android:id="@+id/remote_videoview"
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent" >
+    </com.huawei.esdk.te.VariationView>
+
+    <RelativeLayout
+        android:id="@+id/local_layout"
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent" >
+
+        <RelativeLayout
+            android:id="@+id/local_videoview_group"
+            android:layout_width="268dp"
+            android:layout_height="150.76dp"
+            android:layout_alignParentTop="true"
+            android:layout_alignParentRight="true"
+            android:layout_alignWithParentIfMissing="true"
+            android:layout_marginTop="9.33dp"
+            android:layout_marginRight="9.33dp" >
+
+            <RelativeLayout
+                android:id="@+id/local_videoview"
+                android:layout_width="268dp"
+                android:layout_height="150.76dp"
+                android:layout_alignWithParentIfMissing="true"
+                android:layout_centerInParent="true" />
+
+            <View
+                android:id="@+id/line_top"
+                android:layout_width="266dp"
+                android:layout_height="0.50dp"
+                android:layout_alignTop="@id/local_videoview"
+                android:layout_centerHorizontal="true"
+                android:background="#66ffffff" />
+
+            <View
+                android:id="@+id/line_left"
+                android:layout_width="0.50dp"
+                android:layout_height="150.76dp"
+                android:layout_alignLeft="@id/local_videoview"
+                android:layout_centerVertical="true"
+                android:background="#66ffffff" />
+
+            <View
+                android:id="@+id/line_right"
+                android:layout_width="0.50dp"
+                android:layout_height="150.76dp"
+                android:layout_alignRight="@id/local_videoview"
+                android:layout_centerVertical="true"
+                android:background="#66ffffff" />
+
+            <View
+                android:id="@+id/line_bottom"
+                android:layout_width="266dp"
+                android:layout_height="0.50dp"
+                android:layout_alignBottom="@id/local_videoview"
+                android:layout_centerHorizontal="true"
+                android:background="#66ffffff" />
+        </RelativeLayout>
+
+        <ImageButton
+            android:id="@+id/switch_localview"
+            android:layout_width="15dp"
+            android:layout_height="15dp"
+            android:layout_alignParentBottom="true"
+            android:layout_alignParentRight="true"
+            android:layout_marginBottom="75dp"
+            android:layout_marginRight="129.33dp"
+            android:visibility="gone" />
+
+        <ImageButton
+            android:id="@+id/close_localview"
+            android:layout_width="16.50dp"
+            android:layout_height="16.50dp"
+            android:layout_alignParentBottom="true"
+            android:layout_alignParentRight="true"
+            android:layout_marginBottom="65.50dp"
+            android:layout_marginRight="0dp"
+            android:visibility="gone" />
+    </RelativeLayout>
+    
+    <Button
+        android:id="@+id/btn_video_hangup"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:visibility="gone"
+        android:text=" 挂断 "/>
+
+    <ImageButton
+        android:id="@+id/switch_view"
+        android:layout_width="25dp"
+        android:layout_height="25dp"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentRight="true"
+        android:layout_marginBottom="20dp"
+        android:layout_marginRight="20dp"
+        android:visibility="gone" />
+
+</RelativeLayout>
