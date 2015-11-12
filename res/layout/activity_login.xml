@@ -10,7 +10,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:onClick="saveLog"
-        
+        android:visibility="gone"
         android:text="保存日志" />
 
     <RelativeLayout

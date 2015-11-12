@@ -41,21 +41,21 @@ import android.widget.Toast;
 public class LoginActivity extends BaseActivity
 {
 	// 产品环境
-	private static final String SERVER = "10.174.4.226";
-	private static final String PORT = "5061";
-	private static final String ACCOUNT = "20150512";
-	private static final String PASSWORD = "huawei123";
-	private static final String SIPURI = "";
-	private static final String LICENSESERVER = "10.174.199.239";
+	// private static final String SERVER = "10.174.4.226";
+	// private static final String PORT = "5061";
+	// private static final String ACCOUNT = "20150512";
+	// private static final String PASSWORD = "huawei123";
+	// private static final String SIPURI = "";
+	// private static final String LICENSESERVER = "10.174.199.239";
 
 	// //172.22.8.4环境
-	// private static final String SERVER = "172.22.8.4";
-	// private static final String PORT = "5061";
-	// private static final String ACCOUNT = "01058888";
-	// private static final String PASSWORD = "Huawei@123";
-	// private static final String SIPURI = "";
-	// private static final String LICENSESERVER = "";
-	//
+	private static final String SERVER = "172.22.8.4";
+	private static final String PORT = "5061";
+	private static final String ACCOUNT = "01058888";
+	private static final String PASSWORD = "Huawei@123";
+	private static final String SIPURI = "";
+	private static final String LICENSESERVER = "";
+
 	// //产品环境
 	// private static final String SERVER = "172.22.8.4";
 	// private static final String PORT = "5061";
@@ -64,7 +64,7 @@ public class LoginActivity extends BaseActivity
 	// private static final String SIPURI = "01052430@172.22.9.21";
 	// private static final String LICENSESERVER = "";
 
-	private static final String TAG = Constants.GTAG + LoginActivity.class.getSimpleName();
+	private static final String TAG = LoginActivity.class.getSimpleName();
 	private static LoginActivity instance;
 	private String serverIP; // 登录服务器地址
 	private String serverPort; // 登录服务器地址
@@ -110,6 +110,7 @@ public class LoginActivity extends BaseActivity
 	@Override
 	protected void onCreate(Bundle savedInstanceState)
 	{
+		Log.d(TAG, "onCreate()");
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_login);
 		initView();
@@ -139,7 +140,7 @@ public class LoginActivity extends BaseActivity
 		edLicenseServer.setText(LICENSESERVER);
 	}
 
-	//保存日志
+	// 保存日志
 	public void saveLog(View v)
 	{
 		Log.i(TAG, "save Fault Report.");
@@ -265,8 +266,44 @@ public class LoginActivity extends BaseActivity
 	}
 
 	@Override
+	protected void onStart()
+	{
+		Log.d(TAG, "onStart()");
+		super.onStart();
+	}
+	
+	@Override
+	protected void onResume()
+	{
+		Log.d(TAG, "onResume()");
+		super.onResume();
+	}
+	
+	@Override
+	protected void onPause()
+	{
+		Log.d(TAG, "onPause()");
+		super.onPause();
+	}
+	
+	@Override
+	protected void onStop()
+	{
+		Log.d(TAG, "onStop()");
+		super.onStop();
+	}
+
+	@Override
+	protected void onRestart()
+	{
+		Log.d(TAG, "onRestart()");
+		super.onRestart();
+	}
+	
+	@Override
 	protected void onDestroy()
 	{
+		Log.d(TAG, "onDestroy()");
 		super.onDestroy();
 		unRegister();
 		innerHandler = null;
