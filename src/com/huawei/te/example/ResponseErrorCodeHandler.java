@@ -218,7 +218,7 @@ public final class ResponseErrorCodeHandler
 		// needShow = true;
 		// msg = StringUtil.isStringEmpty(desc) ?
 		// baseActivity.getString(R.string.module_error_1) : desc;
-		// TEApp.getIns().stopImServiceIfInactive();
+		// TESDK.getInstance().stopImServiceIfInactive();
 		// break;
 		default:
 			break;

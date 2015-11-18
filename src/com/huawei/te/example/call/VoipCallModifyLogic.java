@@ -4,12 +4,6 @@ import java.util.Timer;
 import java.util.TimerTask;
 import java.util.concurrent.Executors;
 
-import com.huawei.esdk.te.call.VideoHandler;
-import com.huawei.te.example.CallControl;
-import com.huawei.te.example.R;
-import com.huawei.te.example.activity.CallActivity;
-import com.huawei.voip.data.VideoCaps;
-
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.DialogInterface.OnClickListener;
@@ -18,6 +12,12 @@ import android.os.Handler;
 import android.os.Looper;
 import android.util.Log;
 import android.widget.Toast;
+
+import com.huawei.esdk.te.video.VideoHandler;
+import com.huawei.te.example.CallControl;
+import com.huawei.te.example.R;
+import com.huawei.te.example.activity.CallActivity;
+import com.huawei.voip.data.VideoCaps;
 
 /**
  * 通话状态改变控制类
@@ -43,7 +43,6 @@ public class VoipCallModifyLogic
 	private static final int CANCLE_TIME = 25000;
 	// end add by cwx176935 reason:ANDRIOD-167 视频升级对话框
 
-	// private final CVoip cvoip = CommonManager.getInstance().getVoip();
 	private final CallControl callConrol = CallControl.getInstance();
 
 	// 确认、接受升级对话框
@@ -86,9 +85,9 @@ public class VoipCallModifyLogic
 								{
 									Looper.prepare();
 								}
-								VideoCaps caps = (VideoCaps) VideoHandler.getIns().initCallVideo(callActivity);
-								VideoCaps dataCaps = VideoHandler.getIns().getDataCaps();
-								callConrol.agreeUpgradeVideo(caps, dataCaps);
+//								VideoCaps caps = (VideoCaps) VideoHandler.getIns().initCallVideo(callActivity);
+//								VideoCaps dataCaps = VideoHandler.getIns().getDataCaps();
+								callConrol.agreeUpgradeVideo();
 							}
 						});
 						// end add by cWX176935 reason: 解决对话框消失慢

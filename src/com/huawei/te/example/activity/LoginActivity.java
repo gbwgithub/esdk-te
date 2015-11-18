@@ -1,26 +1,5 @@
 package com.huawei.te.example.activity;
 
-import com.huawei.common.CustomBroadcastConst;
-import com.huawei.common.LogSDK;
-import com.huawei.common.Resource;
-import com.huawei.common.ResponseCodeHandler.ResponseCode;
-import com.huawei.common.ThreadTimer;
-import com.huawei.esdk.te.CallPresenter;
-import com.huawei.esdk.te.TEApp;
-import com.huawei.esdk.te.data.Constants;
-import com.huawei.manager.DataManager;
-import com.huawei.service.ServiceProxy;
-import com.huawei.service.eSpaceService;
-import com.huawei.te.example.App;
-import com.huawei.te.example.CallControl;
-import com.huawei.te.example.R;
-import com.huawei.te.example.ResponseErrorCodeHandler;
-import com.huawei.te.example.utils.FileUtil;
-import com.huawei.utils.DeviceManager;
-import com.huawei.utils.StringUtil;
-import com.huawei.voip.CallManager.State;
-import com.huawei.voip.data.LoginInfo;
-
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.DialogInterface;
@@ -37,6 +16,26 @@ import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
+
+import com.huawei.common.CustomBroadcastConst;
+import com.huawei.common.LogSDK;
+import com.huawei.common.Resource;
+import com.huawei.common.ResponseCodeHandler.ResponseCode;
+import com.huawei.common.ThreadTimer;
+import com.huawei.esdk.te.TESDK;
+import com.huawei.esdk.te.call.CallService;
+import com.huawei.esdk.te.data.Constants;
+import com.huawei.manager.DataManager;
+import com.huawei.service.ServiceProxy;
+import com.huawei.service.eSpaceService;
+import com.huawei.te.example.CallControl;
+import com.huawei.te.example.R;
+import com.huawei.te.example.ResponseErrorCodeHandler;
+import com.huawei.te.example.utils.FileUtil;
+import com.huawei.utils.DeviceManager;
+import com.huawei.utils.StringUtil;
+import com.huawei.voip.CallManager.State;
+import com.huawei.voip.data.LoginInfo;
 
 public class LoginActivity extends BaseActivity
 {
@@ -86,7 +85,7 @@ public class LoginActivity extends BaseActivity
 	 */
 	private Handler handler;
 
-	private ServiceProxy mServiceProxy;
+	private ServiceProxy serviceProxy;
 
 	/**
 	 * 用于在onLoginResponse中判断接收到的service.login广播是登录响应，还是被踢响应，
@@ -370,10 +369,8 @@ public class LoginActivity extends BaseActivity
 			// 这里不能用再下边哪行代码，因为如果直接写new
 			// Handler()，则这个Handler是在run()中创建，也就是说，它会在其他线程执行，
 			// 而那种情况是不满足预期的，handler无法接收到消息,所以需要在主线程中创建handler.（就像下边这行...）
-			App.getIns().callWhenServiceConnected(innerHandler, new Runnable()
+			TESDK.getInstance().callWhenServiceConnected(innerHandler, new Runnable()
 			{
-				// TEApp.getIns().callWhenServiceConnected(new Handler(), new
-				// Runnable() {
 				@Override
 				public void run()
 				{
@@ -393,11 +390,11 @@ public class LoginActivity extends BaseActivity
 	private void connectToServer(boolean isAnonymousLogin)
 	{
 		Log.i(TAG, "connectToServer enter. isAnonymousLogin: " + isAnonymousLogin);
-		mServiceProxy = App.getIns().getmService();
+		serviceProxy = TESDK.getInstance().getmService();
 
-		if (mServiceProxy == null)
+		if (serviceProxy == null)
 		{
-			Log.w(TAG, "connect to Server error  mServiceProxy is null ");
+			Log.w(TAG, "connect to Server error  serviceProxy is null ");
 			Log.i(TAG, "connectToServer leave.");
 			return;
 		}
@@ -424,6 +421,7 @@ public class LoginActivity extends BaseActivity
 		info.setBfcpEnable(true);
 		info.setLoginName(eSpaceNumber);
 		info.setLoginPwd(eSpaceWordPass);
+	    //设置SRTP，安全传输协议：2：加密 3:非强制性加密(最大互通性) 1：不加密
 		info.setEncryptMode(3);
 		int callBandWidth = 512;
 		info.setCallBandWidth(callBandWidth);
@@ -443,7 +441,7 @@ public class LoginActivity extends BaseActivity
 		info.setMediaPort(10002);
 		info.setServerPort("5061");
 		// login返回false时上报错误状态
-		if (!mServiceProxy.login(info, this))
+		if (!serviceProxy.login(info, this))
 		{
 			eSpaceService.getService().onLoginResult(State.UNREGISTE, Resource.NETWORK_INVALID);
 		}
@@ -468,7 +466,7 @@ public class LoginActivity extends BaseActivity
 		if (result == Resource.REQUEST_OK)
 		{
 
-			CallPresenter callPresenter = CallPresenter.getInstance();
+			CallService callPresenter = CallService.getInstance();
 			if (null != callPresenter)
 			{
 				CallControl.getInstance();
@@ -497,7 +495,7 @@ public class LoginActivity extends BaseActivity
 			@Override
 			public void run()
 			{
-				synchronized (App.getIns().getSynLock())
+				synchronized (TESDK.getInstance().getSynLock())
 				{
 					Log.i(TAG, "Login Success.");
 					Intent intent = new Intent();
@@ -519,14 +517,14 @@ public class LoginActivity extends BaseActivity
 		boolean flag = intent.getBooleanExtra(Resource.SERVICE_RESPONSE_DATA, false);
 		if (flag)
 		{
-			if (mServiceProxy != null)
+			if (serviceProxy != null)
 			{
 				new Thread(new Runnable()
 				{
 					@Override
 					public void run()
 					{
-						if (mServiceProxy != null)
+						if (serviceProxy != null)
 						{
 							try
 							{
@@ -567,7 +565,7 @@ public class LoginActivity extends BaseActivity
 		Log.w(TAG, "RequestError  errorType = " + errorType);
 		// isLoading = false;
 		// sendHandlerMessage(LOGINACTIVITY_MSG.ON_BACK_TO_LOGINVIEW, null);
-		TEApp.getIns().stopImServiceIfInactive();
+		TESDK.getInstance().stopSDKService();
 		int errorCode = 0;
 		// 目前三种类型，鉴权失败，超时，服务器错误（作为服务器连接失败处理）
 		if (errorType.equals(Resource.LICENSEAPPLY_FAILED))
@@ -606,7 +604,7 @@ public class LoginActivity extends BaseActivity
 		Log.w(TAG, "ResponseError  code = " + errorCode + Constants.CHARACTER_MARK.VERTICAL_MARK + info + Constants.CHARACTER_MARK.VERTICAL_MARK);
 		// isLoading = false;
 		// sendHandlerMessage(LOGINACTIVITY_MSG.ON_BACK_TO_LOGINVIEW, null);
-		TEApp.getIns().stopImServiceIfInactive();
+		TESDK.getInstance().stopSDKService();
 		ResponseErrorCodeHandler.handleError(errorCode, info, LoginActivity.this, true);
 	}
 

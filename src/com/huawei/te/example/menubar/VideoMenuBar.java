@@ -24,7 +24,7 @@ import android.widget.ImageView;
  */
 public class VideoMenuBar implements View.OnClickListener, Runnable
 {
-	private static final String TAG = Constants.GTAG + VideoMenuBar.class.getSimpleName();
+	private static final String TAG = VideoMenuBar.class.getSimpleName();
 	/**
 	 * 音频全屏、半屏切换 ，视频在popwindow里
 	 */

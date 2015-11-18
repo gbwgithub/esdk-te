@@ -3,25 +3,6 @@ package com.huawei.te.example.activity;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
-import com.huawei.common.CallErrorCode;
-import com.huawei.esdk.te.LocalHideRenderServer;
-import com.huawei.esdk.te.VariationView;
-import com.huawei.esdk.te.call.CallLogic;
-import com.huawei.esdk.te.call.CallLogic.ModifyNoticeType;
-import com.huawei.esdk.te.call.VideoHandler;
-import com.huawei.esdk.te.data.Constants;
-import com.huawei.esdk.te.data.Constants.CallConstant;
-import com.huawei.esdk.te.data.Constants.MsgCallFragment;
-import com.huawei.te.example.CallControl;
-import com.huawei.te.example.R;
-import com.huawei.te.example.call.VoipCallModifyLogic;
-import com.huawei.te.example.menubar.MenuBarContalPanel;
-import com.huawei.te.example.menubar.MenuBarContalPanel.MenuItemServer;
-import com.huawei.te.example.menubar.MenuBarContalPanel.Mode;
-import com.huawei.utils.StringUtil;
-import com.huawei.voip.data.CallCommandParams;
-import com.huawei.voip.data.VoiceQuality.VoiceQualityLevel;
-
 import android.app.Fragment;
 import android.content.Intent;
 import android.content.pm.ActivityInfo;
@@ -41,6 +22,25 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.huawei.common.CallErrorCode;
+import com.huawei.esdk.te.call.CallLogic;
+import com.huawei.esdk.te.call.CallLogic.ModifyNoticeType;
+import com.huawei.esdk.te.data.Constants;
+import com.huawei.esdk.te.data.Constants.CallConstant;
+import com.huawei.esdk.te.data.Constants.MsgCallFragment;
+import com.huawei.esdk.te.video.LocalHideRenderServer;
+import com.huawei.esdk.te.video.VariationView;
+import com.huawei.esdk.te.video.VideoHandler;
+import com.huawei.te.example.CallControl;
+import com.huawei.te.example.R;
+import com.huawei.te.example.call.VoipCallModifyLogic;
+import com.huawei.te.example.menubar.MenuBarContalPanel;
+import com.huawei.te.example.menubar.MenuBarContalPanel.MenuItemServer;
+import com.huawei.te.example.menubar.MenuBarContalPanel.Mode;
+import com.huawei.utils.StringUtil;
+import com.huawei.voip.data.CallCommandParams;
+import com.huawei.voip.data.VoiceQuality.VoiceQualityLevel;
+
 /**
  * render 操作流程 stop --> remove --> add --> start
  * addView必须在hme_videorender_start之前，原因没addview相当于后台渲染，opengl操作有风险
@@ -50,7 +50,7 @@ import android.widget.Toast;
 public class CallFragment extends Fragment implements OnClickListener
 {
 
-	private static final String TAG = Constants.GTAG + CallFragment.class.getSimpleName();
+	private static final String TAG = CallFragment.class.getSimpleName();
 
 	private static final Object VIDEO_HANGUP_LOCK = new Object();
 
@@ -636,7 +636,7 @@ public class CallFragment extends Fragment implements OnClickListener
 		// public void run() {
 		// // 重新设置一次手机竖屏,重新初始化联系人和通话记录的adapt,重新计算缓存item的大小，否则会bianxiao
 		// 只针对手机屏幕，这里可以不调用下面一行代码
-		setScrean(CallLogic.STATUS_CLOSE, true);
+		// setScrean(CallLogic.STATUS_CLOSE, true);
 		//
 		// // CommonManager.getInstance().getVoip().closeCall();
 		// // TO invoke
@@ -754,18 +754,6 @@ public class CallFragment extends Fragment implements OnClickListener
 	 */
 	private synchronized void processDialCall(final String callNumber, final boolean isVideoCall)
 	{
-		// // 设置VideoCaps
-		// VideoCaps vcaps = null;
-		// VideoCaps dataCaps = null;
-		// if (isVideoCall) {
-		// // 初始化
-		// vcaps = VideoHandler.getIns().getCaps();
-		// dataCaps = VideoHandler.getIns().getDataCaps();
-		// }
-
-		// 发起呼叫方法
-		// final String callRet = CallControl.getInstance().dialCall(callNumber,
-		// null, isVideoCall, vcaps, dataCaps);
 		final String callRet = CallControl.getInstance().dialCall(callNumber, null, isVideoCall);
 
 		Runnable runnable = new Runnable()
@@ -823,8 +811,6 @@ public class CallFragment extends Fragment implements OnClickListener
 			Log.d(TAG, "menuBarPanel is null");
 		}
 
-		setScrean(voipState, isVideoCall);
-
 		// 设置是否视频通话
 		CallLogic.getIns().setVideoCall(isVideoCall);
 
@@ -865,25 +851,6 @@ public class CallFragment extends Fragment implements OnClickListener
 		}
 		menuBarPanel.setRemoteNumber(callNumber);
 		updateByState(callNumber, voipState, isVideoCall);
-	}
-
-	private void setScrean(int voipState, boolean isVideoCall)
-	{
-		// 只针对手机屏幕，所以这里不考虑
-		// if (!ConfigApp.getInstance().isUsePadLayout())
-		if (false)
-		{
-			if (voipState == CallLogic.STATUS_VIDEOING || (voipState == CallLogic.STATUS_CALLING && isVideoCall))
-			{
-				// 手机界面语音呼叫通话时状态图标不显示
-				if (!CallLogic.getIns().isMainView())
-				{
-					getActivity().setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE);
-				}
-				return;
-			}
-			getActivity().setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
-		}
 	}
 
 	/**
@@ -1202,10 +1169,6 @@ public class CallFragment extends Fragment implements OnClickListener
 			// 是否显示Record图标
 			// recodeImg(false);
 		}
-		// 手机界面时，从呼叫界面跳到主界面，进入通话时，还是主界面时，要刷新主界面的提示语,暂注释
-		// if (CallLogic.getIns().isMainView()) {
-		// HomeActivity.getInstance().homeStateTip();
-		// }
 
 		// 视频通话中
 		if (isVideoCall)

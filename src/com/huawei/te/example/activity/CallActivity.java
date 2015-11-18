@@ -1,21 +1,5 @@
 package com.huawei.te.example.activity;
 
-import com.huawei.common.CustomBroadcastConst;
-import com.huawei.common.LogSDK;
-import com.huawei.common.Resource;
-import com.huawei.esdk.te.call.CallLogic;
-import com.huawei.esdk.te.call.VideoHandler;
-import com.huawei.esdk.te.data.Constants;
-import com.huawei.esdk.te.data.Constants.CallConstant;
-import com.huawei.esdk.te.data.Constants.MSG_FOR_HOMEACTIVITY;
-import com.huawei.esdk.te.data.Constants.MsgCallFragment;
-import com.huawei.manager.DataManager;
-import com.huawei.te.example.App;
-import com.huawei.te.example.CallControl;
-import com.huawei.te.example.R;
-import com.huawei.te.example.ResponseErrorCodeHandler;
-import com.huawei.utils.StringUtil;
-
 import android.app.AlertDialog;
 import android.app.FragmentManager;
 import android.app.FragmentTransaction;
@@ -33,6 +17,22 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.Toast;
+
+import com.huawei.common.CustomBroadcastConst;
+import com.huawei.common.LogSDK;
+import com.huawei.common.Resource;
+import com.huawei.esdk.te.TESDK;
+import com.huawei.esdk.te.call.CallLogic;
+import com.huawei.esdk.te.data.Constants;
+import com.huawei.esdk.te.data.Constants.CallConstant;
+import com.huawei.esdk.te.data.Constants.MSG_FOR_HOMEACTIVITY;
+import com.huawei.esdk.te.data.Constants.MsgCallFragment;
+import com.huawei.esdk.te.video.VideoHandler;
+import com.huawei.manager.DataManager;
+import com.huawei.te.example.CallControl;
+import com.huawei.te.example.R;
+import com.huawei.te.example.ResponseErrorCodeHandler;
+import com.huawei.utils.StringUtil;
 
 public class CallActivity extends BaseActivity
 {
@@ -265,7 +265,7 @@ public class CallActivity extends BaseActivity
 		switch (msg.what) {
 		case MSG_FOR_HOMEACTIVITY.MSG_LOGOUT_AND_REGISTE:
 			// setSelfStatus(SelfSettingWindow.AWAY);
-			// mServiceProxy.getCallManager().unRegister();
+			// serviceProxy.getCallManager().unRegister();
 			// EspaceApp.getIns().setOnlineStatus(Constant.STATUS_OFFLINE);
 			// doLogin();
 			break;
@@ -522,7 +522,7 @@ public class CallActivity extends BaseActivity
 				// 系统设置取消记住密码，注销以后再登录界面还会记住登录密码；
 				Constants.setNeedToDelete(true);
 				CallControl.getInstance().clear();
-				App.getIns().logOut();
+				TESDK.getInstance().logout();
 				backToLogin();
 				LogSDK.setUser("");
 			}
@@ -590,20 +590,6 @@ public class CallActivity extends BaseActivity
 	{
 		// 挂断 返回欢迎界面
 		backToWelcome();
-		// homeTipButton.setVisibility(View.GONE);
-		CallLogic.getIns().setMainView(false);
-		// 挂断时清空会场列表
-		// Log.i(TAG, "clear confContacts");
-		// dismissConferenceListView();
-		// confFragment.enableConfBtn(true);
-		// confContacts.clear();
-		// isBroadcasted = false;
-		// eSpaceService.getService().confManager.clearConfSiteInfosMap();
-		// confListAdapter.setWatchedSiteInfoMTnum(null);
-		// confListAdapter.setSelfMTNumber(null);
-		// // 设置本地视频按钮可用
-		// setPreviewBtnUserable();
-		// confListAdapter.setIslocalBroadcast(TupBool.TUP_FALSE);
 	}
 
 	/**

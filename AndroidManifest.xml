@@ -71,7 +71,7 @@
     <uses-permission android:name="android.permission.BATTERY_STATS" />
 
     <application
-        android:name="com.huawei.te.example.App"
+        android:name="com.huawei.te.example.TEDemoApp"
         android:allowBackup="false"
         android:icon="@drawable/te_logo_app"
         android:label="@string/app_name"
@@ -108,7 +108,7 @@
         </activity>
 
         <service android:name="com.huawei.service.eSpaceService" />
-        <service android:name="com.huawei.esdk.te.LocalHideRenderServer" />
+        <service android:name="com.huawei.esdk.te.video.LocalHideRenderServer" />
 
         <receiver android:name="com.huawei.app.application.StartUpReceiver" >
             <intent-filter>

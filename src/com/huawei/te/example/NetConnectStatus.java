@@ -2,6 +2,7 @@ package com.huawei.te.example;
 
 import com.huawei.common.CustomBroadcastConst;
 import com.huawei.common.LogSDK;
+import com.huawei.esdk.te.TESDK;
 import com.huawei.esdk.te.data.Constants;
 import com.huawei.service.eSpaceService;
 
@@ -18,7 +19,7 @@ import android.util.Log;
  */
 public class NetConnectStatus extends BroadcastReceiver {
 
-	private static final String TAG = Constants.GTAG + NetConnectStatus.class.getSimpleName();
+	private static final String TAG = NetConnectStatus.class.getSimpleName();
 
 	/**
 	 * 
@@ -50,8 +51,6 @@ public class NetConnectStatus extends BroadcastReceiver {
 		// 在没有网络的情况下开机启动 进入主界面之后 再打开网络，由于service为null 所以发送不过去设置连接状态
 		if (eSpaceService.getService() == null) {
 			Log.i(TAG, "eSpaceService is null only set connected is " + !isBreak);
-			// 主动设置网络状态 isConnected 为连接状态
-			// TEApp.getIns().setConnected(!isBreak);
 		}
 	}
 

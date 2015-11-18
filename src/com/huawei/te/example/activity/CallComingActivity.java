@@ -25,7 +25,7 @@ import android.widget.TextView;
  * 类名称：CallComingActivity.java 类描述：语音或会议来电
  */
 public class CallComingActivity extends BaseActivity {
-	private static final String TAG = Constants.GTAG + CallComingActivity.class.getSimpleName();
+	private static final String TAG = CallComingActivity.class.getSimpleName();
 
 	private static CallComingActivity instance;
 
@@ -287,31 +287,8 @@ public class CallComingActivity extends BaseActivity {
 		accepAudioBtn.setClickable(false);
 		rejectBtn.setClickable(false);
 
-		// 启动一个空的Activity，1s后消失，使用户不能随意点击其他界面、按钮
-		// Intent intent = new Intent(this, UpdateTmpActivity.class);
-		// intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-		// TEApp.getIns().startActivity(intent);
-		// 接听来电
-		// // AsynProcess.getInstance().execute(new SimpleESpaceProcess() {
-		// // @Override
-		// // public boolean doInBackground() {
-		// receiveCall(isVideo);
-		// // 不能先Finish 掉Activity，否则横竖屏切换，会导致最后的界面拉伸一下
-		// finish();
-		// // return true;
-		// // }
-		// // });
-
-		// 由于接听视频通话，刚刚接听，PC端就挂断，所以这里去掉异步线程试试。
-		// TO invoke
-		// Thread thread = new Thread(new Runnable() {
-		// @Override
-		// public void run() {
 		receiveCall(isVideo);
 		finish();
-		// }
-		// });
-		// thread.start();
 	}
 
 	/**
@@ -361,23 +338,12 @@ public class CallComingActivity extends BaseActivity {
 	private void receiveCall(boolean isVideo) {
 		Log.d(TAG, "receiveCall()");
 		// 接听
-		// CVoip cvoip = CommonManager.getInstance().getVoip();
 		CallControl callControl = CallControl.getInstance();
 		boolean answerRet = false;
 		if (callControl != null) {
 			if (null == Looper.myLooper()) {
 				Looper.prepare();
 			}
-
-			// // 判断是否接入视频
-			// if (isVideo) {
-			// VideoCaps caps = VideoHandler.getIns().initCallVideo(this);
-			// VideoCaps dataCaps = VideoHandler.getIns().getDataCaps();
-			// answerRet = callControl.callAnswer(callid, isVideo, caps,
-			// dataCaps);
-			// } else {
-			// answerRet = callControl.callAnswer(callid, isVideo, null, null);
-			// }
 
 			answerRet = callControl.callAnswer(callid, isVideo);
 

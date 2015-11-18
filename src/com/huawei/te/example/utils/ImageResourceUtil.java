@@ -17,7 +17,7 @@ import android.util.Log;
 public class ImageResourceUtil
 {
 	
-	private static final String TAG = Constants.GTAG + ImageResourceUtil.class.getSimpleName();
+	private static final String TAG = ImageResourceUtil.class.getSimpleName();
     private static ImageResourceUtil ins;
     public static ImageResourceUtil getIns()
     {

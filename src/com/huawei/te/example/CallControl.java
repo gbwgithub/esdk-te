@@ -1,26 +1,28 @@
 package com.huawei.te.example;
 
+import object.StreamInfo;
+import android.content.Intent;
+import android.util.Log;
+
 import com.huawei.application.BaseApp;
 import com.huawei.common.CallErrorCode;
-import com.huawei.esdk.te.CallNotification;
-import com.huawei.esdk.te.CallPresenter;
+import com.huawei.esdk.te.TESDK;
+import com.huawei.esdk.te.call.Call;
 import com.huawei.esdk.te.call.CallLogic;
+import com.huawei.esdk.te.call.CallNotification;
+import com.huawei.esdk.te.call.CallService;
 import com.huawei.esdk.te.data.Constants;
 import com.huawei.esdk.te.data.Constants.CallConstant;
 import com.huawei.esdk.te.data.Constants.MSG_FOR_HOMEACTIVITY;
 import com.huawei.esdk.te.data.Constants.MsgCallFragment;
+import com.huawei.esdk.te.util.MediaUtil;
 import com.huawei.te.example.activity.CallActivity;
 import com.huawei.te.example.activity.CallComingActivity;
 import com.huawei.te.example.activity.CallFragment;
 import com.huawei.utils.StringUtil;
 import com.huawei.voip.data.CameraViewRefresh;
 import com.huawei.voip.data.EventData;
-import com.huawei.voip.data.SessionBean;
 import com.huawei.voip.data.VideoCaps;
-
-import android.content.Intent;
-import android.util.Log;
-import object.StreamInfo;
 
 public class CallControl implements CallNotification
 {
@@ -61,7 +63,7 @@ public class CallControl implements CallNotification
 	 */
 	private CallControl()
 	{
-		CallPresenter callPresenter = CallPresenter.getInstance();
+		CallService callPresenter = CallService.getInstance();
 		if (null != callPresenter)
 		{
 			instance = this;
@@ -71,7 +73,7 @@ public class CallControl implements CallNotification
 			Log.e(TAG, "callPresenter is null !");
 		}
 	}
-	
+
 	/**
 	 * 通知会话界面刷新 - callFragment update ui (未接听)
 	 */
@@ -90,7 +92,7 @@ public class CallControl implements CallNotification
 
 	/**
 	 * 通知通话界面刷新
-	 *
+	 * 
 	 * @param answer
 	 *            是否接听 为True时候，这个参数用于TEMobile返回HomeActivity，即返CallActivity，暂时不需要
 	 */
@@ -112,8 +114,7 @@ public class CallControl implements CallNotification
 	{
 		Log.d(TAG, "clearVideoSurface()");
 		int voipStatus = CallLogic.getIns().getVoipStatus();
-		boolean voipStatusIsTrue = (voipStatus == CallLogic.STATUS_VIDEOING || voipStatus == CallLogic.STATUS_VIDEOACEPT
-				|| voipStatus == CallLogic.STATUS_VIDEOINIT);
+		boolean voipStatusIsTrue = (voipStatus == CallLogic.STATUS_VIDEOING || voipStatus == CallLogic.STATUS_VIDEOACEPT || voipStatus == CallLogic.STATUS_VIDEOINIT);
 		if (voipStatusIsTrue)
 		{
 			// 释放视频数据
@@ -130,14 +131,14 @@ public class CallControl implements CallNotification
 	/**
 	 * 收到通话结束，上报的消息，最终结果在oncalldestroy中处理，此处只用于获取挂断原因
 	 */
-	private void processCallNtfEnded(SessionBean session)
+	private void processCallNtfEnded(Call currentCall)
 	{
-		if (session == null)
+		if (currentCall == null)
 		{
 			Log.e(TAG, "session is null.");
 			return;
 		}
-		String callid = session.getCallID();
+		String callid = currentCall.getCallID();
 		if (StringUtil.isStringEmpty(callid))
 		{
 			Log.e(TAG, "callid is null.");
@@ -145,28 +146,28 @@ public class CallControl implements CallNotification
 		}
 
 		// bye原因
-		String reason = session.getReleaseReason();
+		String reason = currentCall.getReleaseReason();
 		Log.i(TAG, "exceedingly call close : " + reason);
-		reasonText = setCloseReasonText(reason, session);
+		reasonText = setCloseReasonText(reason, currentCall);
 	}
 
 	/**
 	 * 通话挂断通知 4105
-	 *
+	 * 
 	 * @param callsession
 	 *            会话对象
 	 */
-	private void processCallNtfClosed(SessionBean session)
+	private void processCallNtfClosed(Call currentCall)
 	{
 		Log.d(TAG, "processCallNtfClosed()");
-		if (session == null)
+		if (currentCall == null)
 		{
 			Log.e(TAG, "session is null.");
 			Log.i(TAG, "processCallNtfClosed leave.");
 			return;
 		}
 
-		String callid = session.getCallID();
+		String callid = currentCall.getCallID();
 		if (StringUtil.isStringEmpty(callid))
 		{
 			Log.e(TAG, "callid is null.");
@@ -175,7 +176,7 @@ public class CallControl implements CallNotification
 		}
 
 		// bye原因
-		String reason = session.getReleaseReason();
+		String reason = currentCall.getReleaseReason();
 
 		Log.d(TAG, "callid->" + callid);
 		Log.d(TAG, "isCurrentCall->" + isCurrentCall(callid));
@@ -196,7 +197,7 @@ public class CallControl implements CallNotification
 			clearVideoSurface();
 
 			CallActivity.getInstance().getCallFragment().sendHandlerMessage(Constants.MSG_NOTIFY_CALL_END, null);
-			CallPresenter.getInstance().setCurSDKCallID(null);
+			CallService.getInstance().setCurSDKCallID(null);
 
 		} else
 		{
@@ -217,21 +218,21 @@ public class CallControl implements CallNotification
 	/**
 	 * 接听通知 & 会开始通知 4104(接听后，对方接听后)
 	 */
-	private void processCallNtfTalk(SessionBean session)
+	private void processCallNtfTalk(Call currentCall)
 	{
-		if (session == null)
+		if (currentCall == null)
 		{
 			Log.e(TAG, "processCallNtfTalk:session data is null");
 			return;
 		}
-		String callid = session.getCallID();
+		String callid = currentCall.getCallID();
 		if (StringUtil.isStringEmpty(callid))
 		{
 			Log.e(TAG, "processCallNtfTalk:callid is empty.");
 			return;
 		}
 
-		String currentCallID = CallPresenter.getInstance().getCurSDKCallID();
+		String currentCallID = CallService.getInstance().getCurSDKCallID();
 		boolean notSameidAndlogicIsClose = (!callid.equals(currentCallID) || CallLogic.STATUS_CLOSE == CallLogic.getIns().getVoipStatus());
 		if (notSameidAndlogicIsClose)
 		{
@@ -239,21 +240,13 @@ public class CallControl implements CallNotification
 			return;
 		}
 
-		if (!session.isVideoCall())
+		if (!currentCall.isVideoCall())
 		{
-
-			// 下边的处理考虑的不周全，没有涉及state被更改的情况，已修改
-			// int voipStatus = CallLogic.getIns().getVoipStatus();
-			// if (CallLogic.STATUS_VIDEOINIT == voipStatus) {
-			// CallActivity.getInstance().sendHandlerMessage(Constants.MSG_UNINIT_VIDEO,
-			// null);
-			// }
-
 			// 本方视频呼叫，对方音频接听时，释放视频数据
-			boolean isNeedClearVideo = CallPresenter.getInstance().isNeedClearVideo();
+			boolean isNeedClearVideo = CallService.getInstance().isNeedClearVideo();
 			if (isNeedClearVideo)
 			{
-				CallPresenter.getInstance().setNeedClearVideo(false);
+				CallService.getInstance().setNeedClearVideo(false);
 				CallActivity.getInstance().sendHandlerMessage(Constants.MSG_UNINIT_VIDEO, null);
 			}
 		}
@@ -267,27 +260,27 @@ public class CallControl implements CallNotification
 	 * @param mCallSession
 	 *            会话
 	 */
-	private void processCallNtfModified(final SessionBean session)
+	private void processCallNtfModified(final Call currentCall)
 	{
 		Log.d(TAG, "processCallNtfModified()");
 		// 不是当前呼叫，return;
-		if (null == session)
+		if (null == currentCall)
 		{
 			Log.d(TAG, "session is null!");
 			return;
 		} else
 		{
-			if (!isCurrentCall(session.getCallID()))
+			if (!isCurrentCall(currentCall.getCallID()))
 			{
-				Log.d(TAG, "[session=" + session + "] [callID=" + session.getCallID() + ']');
+				Log.d(TAG, "[session=" + currentCall + "] [callID=" + currentCall.getCallID() + ']');
 				return;
 			}
 		}
 		int voipStatus = CallLogic.getIns().getVoipStatus();
 		Log.d(TAG, "voipStatus = " + voipStatus);
 
-		String oper = session.getOperation();
-		int videoModifyState = session.getVideoModifyState();
+		String oper = currentCall.getOperation();
+		int videoModifyState = currentCall.getVideoModifyState();
 		Log.d(TAG, "videoModifyState = " + videoModifyState);
 
 		// 关闭视频成功 || 对端请求关闭视频
@@ -317,8 +310,7 @@ public class CallControl implements CallNotification
 			// begin modify by l00211010 视频到音频通知界面刷新
 			// CallActionNotifyActivty.getIns().notifyCallModify(CallLogic.ModifyNoticeType.VideoToVoice);
 			// TO invoke
-			CallActivity.getInstance().getCallFragment().sendHandlerMessage(MsgCallFragment.MSG_CALL_MODIFY_UI,
-					CallLogic.ModifyNoticeType.VideoToVoice);
+			CallActivity.getInstance().getCallFragment().sendHandlerMessage(MsgCallFragment.MSG_CALL_MODIFY_UI, CallLogic.ModifyNoticeType.VideoToVoice);
 			// end modify by l00211010 视频到音频通知界面刷新
 			// 转为音频的时候重置扬声器和听筒
 			// resetAudioRoute(false);
@@ -328,22 +320,22 @@ public class CallControl implements CallNotification
 		// TE30对接，会话重协商。
 		else if (isActiveUpdateVideo)
 		{
-			if (session.getRemoteVideoState() != 0)
+			if (currentCall.getRemoteVideoState() != 0)
 			{
-				// notifyCallActivityUpdateRemoteVideo(session.getRemoteVideoState()
+				// notifyCallActivityUpdateRemoteVideo(currentCall.getRemoteVideoState()
 				// == 1);
 				// TO invoke
-				boolean isRemoteVideoClose = session.getRemoteVideoState() == 1;
+				boolean isRemoteVideoClose = currentCall.getRemoteVideoState() == 1;
 				CallActivity.getInstance().getCallFragment().sendHandlerMessage(MsgCallFragment.MSG_REMOTE_VIDEO_UPDATE, isRemoteVideoClose);
 			}
 			Log.d(TAG, "Upgrade To Video Call");
 			CallLogic.getIns().setVoipStatus(CallLogic.STATUS_VIDEOING);
 			// resetAudioRoute(true);
-			CallLogic.getIns().setEnableBfcp(session.isBFCPSuccess());
+			CallLogic.getIns().setEnableBfcp(currentCall.isBFCPSuccess());
 			// begin modified by cwx176934 2014/01/08 Reason:DTS2014010303079
 			// 与VCT对接辅流时音视频变换，界面异常
-			boolean statusOfBFCP = (CallLogic.BFCP_RECEIVE.equals(CallLogic.getIns().getBfcpStatus())
-					|| CallLogic.BFCP_START.equals(CallLogic.getIns().getBfcpStatus()));
+			boolean statusOfBFCP = (CallLogic.BFCP_RECEIVE.equals(CallLogic.getIns().getBfcpStatus()) || CallLogic.BFCP_START.equals(CallLogic.getIns()
+					.getBfcpStatus()));
 			if (statusOfBFCP)
 			{
 				Log.i(TAG, "not refresh ui the bfcpStatus is " + CallLogic.getIns().getBfcpStatus());
@@ -356,19 +348,19 @@ public class CallControl implements CallNotification
 		{
 			CallLogic.getIns().setVoipStatus(CallLogic.STATUS_TALKING);
 			notifyCallViewUpdate(false);
-			CallActivity.getInstance().getCallFragment().sendHandlerMessage(MsgCallFragment.MSG_CALL_MODIFY_UI,
-					CallLogic.ModifyNoticeType.ModifyRequestFalied);
+			CallActivity.getInstance().getCallFragment()
+					.sendHandlerMessage(MsgCallFragment.MSG_CALL_MODIFY_UI, CallLogic.ModifyNoticeType.ModifyRequestFalied);
 		} else if (VIDEOMOD.equals(oper))
 		{
-			if (session.getRemoteVideoState() != 0)
+			if (currentCall.getRemoteVideoState() != 0)
 			{
-				notifyCallActivityUpdateRemoteVideo(session.getRemoteVideoState() == 1);
+				notifyCallActivityUpdateRemoteVideo(currentCall.getRemoteVideoState() == 1);
 			}
-			CallLogic.getIns().setEnableBfcp(session.isBFCPSuccess());
+			CallLogic.getIns().setEnableBfcp(currentCall.isBFCPSuccess());
 			// begin modified by cwx176934 2014/01/08 Reason:DTS2014010303079
 			// 与VCT对接辅流时音视频变换，界面异常
-			boolean statusOfBFCP = (CallLogic.BFCP_RECEIVE.equals(CallLogic.getIns().getBfcpStatus())
-					|| CallLogic.BFCP_START.equals(CallLogic.getIns().getBfcpStatus()));
+			boolean statusOfBFCP = (CallLogic.BFCP_RECEIVE.equals(CallLogic.getIns().getBfcpStatus()) || CallLogic.BFCP_START.equals(CallLogic.getIns()
+					.getBfcpStatus()));
 			if (statusOfBFCP)
 			{
 				Log.i(TAG, "not refresh ui the bfcpStatus is " + CallLogic.getIns().getBfcpStatus());
@@ -381,16 +373,23 @@ public class CallControl implements CallNotification
 		// 通知界面取消升级视频
 		else if (isVideoUpCanceled)
 		{
-			CallActivity.getInstance().getCallFragment().sendHandlerMessage(MsgCallFragment.MSG_CALL_MODIFY_UI,
-					CallLogic.ModifyNoticeType.ModifyRequestCancel);
+			CallActivity.getInstance().getCallFragment()
+					.sendHandlerMessage(MsgCallFragment.MSG_CALL_MODIFY_UI, CallLogic.ModifyNoticeType.ModifyRequestCancel);
 		}
 	}
 
-	private void processCallNtfModifyAlert(SessionBean sessionBean)
+	private void processCallNtfModifyAlert(Call currentCall)
 	{
 		CallActivity.getInstance().getCallFragment().sendHandlerMessage(MsgCallFragment.MSG_CALL_MODIFY_UI, CallLogic.ModifyNoticeType.VoiceToVideo);
 	}
-	
+
+	private void processCallNtfRinging(Call currentCall)
+	{
+		Log.d(TAG, "processCallNtfRinging()  sessionId->" + currentCall.getCallID());
+		// 本地嘟嘟音
+		MediaUtil.getIns().playCallRspRing();
+	}
+
 	/**
 	 * 协商结果处理 将BFCP重协商结果上报界面层
 	 * 
@@ -468,25 +467,24 @@ public class CallControl implements CallNotification
 	 * @param callsession
 	 *            会话对象
 	 */
-	private void processCallNtfComing(SessionBean session)
+	private void processCallNtfComing(Call currentCall)
 	{
 
-		comingCallID = session.getCallID();
+		comingCallID = currentCall.getCallID();
 
 		int callType = Constants.COMING_CALL;
 
-		if (session.isVideoCall())
+		if (currentCall.isVideoCall())
 		{
 			callType = Constants.COMING_VIDEO_CALL;
 		}
 
 		// 启动CallComingActivity界面
 		Intent intent = new Intent();
-		// SX20做主叫SIP呼叫TE Mobile时，显示sx20的号码不对
-		intent.putExtra(CallConstant.VOIP_CALLNUMBER, session.getCallerNumber());
-		intent.putExtra(CallConstant.VOIP_CALL_DISPLAY_NAME, session.getCallerDisplayname());
+		intent.putExtra(CallConstant.VOIP_CALLNUMBER, currentCall.getCallerNumber());
+		intent.putExtra(CallConstant.VOIP_CALL_DISPLAY_NAME, currentCall.getCallerDisplayname());
 		intent.putExtra(Constants.COMING_VIEW_TYPE, callType);
-		intent.putExtra(CallConstant.VOIP_CALLID, session.getCallID());
+		intent.putExtra(CallConstant.VOIP_CALLID, currentCall.getCallID());
 
 		intent.setClass(BaseApp.getApp(), CallComingActivity.class);
 		intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
@@ -515,12 +513,12 @@ public class CallControl implements CallNotification
 	 */
 	public synchronized String dialCall(String fromPhone, String domain, boolean isVideoCall)
 	{
-		return CallPresenter.getInstance().dialCall(fromPhone, domain, isVideoCall);
+		return CallService.getInstance().dialCall(fromPhone, domain, isVideoCall);
 	}
 
 	/**
 	 * 接听呼叫，接听一个呼叫，包括音、视频呼叫，返回接听是否成功
-	 *
+	 * 
 	 * @param callid
 	 *            接听会话的唯一标识callid
 	 * @param isNeedAnswerVideo
@@ -535,19 +533,19 @@ public class CallControl implements CallNotification
 		// 接听来电后将来电标志位重置
 		comingCallID = null;
 
-		boolean ret = CallPresenter.getInstance().callAnswer(callid, isVideo, App.getIns());
+		boolean ret = CallService.getInstance().callAnswer(callid, isVideo, TESDK.getInstance().getApplication());
 
 		if (!ret)
 		{
 			// 主要将id置空不然这个时候去注销会出现空指针异常
-			CallPresenter.getInstance().setCurSDKCallID(null);
+			CallService.getInstance().setCurSDKCallID(null);
 		}
 		return ret;
 	}
 
 	/**
 	 * 拒绝来电呼叫
-	 *
+	 * 
 	 * @param callid
 	 *            来电的callid
 	 * @return 执行拒绝呼叫结果， true 为成功
@@ -555,20 +553,20 @@ public class CallControl implements CallNotification
 	public boolean rejectCall(String callid)
 	{
 		comingCallID = null;
-		boolean ret = CallPresenter.getInstance().rejectCall(callid);
+		boolean ret = CallService.getInstance().rejectCall(callid);
 		return ret;
 	}
 
 	/**
 	 * 挂断呼叫
-	 *
+	 * 
 	 * @return 执行是否完成
 	 */
 	public synchronized void closeCall()
 	{
 		Log.d(TAG, "closeCall()");
 		// 当前没有会话，不执行此操作
-		String currentCallID = CallPresenter.getInstance().getCurrentCallID();
+		String currentCallID = CallService.getInstance().getCurrentCallID();
 		if (StringUtil.isStringEmpty(currentCallID))
 		{
 			Log.e(TAG, "currentCallID is null, notify call end.");
@@ -579,8 +577,7 @@ public class CallControl implements CallNotification
 
 		int voipStatus = CallLogic.getIns().getVoipStatus();
 		Log.d(TAG, "voipStatus->" + voipStatus);
-		boolean voipStatusIsTrue = (voipStatus == CallLogic.STATUS_VIDEOING || voipStatus == CallLogic.STATUS_VIDEOACEPT
-				|| voipStatus == CallLogic.STATUS_VIDEOINIT);
+		boolean voipStatusIsTrue = (voipStatus == CallLogic.STATUS_VIDEOING || voipStatus == CallLogic.STATUS_VIDEOACEPT || voipStatus == CallLogic.STATUS_VIDEOINIT);
 		Log.d(TAG, "voipStatusIsTrue->" + voipStatusIsTrue);
 		if (voipStatusIsTrue)
 		{
@@ -588,7 +585,7 @@ public class CallControl implements CallNotification
 			clearVideoSurface();
 		}
 
-		boolean ret = CallPresenter.getInstance().closeCall();
+		boolean ret = CallService.getInstance().closeCall();
 		Log.d(TAG, "close call,SDK 层是否执行完成->" + ret);
 
 		if (null != CallActivity.getInstance().getCallFragment())
@@ -607,7 +604,7 @@ public class CallControl implements CallNotification
 	 */
 	public boolean closeVideo()
 	{
-		boolean ret = CallPresenter.getInstance().closeVideo();
+		boolean ret = CallService.getInstance().closeVideo();
 		// 如果执行失败提示
 		if (!ret)
 		{
@@ -617,19 +614,18 @@ public class CallControl implements CallNotification
 	}
 
 	/**
-	 * 视频应答
+	 * 同意视频升级
 	 * 
 	 * @param caps
 	 *            视频参数
 	 * @return 执行结果 true 为执行成功 false 执行失败
 	 */
-	public boolean agreeUpgradeVideo(VideoCaps caps, VideoCaps dataCaps)
+	public boolean agreeUpgradeVideo()
 	{
-		boolean ret = CallPresenter.getInstance().agreeUpgradeVideo(caps, dataCaps);
+		boolean ret = CallService.getInstance().agreeUpgradeVideo();
 		if (ret)
 		{
-			CallActivity.getInstance().getCallFragment().sendHandlerMessage(MsgCallFragment.MSG_CALL_MODIFY_UI,
-					CallLogic.ModifyNoticeType.defaultType);
+			CallActivity.getInstance().getCallFragment().sendHandlerMessage(MsgCallFragment.MSG_CALL_MODIFY_UI, CallLogic.ModifyNoticeType.defaultType);
 		}
 		return ret;
 	}
@@ -641,11 +637,11 @@ public class CallControl implements CallNotification
 	 */
 	public boolean disAgreeUpgradeVideo()
 	{
-		return CallPresenter.getInstance().disAgreeUpgradeVideo();
+		return CallService.getInstance().disAgreeUpgradeVideo();
 	}
 
 	/**
-	 * 通话过程中升级到视频通话
+	 * 通话过程中请求升级到视频通话
 	 * 
 	 * @param caps
 	 *            视频参数
@@ -653,7 +649,7 @@ public class CallControl implements CallNotification
 	 */
 	public boolean upgradeVideo(VideoCaps caps, VideoCaps dataCaps)
 	{
-		boolean ret = CallPresenter.getInstance().upgradeVideo(caps, dataCaps);
+		boolean ret = CallService.getInstance().upgradeVideo(caps, dataCaps);
 		if (ret)
 		{
 			notifyCallViewUpdate(false);
@@ -667,16 +663,14 @@ public class CallControl implements CallNotification
 
 		return ret;
 	}
-	
 
-    /**
-     * 获取当前通话媒体信息
-     */
-    public StreamInfo getMediaInfo()
-    {
-    	return CallPresenter.getInstance().getMediaInfo();
-    }
-
+	/**
+	 * 获取当前通话媒体信息
+	 */
+	public StreamInfo getMediaInfo()
+	{
+		return CallService.getInstance().getMediaInfo();
+	}
 
 	/**
 	 * _______________________________________ 这些是动作 end
@@ -689,7 +683,7 @@ public class CallControl implements CallNotification
 	 * @param reason
 	 *            挂断reason
 	 */
-	private String setCloseReasonText(String reason, SessionBean session)
+	private String setCloseReasonText(String reason, Call currentCall)
 	{
 		reasonText = null;
 		if (StringUtil.isStringEmpty(reason))
@@ -707,7 +701,7 @@ public class CallControl implements CallNotification
 			} else if ("forbidden".equals(reason))
 			{
 				reasonText = BaseApp.getApp().getString(R.string.inaccessible);
-				if (checkHasHeader(session))
+				if (checkHasHeader(currentCall))
 				{
 					reasonText = "VoIP Unavailable";
 				}
@@ -744,12 +738,12 @@ public class CallControl implements CallNotification
 	 *            CallSession对象
 	 * @return reason-header字段 有：true 无：false
 	 */
-	private boolean checkHasHeader(SessionBean session)
+	private boolean checkHasHeader(Call currentCall)
 	{
 		boolean hasHeader = false;
-		String reasonHeader = session.getReasonHeader();
-		hasHeader = !StringUtil.isStringEmpty(reasonHeader) && (reasonHeader.indexOf("VoIP Unavailable") != -1
-				|| reasonHeader.replaceAll(Constants.CHARACTER_MARK.BLANK_MARK, "").indexOf("cause=1") != -1);
+		String reasonHeader = currentCall.getReasonHeader();
+		hasHeader = !StringUtil.isStringEmpty(reasonHeader)
+				&& (reasonHeader.indexOf("VoIP Unavailable") != -1 || reasonHeader.replaceAll(Constants.CHARACTER_MARK.BLANK_MARK, "").indexOf("cause=1") != -1);
 		return hasHeader;
 	}
 
@@ -757,7 +751,7 @@ public class CallControl implements CallNotification
 	{
 		Log.i(TAG, "isCurrentCall exec ");
 		boolean ret = false;
-		String currentCallID = CallPresenter.getInstance().getCurSDKCallID();
+		String currentCallID = CallService.getInstance().getCurSDKCallID();
 		if (StringUtil.isNotEmpty(callid) && StringUtil.isNotEmpty(currentCallID) && callid.equals(currentCallID))
 		{
 			ret = true;
@@ -769,23 +763,23 @@ public class CallControl implements CallNotification
 	private boolean isCurrentCall(String callid)
 	{
 		Log.i(TAG, "isCurrentCall exec ");
-		boolean ret = CallPresenter.getInstance().isCurrentCall(callid);
+		boolean ret = CallService.getInstance().isCurrentCall(callid);
 		Log.d(TAG, "isCurrentCall return ret->" + ret);
 		return ret;
 	}
 
 	@Override
-	public void onCallComing(SessionBean sessionBean)
+	public void onCallComing(Call currentCall)
 	{
 		Log.d(TAG, "onCallComing()");
-		processCallNtfComing(sessionBean);
+		processCallNtfComing(currentCall);
 	}
 
 	@Override
-	public void onCallConnect(SessionBean sessionBean)
+	public void onCallConnect(Call currentCall)
 	{
 		Log.d(TAG, "onCallConnect()");
-		processCallNtfTalk(sessionBean);
+		processCallNtfTalk(currentCall);
 	}
 
 	/**
@@ -803,20 +797,20 @@ public class CallControl implements CallNotification
 	 * 对方挂断
 	 */
 	@Override
-	public void onCallend(SessionBean sessionBean)
+	public void onCallend(Call currentCall)
 	{
 		Log.d(TAG, " - onCallend()");
-		processCallNtfEnded(sessionBean);
+		processCallNtfEnded(currentCall);
 	}
 
 	/**
 	 * 收到通话结束释放资源后消息
 	 */
 	@Override
-	public void onCallDestroy(SessionBean sessionBean)
+	public void onCallDestroy(Call currentCall)
 	{
 		Log.d(TAG, " - onCallDestroy()");
-		processCallNtfClosed(sessionBean);
+		processCallNtfClosed(currentCall);
 	}
 
 	// 协商结果处理
@@ -830,29 +824,35 @@ public class CallControl implements CallNotification
 	}
 
 	@Override
-	public void onCallViedoResult(SessionBean sessionBean)
+	public void onCallViedoResult(Call currentCall)
 	{
 		Log.d(TAG, " - onCallViedoResult()");
-		processCallNtfModified(sessionBean);
+		processCallNtfModified(currentCall);
 	}
-	
-    /**
-     * 添加视频请求
-     */
-    @Override
-    public void onCallAddVideo(SessionBean sessionBean)
-    {
-        processCallNtfModifyAlert(sessionBean);
-    }
-    
-    /**
-     *  对端降音频结果通知
-     */
-    @Override
-    public void onCallDelViedo(SessionBean sessionBean)
-    {
-        processCallNtfModified(sessionBean);
-    }
+
+	/**
+	 * 添加视频请求
+	 */
+	@Override
+	public void onCallAddVideo(Call currentCall)
+	{
+		processCallNtfModifyAlert(currentCall);
+	}
+
+	/**
+	 * 对端降音频结果通知
+	 */
+	@Override
+	public void onCallDelViedo(Call currentCall)
+	{
+		processCallNtfModified(currentCall);
+	}
+
+	@Override
+	public void onRingBack(Call currentCall)
+	{
+		processCallNtfRinging(currentCall);
+	}
 
 	/**
 	 * render控制
@@ -864,14 +864,13 @@ public class CallControl implements CallNotification
 	 */
 	public boolean controlRenderVideo(int renderModule, boolean isStart)
 	{
-		return CallPresenter.getInstance().controlRenderVideo(renderModule, isStart);
+		return CallService.getInstance().controlRenderVideo(renderModule, isStart);
 	}
-	
+
 	public void clear()
 	{
-		CallPresenter.getInstance().unRegisterNofitication(this);
+		CallService.getInstance().unRegisterNofitication(this);
 		instance = null;
 	}
-	
-	
+
 }

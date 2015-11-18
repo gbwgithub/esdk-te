@@ -5,18 +5,6 @@ import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
 
-import com.huawei.esdk.te.call.CallLogic;
-import com.huawei.esdk.te.call.VideoHandler;
-import com.huawei.esdk.te.data.Constants;
-import com.huawei.esdk.te.data.Constants.MsgCallFragment;
-import com.huawei.esdk.te.util.LayoutUtil;
-import com.huawei.te.example.CallControl;
-import com.huawei.te.example.R;
-import com.huawei.te.example.activity.CallActivity;
-import com.huawei.te.example.utils.ImageResourceUtil;
-import com.huawei.voip.data.VideoCaps;
-import com.huawei.voip.data.VoiceQuality.VoiceQualityLevel;
-
 import android.content.Context;
 import android.graphics.drawable.BitmapDrawable;
 import android.os.Handler;
@@ -33,13 +21,25 @@ import android.widget.PopupWindow;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.huawei.esdk.te.call.CallLogic;
+import com.huawei.esdk.te.data.Constants;
+import com.huawei.esdk.te.data.Constants.MsgCallFragment;
+import com.huawei.esdk.te.util.LayoutUtil;
+import com.huawei.esdk.te.video.VideoHandler;
+import com.huawei.te.example.CallControl;
+import com.huawei.te.example.R;
+import com.huawei.te.example.activity.CallActivity;
+import com.huawei.te.example.utils.ImageResourceUtil;
+import com.huawei.voip.data.VideoCaps;
+import com.huawei.voip.data.VoiceQuality.VoiceQualityLevel;
+
 /**
  * 视频菜单栏的控制类
  */
 public class MenuBarContalPanel implements OnClickListener, com.huawei.te.example.menubar.VideoMenuBar.MenuItemServer
 {
 
-	private static final String TAG = Constants.GTAG + MenuBarContalPanel.class.getSimpleName();
+	private static final String TAG = MenuBarContalPanel.class.getSimpleName();
 
 	/**
 	 * 界面回调类
@@ -1746,7 +1746,6 @@ public class MenuBarContalPanel implements OnClickListener, com.huawei.te.exampl
 		// 手机中音频为竖屏，视频为横屏，每次需重新创建
 		recallPopWindow = new RecallPopWindow(rootView.getContext(), menuBar.getMenuItems(VideoMenuBar.REDIAL_BOARD))
 		{
-
 			@Override
 			public void showAsDropDown(View anchor, int xoff, int yoff)
 			{
@@ -1760,7 +1759,6 @@ public class MenuBarContalPanel implements OnClickListener, com.huawei.te.exampl
 				super.dismiss();
 				menuBar.getMenuItems(VideoMenuBar.REDIAL_BOARD).setSelected(false);
 			}
-
 		};
 		int distance = Float.valueOf((MORE_POP_DISTANCE * LayoutUtil.getInstance().getScreenPXScale())).intValue();
 
@@ -2255,8 +2253,6 @@ public class MenuBarContalPanel implements OnClickListener, com.huawei.te.exampl
 			public void run()
 			{
 				++autoTime;
-				// 更新通话时长
-				CallLogic.getIns().setCallTimeInterval(autoTime);
 				timeHandler.sendEmptyMessage(0);
 			}
 		}, 1, 1, TimeUnit.SECONDS);
