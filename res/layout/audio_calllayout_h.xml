@@ -37,21 +37,6 @@
                 android:textColor="#FFFFFF"
                 android:textSize="12.50dp" />
         </LinearLayout>
-
-        <FrameLayout
-            android:id="@+id/menu_bar_layout"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:orientation="horizontal" >
-
-            <Button
-                android:id="@+id/btn_audio_hangup"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center"
-                android:visibility="gone"
-                android:text="  挂断  " />
-        </FrameLayout>
     </LinearLayout>
 
 </RelativeLayout>

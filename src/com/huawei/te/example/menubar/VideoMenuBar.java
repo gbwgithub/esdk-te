@@ -5,9 +5,6 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import com.huawei.esdk.te.data.Constants;
-import com.huawei.te.example.R;
-
 import android.content.DialogInterface;
 import android.os.Handler;
 import android.os.Message;
@@ -18,6 +15,9 @@ import android.view.animation.AlphaAnimation;
 import android.view.animation.Animation;
 import android.view.animation.Animation.AnimationListener;
 import android.widget.ImageView;
+
+import com.huawei.esdk.te.data.Constants;
+import com.huawei.te.example.R;
 
 /**
  * Copyright (C) 2008-2013 华为技术有限公司(Huawei Tech.Co.,Ltd)

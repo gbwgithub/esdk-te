@@ -22,12 +22,12 @@ import com.huawei.common.CustomBroadcastConst;
 import com.huawei.common.LogSDK;
 import com.huawei.common.Resource;
 import com.huawei.esdk.te.TESDK;
-import com.huawei.esdk.te.call.CallLogic;
+import com.huawei.esdk.te.call.CallConstants.CallStatus;
+import com.huawei.esdk.te.call.CallService;
 import com.huawei.esdk.te.data.Constants;
 import com.huawei.esdk.te.data.Constants.CallConstant;
 import com.huawei.esdk.te.data.Constants.MSG_FOR_HOMEACTIVITY;
 import com.huawei.esdk.te.data.Constants.MsgCallFragment;
-import com.huawei.esdk.te.video.VideoHandler;
 import com.huawei.manager.DataManager;
 import com.huawei.te.example.CallControl;
 import com.huawei.te.example.R;
@@ -102,7 +102,7 @@ public class CallActivity extends BaseActivity
 			iFilter.addAction(CustomBroadcastConst.ACTION_CONNECT_TO_SERVER);
 			iFilter.addAction(CustomBroadcastConst.ACTION_LOGIN_RESPONSE);
 			iFilter.addAction(CustomBroadcastConst.ACTION_REFRESHLICENSEFAILED_NOTIFY);
-			// 注册重登陆广播 211010
+			// 注册重登陆广播
 			regReceiver = new RegReceiver();
 			registerReceiver(regReceiver, iFilter);
 		}
@@ -110,7 +110,7 @@ public class CallActivity extends BaseActivity
 	}
 
 	/**
-	 * 方法名称：unRegister 作者：wujingdong 方法描述：注销刷新界面的广播 输入参数： 返回类型：void 备注：
+	 * 注销刷新界面的广播
 	 */
 	private void unRegister()
 	{
@@ -144,9 +144,7 @@ public class CallActivity extends BaseActivity
 			@Override
 			public void onClick(View v)
 			{
-				// Log.e(TAG, "for test voipstatus:" +
-				// CallLogic.getIns().getVoipStatus());
-				if (CallLogic.STATUS_CLOSE == CallLogic.getIns().getVoipStatus())
+				if (CallStatus.STATUS_CLOSE == CallService.getInstance().getVoipStatus())
 				{
 					String callNumber = callNumEt.getText().toString();
 					if (null == callNumber || 0 == callNumber.length())
@@ -176,9 +174,7 @@ public class CallActivity extends BaseActivity
 			@Override
 			public void onClick(View v)
 			{
-				// Log.e(TAG, "for test voipstatus:" +
-				// CallLogic.getIns().getVoipStatus());
-				if (CallLogic.STATUS_CLOSE == CallLogic.getIns().getVoipStatus())
+				if (CallStatus.STATUS_CLOSE == CallService.getInstance().getVoipStatus())
 				{
 					String callNumber = callNumEt.getText().toString();
 					if (null == callNumber || 0 == callNumber.length())
@@ -361,13 +357,6 @@ public class CallActivity extends BaseActivity
 			// dismissShadView();
 			// end modified by pwx178217 2013/8/15 reason：取消遮罩层
 			break;
-		case Constants.MSG_INIT_VIDEO:
-			VideoHandler.getIns().initCallVideo(CallActivity.this);
-			break;
-		case Constants.MSG_UNINIT_VIDEO:
-			Log.d(TAG, "Enter MSG_UNINIT_VIDEO");
-			VideoHandler.getIns().clearCallVideo();
-			break;
 		case Constants.CONTACT_EXPORT_OPERATE:
 			// contactExport(msg.obj.toString(), fileTitleString);
 			break;
@@ -415,7 +404,7 @@ public class CallActivity extends BaseActivity
 			// if (!ConfigApp.getInstance().isUsePadLayout()) {
 			// showScreenWithTitle();
 			// }
-			// CallLogic.getIns().setMainView(true);
+			// CallService.getInstance().setMainView(true);
 			// if (homeLeft.isShown()) {
 			// homeTipButton.setText((String) msg.obj);
 			// return;
@@ -469,9 +458,8 @@ public class CallActivity extends BaseActivity
 	 */
 	private void logoutApp()
 	{
-		// ConfigApp.getInstance().setRestartEvent(2);
 		// 在注销和登出时判断是否需要挂断,没设置VoipStatus,直接退出
-		if (CallLogic.getIns().getVoipStatus() == CallLogic.STATUS_CLOSE)
+		if (CallService.getInstance().getVoipStatus() == CallStatus.STATUS_CLOSE)
 		{
 			logoutProcess();
 			return;
@@ -494,7 +482,7 @@ public class CallActivity extends BaseActivity
 			public void onClick(DialogInterface dialog, int which)
 			{
 				Log.i(TAG, "logout~~");
-				CallLogic.getIns().forceCloseCall();
+				CallService.getInstance().forceCloseCall();
 				logoutProcess();
 				dialog.dismiss();
 			}
@@ -648,7 +636,7 @@ public class CallActivity extends BaseActivity
 				// 在主页面时非主动操作，登录消息收到，1，断网重连了；2，在线心跳超时，重注册了。 ANDRIOD-195
 				// 2013.11.26
 				// 这两种情况都要进行挂断所有会话。TODO 是否需要增加提示？
-				CallLogic.getIns().forceCloseCall();
+				CallService.getInstance().forceCloseCall();
 				// end ANDRIOD-195 l00211010 2013.11.26
 				// 关闭注册窗口并提示登录失败，如果成功的话则关闭，修改在线状态
 				// dismissProgressDialog();// 将进度条先关闭
@@ -680,7 +668,7 @@ public class CallActivity extends BaseActivity
 					@Override
 					public void run()
 					{
-						CallLogic.getIns().forceCloseCall();
+						CallService.getInstance().forceCloseCall();
 						logoutProcess();
 					}
 				}, 1500);

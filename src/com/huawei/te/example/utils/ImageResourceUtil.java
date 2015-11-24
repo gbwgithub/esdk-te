@@ -3,8 +3,6 @@ package com.huawei.te.example.utils;
 import java.io.IOException;
 import java.io.InputStream;
 
-import com.huawei.esdk.te.data.Constants;
-
 import android.content.Context;
 import android.content.res.Resources.NotFoundException;
 import android.graphics.Bitmap;

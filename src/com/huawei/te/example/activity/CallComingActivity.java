@@ -1,15 +1,5 @@
 package com.huawei.te.example.activity;
 
-import com.huawei.common.PersonalContact;
-import com.huawei.esdk.te.data.Constants;
-import com.huawei.esdk.te.data.Constants.CallConstant;
-import com.huawei.esdk.te.util.DeviceUtil;
-import com.huawei.esdk.te.util.LayoutUtil;
-import com.huawei.esdk.te.util.MediaUtil;
-import com.huawei.manager.DataManager;
-import com.huawei.te.example.CallControl;
-import com.huawei.te.example.R;
-
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
@@ -20,6 +10,16 @@ import android.view.View.OnClickListener;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
+
+import com.huawei.common.PersonalContact;
+import com.huawei.esdk.te.data.Constants;
+import com.huawei.esdk.te.data.Constants.CallConstant;
+import com.huawei.esdk.te.util.DeviceUtil;
+import com.huawei.esdk.te.util.LayoutUtil;
+import com.huawei.esdk.te.util.MediaUtil;
+import com.huawei.manager.DataManager;
+import com.huawei.te.example.CallControl;
+import com.huawei.te.example.R;
 
 /**
  * 类名称：CallComingActivity.java 类描述：语音或会议来电

@@ -1,11 +1,5 @@
 package com.huawei.te.example;
 
-import com.huawei.common.CustomBroadcastConst;
-import com.huawei.common.LogSDK;
-import com.huawei.esdk.te.TESDK;
-import com.huawei.esdk.te.data.Constants;
-import com.huawei.service.eSpaceService;
-
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
@@ -13,6 +7,10 @@ import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.net.NetworkInfo.State;
 import android.util.Log;
+
+import com.huawei.common.CustomBroadcastConst;
+import com.huawei.common.LogSDK;
+import com.huawei.service.eSpaceService;
 
 /**
  * Copyright (C) 2008-2013 华为技术有限公司(Huawei Tech.Co.,Ltd)

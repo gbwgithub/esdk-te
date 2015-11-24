@@ -13,11 +13,9 @@ import android.os.Looper;
 import android.util.Log;
 import android.widget.Toast;
 
-import com.huawei.esdk.te.video.VideoHandler;
 import com.huawei.te.example.CallControl;
 import com.huawei.te.example.R;
 import com.huawei.te.example.activity.CallActivity;
-import com.huawei.voip.data.VideoCaps;
 
 /**
  * 通话状态改变控制类
@@ -159,13 +157,10 @@ public class VoipCallModifyLogic
 	}
 
 	/**
-	 * 通话升级视频视频失败 稍后重试
+	 * 弹出通话升级视频视频失败对话框 询问是否稍后重试
 	 */
 	public void modifyRequestFalied()
 	{
-		// getCurrentActivity 获取的不一定是HomeActivity 所以显示不出来
-		// final BaseActivity ba = (BaseActivity)
-		// ActivityStackManager.INSTANCE.getHomeActivity();
 		final CallActivity callActivity = CallActivity.getInstance();
 		if (callConrol == null || callActivity == null)
 		{
@@ -183,7 +178,7 @@ public class VoipCallModifyLogic
 					@Override
 					public void onClick(DialogInterface dialog, int which)
 					{
-						// begin add by cWX176935 reason: 解决对话框消失慢
+						// 解决对话框消失慢
 						handler.postAtFrontOfQueue(new Runnable()
 						{
 							/**
@@ -192,12 +187,9 @@ public class VoipCallModifyLogic
 							@Override
 							public void run()
 							{
-								VideoCaps caps = (VideoCaps) VideoHandler.getIns().initCallVideo(callActivity);
-								VideoCaps dataCaps = VideoHandler.getIns().getDataCaps();
-								callConrol.upgradeVideo(caps, dataCaps);
+								callConrol.upgradeVideo();
 							}
 						});
-						// end add by cWX176935 reason: 解决对话框消失慢
 					}
 				};
 
@@ -216,19 +208,16 @@ public class VoipCallModifyLogic
 				builder.setNegativeButton(callActivity.getString(R.string.ok), ok);
 				dialog = builder.create();
 				dialog.show();
-				
 			}
 		});
 	}
 
-	// begin modified by cwx176934 2013/11/22 Reason:ANDROID-181 添加响应对方取消升级视频操作
 	/**
-	 * 对方取消升级视频
+	 * 响应对方取消升级视频操作
 	 */
 	public void modifyRequestCancel()
 	{
 		Log.i(TAG, "modifyRequestCancel");
-		// dismissAllDialogs();
 		final CallActivity callActivity = CallActivity.getInstance();
 		if (null == callActivity)
 		{
@@ -240,7 +229,6 @@ public class VoipCallModifyLogic
 			return;
 		}
 		// 升级视频对话框取消显示
-		// callActivity.dismissUpdateDialog();
 		if (dialog != null && dialog.isShowing() && !callActivity.isFinishing())
 		{
 			dialog.dismiss();
@@ -248,7 +236,6 @@ public class VoipCallModifyLogic
 
 		Toast.makeText(callActivity, callActivity.getString(R.string.cancel_video_update), Toast.LENGTH_LONG).show();
 	}
-	// end modified by cwx176934 2013/11/22 Reason:ANDROID-181 添加响应对方取消升级视频操作
 
 	private void cancelDisDiaTimer()
 	{
@@ -263,7 +250,8 @@ public class VoipCallModifyLogic
 	/**
 	 * 描述：开始自动取消提示框计时器
 	 * 
-	 * @param dialogRender：提示框
+	 * @param dialogRender
+	 *            ：提示框
 	 */
 	private void startDisDiaTimer()
 	{

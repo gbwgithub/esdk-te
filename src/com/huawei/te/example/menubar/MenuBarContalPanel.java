@@ -21,7 +21,8 @@ import android.widget.PopupWindow;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.huawei.esdk.te.call.CallLogic;
+import com.huawei.esdk.te.call.CallConstants.CallStatus;
+import com.huawei.esdk.te.call.CallService;
 import com.huawei.esdk.te.data.Constants;
 import com.huawei.esdk.te.data.Constants.MsgCallFragment;
 import com.huawei.esdk.te.util.LayoutUtil;
@@ -30,7 +31,6 @@ import com.huawei.te.example.CallControl;
 import com.huawei.te.example.R;
 import com.huawei.te.example.activity.CallActivity;
 import com.huawei.te.example.utils.ImageResourceUtil;
-import com.huawei.voip.data.VideoCaps;
 import com.huawei.voip.data.VoiceQuality.VoiceQualityLevel;
 
 /**
@@ -160,7 +160,6 @@ public class MenuBarContalPanel implements OnClickListener, com.huawei.te.exampl
 	 */
 	private MenuItemServer menuItemServer;
 
-	// private CVoip cVoip;
 	private CallControl callControl;
 	/**
 	 * 二次拨号盘弹窗PopWindow
@@ -1108,7 +1107,7 @@ public class MenuBarContalPanel implements OnClickListener, com.huawei.te.exampl
 	 */
 	private void sessionHoldMode()
 	{
-		boolean isVideo = CallLogic.getIns().isVideoCall();
+		boolean isVideo = CallService.getInstance().isVideoCall();
 		if (isVideo)
 		{
 			this.menuMode = Mode.VIDEO_CALL;
@@ -1304,7 +1303,7 @@ public class MenuBarContalPanel implements OnClickListener, com.huawei.te.exampl
 				switchAudio.setEnabled(true);
 			}
 
-			if (isConfCtrlEnable && !CallLogic.getIns().isEnableBfcp())
+			if (isConfCtrlEnable && !CallService.getInstance().isEnableBfcp())
 			{
 				// 共享文档不可用
 				shareDataImg.getDrawable().setAlpha(HALF_ALPHA);
@@ -1335,51 +1334,49 @@ public class MenuBarContalPanel implements OnClickListener, com.huawei.te.exampl
 	 */
 	public void operateCamera(final ImageView view)
 	{
-		//
-		// if (null == cVoip) {
-		// Log.e(TAG, "error: CVoip is null");
-		// return;
-		// }
-		// // begin add by cwx176935 reason: DTS2013111300492
-		// // 软终端视频通话时，本地与远端视频切换时，软终端死机
-		// // Begin Modified by z00199735 Reason: DTS2014011800594 U8850
-		// // 视频通话，打开手机自带相机功能，软终端本地视频卡住，不能通过开关摄像头按钮进行恢复
-		// boolean operate = isDone || (CallLogic.STATUS_VIDEOING !=
-		// CallLogic.getIns().getVoipStatus()
-		// && CallLogic.STATUS_VIDEOINIT != CallLogic.getIns().getVoipStatus())
-		// || !VideoHandler.getIns().isInit();
-		// if (operate) {
-		// Log.i(TAG, "last close video click was not readly");
-		// return;
-		// }
-		// // End Modified by z00199735 Reason: DTS2014011800594 U8850
-		// // 视频通话，打开手机自带相机功能，软终端本地视频卡住，不能通过开关摄像头按钮进行恢复
-		//
-		// isDone = true;
-		// // end add by cwx176935 reason: DTS2013111300492
-		// // 软终端视频通话时，本地与远端视频切换时，软终端死机
-		// // 开启摄像头
-		// operPool.execute(new Runnable() {
-		// @Override
-		// public void run() {
-		// synchronized (MENULOCK) {
-		// // 获取是否已经关闭摄像头
-		// boolean bHasCloseCamera = Constant.CLICK.equals(view.getTag());
-		//
-		// // 已经关闭则当前操作为开启
-		// cVoip.localCameraControl(!bHasCloseCamera);
-		// Log.i(TAG, "operate camera, isClose: " + !bHasCloseCamera);
-		//
-		// // 通知界面操作
-		// Message msg = new Message();
-		// msg.what = REFRESH_UI_OPERATE_LOCAL_CAMERA;
-		// msg.obj = !bHasCloseCamera;
-		// handlerUI.sendMessage(msg);
-		// isCameraClose = !bHasCloseCamera;
-		// isDone = false;
-		// }
-		// }
-		// });
+
+		if (null == callControl)
+		{
+			Log.e(TAG, "error: callControl is null");
+			return;
+		}
+		// 软终端视频通话时，本地与远端视频切换时，软终端死机
+		// 视频通话，打开手机自带相机功能，软终端本地视频卡住，不能通过开关摄像头按钮进行恢复
+		boolean operate = isDone
+				|| (CallStatus.STATUS_VIDEOING != CallService.getInstance().getVoipStatus() && CallStatus.STATUS_VIDEOINIT != CallService.getInstance()
+						.getVoipStatus()) || !CallService.getInstance().isVideoInit();
+		if (operate)
+		{
+			Log.i(TAG, "last close video click was not readly");
+			return;
+		}
+
+		isDone = true;
+		// 开启摄像头
+		operPool.execute(new Runnable()
+		{
+			@Override
+			public void run()
+			{
+				synchronized (MENULOCK)
+				{
+					// 获取是否已经关闭摄像头
+					boolean bHasCloseCamera = Constants.CLICK.equals(view.getTag());
+
+					// 已经关闭则当前操作为开启
+					callControl.localCameraControl(!bHasCloseCamera);
+					Log.i(TAG, "operate camera, isClose: " + !bHasCloseCamera);
+
+					// 通知界面操作
+					Message msg = new Message();
+					msg.what = REFRESH_UI_OPERATE_LOCAL_CAMERA;
+					msg.obj = !bHasCloseCamera;
+					handlerUI.sendMessage(msg);
+					isCameraClose = !bHasCloseCamera;
+					isDone = false;
+				}
+			}
+		});
 	}
 
 	/**
@@ -1610,9 +1607,10 @@ public class MenuBarContalPanel implements OnClickListener, com.huawei.te.exampl
 		}
 
 		// 闭本地摄像头后切换前后摄像头，实际不生效但是图标有变化
-		if (isDone || isCameraClose
-				|| (CallLogic.STATUS_VIDEOING != CallLogic.getIns().getVoipStatus() && CallLogic.STATUS_VIDEOINIT != CallLogic.getIns().getVoipStatus())
-				|| !VideoHandler.getIns().isInit())
+		if (isDone
+				|| isCameraClose
+				|| (CallStatus.STATUS_VIDEOING != CallService.getInstance().getVoipStatus() && CallStatus.STATUS_VIDEOINIT != CallService.getInstance()
+						.getVoipStatus()) || !CallService.getInstance().isVideoInit())
 		{
 			Log.i(TAG, "other click not readly or camera is closed");
 			return;
@@ -1626,7 +1624,7 @@ public class MenuBarContalPanel implements OnClickListener, com.huawei.te.exampl
 			{
 				synchronized (MENULOCK)
 				{
-					boolean result = VideoHandler.getIns().switchCamera();
+					boolean result = CallService.getInstance().switchCamera();
 					if (result)
 					{
 						Log.i(TAG, "switch local camera Success");
@@ -1646,11 +1644,6 @@ public class MenuBarContalPanel implements OnClickListener, com.huawei.te.exampl
 	@Override
 	public void videoToAudio(View view)
 	{
-
-		// if (null == cVoip) {
-		// Log.e(TAG, "error: CVoip is null");
-		// return;
-		// }
 		if (null == callControl)
 		{
 			Log.e(TAG, "error: callControl is null");
@@ -1663,13 +1656,7 @@ public class MenuBarContalPanel implements OnClickListener, com.huawei.te.exampl
 		}
 		isDone = true;
 
-		// 获取sim卡是否在通话中,这里暂时不判断
-		// if (!isSIMCalling())
-		// {
-		// isCameraClose = false;
-		// }
-
-		if (CallLogic.STATUS_TALKING == CallLogic.getIns().getVoipStatus())
+		if (CallStatus.STATUS_TALKING == CallService.getInstance().getVoipStatus())
 		{
 			// 语音升级视频
 			operPool.execute(new Runnable()
@@ -1683,20 +1670,13 @@ public class MenuBarContalPanel implements OnClickListener, com.huawei.te.exampl
 					}
 					synchronized (MENULOCK)
 					{
-						VideoCaps caps = VideoHandler.getIns().getCaps();
-						VideoCaps dataCaps = VideoHandler.getIns().getDataCaps();
-						if (!VideoHandler.getIns().isInit())
-						{
-							caps = VideoHandler.getIns().initCallVideo(rootView.getContext());
-							dataCaps = VideoHandler.getIns().getDataCaps();
-						}
-						callControl.upgradeVideo(caps, dataCaps);
+						callControl.upgradeVideo();
 						Log.i(TAG, "upgradevideo");
 						isDone = false;
 					}
 				}
 			});
-		} else if (CallLogic.STATUS_VIDEOING == CallLogic.getIns().getVoipStatus())
+		} else if (CallStatus.STATUS_VIDEOING == CallService.getInstance().getVoipStatus())
 		{
 			// 视频到语音
 			operPool.execute(new Runnable()
@@ -1771,8 +1751,10 @@ public class MenuBarContalPanel implements OnClickListener, com.huawei.te.exampl
 	@Override
 	public void shareFile()
 	{
-		// if ((CallLogic.STATUS_VIDEOING != CallLogic.getIns().getVoipStatus()
-		// && CallLogic.STATUS_VIDEOINIT != CallLogic.getIns().getVoipStatus()))
+		// if ((CallStatus.STATUS_VIDEOING !=
+		// CallService.getInstance().getVoipStatus()
+		// && CallStatus.STATUS_VIDEOINIT !=
+		// CallService.getInstance().getVoipStatus()))
 		// {
 		// Log.i(TAG, "not in video mode");
 		// return;
@@ -1785,8 +1767,10 @@ public class MenuBarContalPanel implements OnClickListener, com.huawei.te.exampl
 
 	private void sharePic()
 	{
-		// if ((CallLogic.STATUS_VIDEOING != CallLogic.getIns().getVoipStatus()
-		// && CallLogic.STATUS_VIDEOINIT != CallLogic.getIns().getVoipStatus()))
+		// if ((CallStatus.STATUS_VIDEOING !=
+		// CallService.getInstance().getVoipStatus()
+		// && CallStatus.STATUS_VIDEOINIT !=
+		// CallService.getInstance().getVoipStatus()))
 		// {
 		// Log.i(TAG, "not in video mode");
 		// return;
@@ -1814,10 +1798,6 @@ public class MenuBarContalPanel implements OnClickListener, com.huawei.te.exampl
 	@Override
 	public void endVideoCall()
 	{
-		// operPool.execute(this);
-
-		// To invoke
-		// 改为非异步线程
 		Log.i(TAG, "endVideoCall send end call request.");
 		CallActivity.getInstance().getCallFragment().sendHandlerMessage(MsgCallFragment.MSG_CALL_END_REQUEST, null);
 	}
@@ -2145,10 +2125,6 @@ public class MenuBarContalPanel implements OnClickListener, com.huawei.te.exampl
 		return isCameraClose;
 	}
 
-	// public boolean isSIMCalling() {
-	// return DeviceUtil.isInSIMCall();
-	// }
-
 	public boolean isMicClosed()
 	{
 		return isMicClosed;
@@ -2286,7 +2262,7 @@ public class MenuBarContalPanel implements OnClickListener, com.huawei.te.exampl
 	{
 		isConfCtrlEnable = isEnable;
 		// 是否显示会场列表按钮
-		if (isEnable && CallLogic.STATUS_TALKING != CallLogic.getIns().getVoipStatus())
+		if (isEnable && CallStatus.STATUS_TALKING != CallService.getInstance().getVoipStatus())
 		{
 			switchMenubar(true);
 		} else

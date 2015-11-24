@@ -3,14 +3,9 @@ package com.huawei.te.example.activity;
 import java.util.Timer;
 import java.util.TimerTask;
 
-import com.huawei.esdk.te.call.CallLogic;
-import com.huawei.esdk.te.util.LayoutUtil;
-import com.huawei.te.example.CallControl;
-import com.huawei.te.example.R;
-import com.huawei.te.example.call.IMediaNetInfoListener;
-import com.huawei.utils.StringUtil;
-import com.huawei.voip.data.MediaNetInfo;
-
+import object.AudioStreamInfo;
+import object.StreamInfo;
+import object.VideoStreamInfo;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -18,10 +13,18 @@ import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 import android.view.Window;
 import android.widget.TextView;
+
+import com.huawei.esdk.te.call.CallConstants.BFCPStatus;
+import com.huawei.esdk.te.call.CallConstants.CallStatus;
+import com.huawei.esdk.te.call.CallLogic;
+import com.huawei.esdk.te.call.CallService;
+import com.huawei.esdk.te.util.LayoutUtil;
+import com.huawei.te.example.CallControl;
+import com.huawei.te.example.R;
+import com.huawei.te.example.call.IMediaNetInfoListener;
+import com.huawei.utils.StringUtil;
+import com.huawei.voip.data.MediaNetInfo;
 import common.TransportType;
-import object.AudioStreamInfo;
-import object.StreamInfo;
-import object.VideoStreamInfo;
 
 public class VideoInfoActivity extends BaseActivity implements IMediaNetInfoListener
 {
@@ -408,10 +411,6 @@ public class VideoInfoActivity extends BaseActivity implements IMediaNetInfoList
 		videoInfoActivity = this;
 		initComponent();
 
-//		if (CallLogic.STATUS_VIDEOING == CallLogic.getIns().getVoipStatus() || CallLogic.STATUS_VIDEOINIT == CallLogic.getIns().getVoipStatus())
-//		{
-//			showScreenNotitle();
-//		}
 		instance = this;
 	}
 	
@@ -931,10 +930,9 @@ public class VideoInfoActivity extends BaseActivity implements IMediaNetInfoList
 		videoEncriptionOutText.setText(videoEncriptionOut);
 		dataEncriptionInText.setText(dataEncriptionIn);
 		dataEncriptionOutText.setText(dataEncriptionOut);
-		// begin added by pwx178217 2013/12/13 reason:DTS2013121204870
 		// 软终端没有发送辅流，但软终端通话状态还显示辅流发送的码率与帧率。。
 		// 音频通话中
-		if (CallLogic.getIns().getVoipStatus() == CallLogic.STATUS_TALKING && !CallLogic.getIns().isVideoCall())
+		if (CallService.getInstance().getVoipStatus() == CallStatus.STATUS_TALKING && !CallLogic.getInstance().isVideoCall())
 		{
 			videoPacketLossProbability = "";
 			videoDelay = "";
@@ -977,15 +975,15 @@ public class VideoInfoActivity extends BaseActivity implements IMediaNetInfoList
 			dataEncriptionOutText.setText("--");
 		}
 		// 视频通话中
-		else if (CallLogic.getIns().getVoipStatus() == CallLogic.STATUS_VIDEOING)
+		else if (CallService.getInstance().getVoipStatus() == CallStatus.STATUS_VIDEOING)
 		{
-			if (CallLogic.BFCP_END.equals(CallLogic.getIns().getBfcpStatus()))
+			if (BFCPStatus.BFCP_END.equals(CallService.getInstance().getBfcpStatus()))
 			{
 
 				setDataEmptyTip();
 				dataEncriptionOutText.setText("--");
 				dataEncriptionInText.setText("--");
-			} else if (CallLogic.BFCP_START.equals(CallLogic.getIns().getBfcpStatus()))
+			} else if (BFCPStatus.BFCP_START.equals(CallService.getInstance().getBfcpStatus()))
 			{
 
 				// 编码

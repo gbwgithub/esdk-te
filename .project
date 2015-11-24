@@ -3,6 +3,7 @@
 	<name>TEDemo</name>
 	<comment></comment>
 	<projects>
+		<project>TESDK</project>
 	</projects>
 	<buildSpec>
 		<buildCommand>

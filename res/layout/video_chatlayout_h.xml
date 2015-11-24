@@ -87,21 +87,4 @@
             android:visibility="gone" />
     </RelativeLayout>
     
-    <Button
-        android:id="@+id/btn_video_hangup"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:visibility="gone"
-        android:text=" 挂断 "/>
-
-    <ImageButton
-        android:id="@+id/switch_view"
-        android:layout_width="25dp"
-        android:layout_height="25dp"
-        android:layout_alignParentBottom="true"
-        android:layout_alignParentRight="true"
-        android:layout_marginBottom="20dp"
-        android:layout_marginRight="20dp"
-        android:visibility="gone" />
-
 </RelativeLayout>
