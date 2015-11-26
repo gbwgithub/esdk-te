@@ -7,7 +7,6 @@ import android.content.Intent;
 import android.content.IntentFilter;
 import android.os.Bundle;
 import android.os.Handler;
-import android.os.Looper;
 import android.util.Log;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -18,21 +17,18 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.huawei.common.CustomBroadcastConst;
-import com.huawei.common.LogSDK;
 import com.huawei.common.Resource;
 import com.huawei.common.ResponseCodeHandler.ResponseCode;
 import com.huawei.common.ThreadTimer;
 import com.huawei.esdk.te.TESDK;
 import com.huawei.esdk.te.call.CallService;
 import com.huawei.esdk.te.data.Constants;
-import com.huawei.manager.DataManager;
 import com.huawei.service.ServiceProxy;
 import com.huawei.service.eSpaceService;
 import com.huawei.te.example.CallControl;
 import com.huawei.te.example.R;
 import com.huawei.te.example.ResponseErrorCodeHandler;
 import com.huawei.te.example.utils.FileUtil;
-import com.huawei.utils.DeviceManager;
 import com.huawei.utils.StringUtil;
 import com.huawei.voip.CallManager.State;
 import com.huawei.voip.data.LoginInfo;
@@ -228,75 +224,58 @@ public class LoginActivity extends BaseActivity
 		doLoginClicked(account, password, false);
 	}
 
-	/**
-	 * 登录点击事件
-	 */
 	private void doLoginClicked(String username, String wordpass, final boolean isAnonymous)
 	{
-
 		eSpaceNumber = isAnonymous ? Constants.ANONYMOUS_ACCOUNT : username;
 		eSpaceWordPass = isAnonymous ? "" : wordpass;
-
-		// 初始化Datamanager
-		DataManager.getIns().init(this, isAnonymous ? Constants.ANONYMOUS_ACCOUNT : username);
-
-		// 在延迟登录线程中执行时，需要判断loop是否存在
-		if (null == Looper.myLooper())
+		
+		connectToServer123(isAnonymous);
+	}
+	
+	
+	private void connectToServer123(boolean isAnonymousLogin){
+		
+		LoginInfo info = new LoginInfo();
+		info.setAnonymousLogin(isAnonymousLogin);
+		info.setAutoLogin(false);
+		info.setLicenseServer(licenseServer);
+		if (!isAnonymousLogin)
 		{
-			Looper.prepare();
+			info.setServerIP(serverIP);
+			info.setServerPort(serverPort);
+			info.setSipuri(sipURI);
 		}
-
-		// 如果网络问题无法登录做提示
-		// if (!DeviceManager.isNetworkAvailable(this) && isGeneralLogin)
-		if (!DeviceManager.isNetworkAvailable(this))
+		// 匿名呼叫自动使用UDP传输协议 -- TLS TCP UDP协议登录时记录设置端口
+		info.setProtocolType(isAnonymousLogin ? "UDP" : "TLS");
+		// Log传输协议
+		Log.i(TAG, "ProtocolType is " + info.getProtocolType());
+		// 设置心跳
+		info.setSupportSipSessionTimer(true);
+		// 设置bfcpState
+		info.setBfcpEnable(true);
+		info.setLoginName(eSpaceNumber);
+		info.setLoginPwd(eSpaceWordPass);
+		// 设置SRTP，安全传输协议：2：加密 3:非强制性加密(最大互通性) 1：不加密
+		info.setEncryptMode(3);
+		int callBandWidth = 512;
+		info.setCallBandWidth(callBandWidth);
+		info.setIsILBCPri(0);
+		if (callBandWidth < 512)
 		{
-			Toast.makeText(this, "网络已断开", Toast.LENGTH_SHORT).show();
-			return;
+			info.setIsILBCPri(1);
 		}
-
-		Constants.setAnonymousAccount(isAnonymous);
-
-		innerHandler = new Handler();
-
-		LogSDK.setUser(isAnonymous ? Constants.ANONYMOUS_ACCOUNT : username);
-		resetLoginDelayTimer();
-		loginDelayTimer = new ThreadTimer(loginRunnable, 100, "logindelay", ThreadTimer.TimerType.TIMER_ONESHOT);
-		loginDelayTimer.start();
-	}
-
-	@Override
-	protected void onStart()
-	{
-		Log.d(TAG, "onStart()");
-		super.onStart();
-	}
-	
-	@Override
-	protected void onResume()
-	{
-		Log.d(TAG, "onResume()");
-		super.onResume();
-	}
-	
-	@Override
-	protected void onPause()
-	{
-		Log.d(TAG, "onPause()");
-		super.onPause();
-	}
-	
-	@Override
-	protected void onStop()
-	{
-		Log.d(TAG, "onStop()");
-		super.onStop();
-	}
-
-	@Override
-	protected void onRestart()
-	{
-		Log.d(TAG, "onRestart()");
-		super.onRestart();
+		// ct值设置成和总带宽一样
+		info.setCT(callBandWidth);
+		// // 画质优先
+		// info.setVideoMode(Constants.VideoMode.VIDEO_QUALITY_MODE);
+		// 流畅优先于画质
+		info.setVideoMode(Constants.VideoMode.VIDEO_PROCESS_MODE);
+		// 添加本地Sip端口和媒体端口
+		info.setSipPort(5060);
+		info.setMediaPort(10002);
+		info.setServerPort("5061");
+		
+		TESDK.getInstance().login(info);
 	}
 	
 	@Override
@@ -353,107 +332,6 @@ public class LoginActivity extends BaseActivity
 				Log.e(TAG, e.getMessage());
 			}
 			mReceiver = null;
-		}
-	}
-
-	private Runnable loginRunnable = new Runnable()
-	{
-		@Override
-		public void run()
-		{
-			if (null == Looper.myLooper())
-			{
-				Looper.prepare();
-			}
-			Log.d(TAG, "delayRunnable start doLoginClicked");
-			// 这里不能用再下边哪行代码，因为如果直接写new
-			// Handler()，则这个Handler是在run()中创建，也就是说，它会在其他线程执行，
-			// 而那种情况是不满足预期的，handler无法接收到消息,所以需要在主线程中创建handler.（就像下边这行...）
-			TESDK.getInstance().callWhenServiceConnected(innerHandler, new Runnable()
-			{
-				@Override
-				public void run()
-				{
-					Log.d(TAG, "ServiceConnected call connectToServer start.");
-					// false - 非匿名连接服务器
-					connectToServer(false);
-					Log.d(TAG, "ServiceConnected call connectToServer end.");
-				}
-			}, false);
-			resetLoginDelayTimer();
-		}
-	};
-
-	/**
-	 * 连接服务器 isAnonymousLogin 是否为匿名登录
-	 */
-	private void connectToServer(boolean isAnonymousLogin)
-	{
-		Log.i(TAG, "connectToServer enter. isAnonymousLogin: " + isAnonymousLogin);
-		serviceProxy = TESDK.getInstance().getmService();
-
-		if (serviceProxy == null)
-		{
-			Log.w(TAG, "connect to Server error  serviceProxy is null ");
-			Log.i(TAG, "connectToServer leave.");
-			return;
-		}
-
-		LoginInfo info = new LoginInfo();
-		info.setAnonymousLogin(isAnonymousLogin);
-		info.setAutoLogin(false);
-		info.setLicenseServer(licenseServer);
-		if (!isAnonymousLogin)
-		{
-			// info.setServerIP("172.22.9.21");
-			// info.setServerIP("172.22.8.4");
-			info.setServerIP(serverIP);
-			info.setServerPort(serverPort);
-			info.setSipuri(sipURI);
-		}
-		// 匿名呼叫自动使用UDP传输协议 -- TLS TCP UDP协议登录时记录设置端口
-		info.setProtocolType(isAnonymousLogin ? "UDP" : "TLS");
-		// Log传输协议
-		Log.i(TAG, "ProtocolType is " + info.getProtocolType());
-		// 设置心跳
-		info.setSupportSipSessionTimer(true);
-		// 设置bfcpState
-		info.setBfcpEnable(true);
-		info.setLoginName(eSpaceNumber);
-		info.setLoginPwd(eSpaceWordPass);
-	    //设置SRTP，安全传输协议：2：加密 3:非强制性加密(最大互通性) 1：不加密
-		info.setEncryptMode(3);
-		int callBandWidth = 512;
-		info.setCallBandWidth(callBandWidth);
-		info.setIsILBCPri(0);
-		if (callBandWidth < 512)
-		{
-			info.setIsILBCPri(1);
-		}
-		// ct值设置成和总带宽一样
-		info.setCT(callBandWidth);
-		// // 画质优先
-		// info.setVideoMode(Constants.VideoMode.VIDEO_QUALITY_MODE);
-		// 流畅优先于画质
-		info.setVideoMode(Constants.VideoMode.VIDEO_PROCESS_MODE);
-		// 添加本地Sip端口和媒体端口
-		info.setSipPort(5060);
-		info.setMediaPort(10002);
-		info.setServerPort("5061");
-		// login返回false时上报错误状态
-		if (!serviceProxy.login(info, this))
-		{
-			eSpaceService.getService().onLoginResult(State.UNREGISTE, Resource.NETWORK_INVALID);
-		}
-		Log.i(TAG, "connectToServer leave.");
-	}
-
-	private void resetLoginDelayTimer()
-	{
-		if (loginDelayTimer != null)
-		{
-			loginDelayTimer.stop();
-			loginDelayTimer = null;
 		}
 	}
 
@@ -517,14 +395,14 @@ public class LoginActivity extends BaseActivity
 		boolean flag = intent.getBooleanExtra(Resource.SERVICE_RESPONSE_DATA, false);
 		if (flag)
 		{
-			if (serviceProxy != null)
+			if (TESDK.getInstance().getmService() != null)
 			{
 				new Thread(new Runnable()
 				{
 					@Override
 					public void run()
 					{
-						if (serviceProxy != null)
+						if (TESDK.getInstance().getmService() != null)
 						{
 							try
 							{

@@ -225,7 +225,7 @@ public class FileUtil
 	 */
 	public void sendTEMobileLog(BaseActivity context, int type)
 	{
-		// begin add by wx183960 reasonn:拷贝崩溃文件到指定目录下
+		// 拷贝崩溃文件到指定目录下
 		if (null == DeviceUtil.getSdcardPath())
 		{
 			copyFolder("/data/tombstones", "/data/data/com.huawei.te.example/TESDKLog");
@@ -243,19 +243,13 @@ public class FileUtil
 		File zipfile = FileUtil.getZIPfile();
 		if (zipfile == null)
 		{
-			// 2014/1/18reason:U8850手机无内存卡，单击“通过电子邮件发送故障报告”按钮无提示信息，用户体验不好
+			// 手机无内存卡，单击“通过电子邮件发送故障报告”按钮无提示信息，用户体验不好
 			// 无sdcard情况下提示 日志打包失败,无SDCard
 			Toast.makeText(context, context.getString(R.string.err_report_zip_false) + " ," + context.getString(R.string.no_sdcard), Toast.LENGTH_LONG)
 					.show();
 			// 2014/1/18reason:U8850手机无内存卡，单击“通过电子邮件发送故障报告”按钮无提示信息，用户体验不好
 			return;
 		}
-
-		// File file = new File("/mnt/sdcard/gbw123/");
-		// if (!file.exists())
-		// {
-		// file.mkdir();
-		// }
 
 		String path = ZipUtil.getCanonicalPath(zipfile);
 		if (type == DATABASE_FILE_TYPE)

@@ -231,7 +231,7 @@ public class MenuBarContalPanel implements OnClickListener, com.huawei.te.exampl
 	/**
 	 * 开关扬声器布局
 	 */
-	// private LinearLayout speekerControl;
+	private LinearLayout speekerControl;
 
 	/**
 	 * 分割线条
@@ -240,7 +240,7 @@ public class MenuBarContalPanel implements OnClickListener, com.huawei.te.exampl
 	/**
 	 * 开关扬声器图标
 	 */
-	// private ImageView speekerControlImg;
+	private ImageView speekerControlImg;
 	/**
 	 * 打开扬声器、关闭扬声器
 	 */
@@ -454,7 +454,7 @@ public class MenuBarContalPanel implements OnClickListener, com.huawei.te.exampl
 		videoClickRes[0][0] = R.drawable.te_state_camera;
 		videoClickRes[0][1] = R.drawable.te_state_close_camera;
 
-		// begin modified by pwx178217 reason:声音外放开关图片 扬声器图片
+		// 声音外放开关图片 扬声器图片
 		outputClickRes[0][0] = R.drawable.te_phone_menu_speaker;
 		outputClickRes[0][1] = R.drawable.te_phone_menu_close_speaker;
 
@@ -536,21 +536,21 @@ public class MenuBarContalPanel implements OnClickListener, com.huawei.te.exampl
 		// ================================
 		// 此之间只有手机布局存在 使用时需注意判空
 		// 关闭扬声器
-		// speekerControl = (LinearLayout)
-		// moreView.findViewById(R.id.video_speaker);
+		speekerControl = (LinearLayout) moreView.findViewById(R.id.video_speaker);
 		// speekerControlLine =
 		// moreView.findViewById(R.id.video_speaker_up_line);
 		// emptyitem = (LinearLayout) moreView.findViewById(R.id.empty_layout);
 		// emptyitemUpLine = moreView.findViewById(R.id.empty_layout_up_line);
-		// if (null != speekerControl) {
-		// speekerControl.setTag(true);
-		// speekerControl.setOnClickListener(this);
-		// }
-		// speekerControlImg = (ImageView)
-		// moreView.findViewById(R.id.video_speaker_img);
-		// if (null != speekerControlImg) {
-		// speekerControlImg.setImageDrawable(rootView.getResources().getDrawable(R.drawable.te_phone_more_open_speaker));
-		// }
+		if (null != speekerControl)
+		{
+			speekerControl.setTag(true);
+			speekerControl.setOnClickListener(this);
+		}
+		speekerControlImg = (ImageView) moreView.findViewById(R.id.video_speaker_img);
+		if (null != speekerControlImg)
+		{
+			speekerControlImg.setImageDrawable(rootView.getResources().getDrawable(R.drawable.te_phone_more_open_speaker));
+		}
 		// speekerControlTxt = (TextView)
 		// moreView.findViewById(R.id.video_speaker_txt);
 		// // end 此之间只有手机布局存在 使用时需注意判空 pwx178217 20150827
@@ -689,11 +689,14 @@ public class MenuBarContalPanel implements OnClickListener, com.huawei.te.exampl
 			dismissMorePopWindow();
 			break;
 		case R.id.video_speaker:
+			// 针对手机布局才在这里调用
 			// boolean isClose = (Boolean) speekerControl.getTag();
 			// speekerControl.setTag(!isClose);
-			// if (isClose) {
+			// if (isClose)
+			// {
 			// closeSpeakerComfirm();
-			// } else {
+			// } else
+			// {
 			// openSpeakerComfirm();
 			// }
 			break;
@@ -837,14 +840,6 @@ public class MenuBarContalPanel implements OnClickListener, com.huawei.te.exampl
 		{
 			changeMode(modeVar, "");
 
-			// 音频全屏、半屏切换 ，视频在popwindow里
-			// 打算添加的功能，就注释掉隐藏代码
-			// menuBar.setMenuItemVisible(VideoMenuBar.HANG_UP, View.GONE);
-			// menuBar.setMenuItemVisible(VideoMenuBar.AUDIO_VIDEO, View.GONE);
-			// menuBar.setMenuItemVisible(VideoMenuBar.MORE, View.GONE);
-			// menuBar.setMenuItemVisible(VideoMenuBar.REDIAL_BOARD, View.GONE);
-			menuBar.setMenuItemVisible(VideoMenuBar.MIC, View.GONE);
-			menuBar.setMenuItemVisible(VideoMenuBar.SPEAKER, View.GONE);
 			// 会场列表
 			menuBar.setMenuItemVisible(VideoMenuBar.CONFLIST, View.GONE);
 			menuBar.setMenuItemVisible(VideoMenuBar.BLUETOOTH, View.GONE);
@@ -1385,37 +1380,43 @@ public class MenuBarContalPanel implements OnClickListener, com.huawei.te.exampl
 	@Override
 	public void closeMIC(ImageView view)
 	{
-		// if (null == cVoip) {
-		// Log.e(TAG, "error: CVoip is null");
-		// return;
-		// }
-		//
-		// if (isDone) {
-		// Log.i(TAG, "other click not readly");
-		// return;
-		// }
-		// isDone = true;
-		//
-		// if (Constant.CLICK.equals(view.getTag())) {
-		// view.setImageResource(micClickRes[0][0]);
-		// view.setTag("");
-		//
-		// // 会议状态下点击取消闭音，执行取消会议闭音方法
-		// if (cVoip.isInConfCall()) {
-		// TEAttendee attendee = new TEAttendee();
-		// cVoip.muteAttendee(attendee, TupBool.TUP_FALSE);
-		// }
-		// cVoip.setLocalMute(true, false);
-		// Log.i(TAG, "open local MIC Success");
-		// isDone = false;
-		// } else {
-		// view.setImageResource(micClickRes[0][1]);
-		// view.setTag(Constant.CLICK);
-		//
-		// cVoip.setLocalMute(true, true);
-		// Log.i(TAG, "close local MIC Success");
-		// isDone = false;
-		// }
+		Log.v(TAG, "closeMIC is clicked()");
+		if (null == callControl)
+		{
+			Log.e(TAG, "error: callControl is null");
+			return;
+		}
+
+		if (isDone)
+		{
+			Log.i(TAG, "other click not readly");
+			return;
+		}
+		isDone = true;
+
+		if (Constants.CLICK.equals(view.getTag()))
+		{
+			view.setImageResource(micClickRes[0][0]);
+			view.setTag("");
+
+			// 会议状态下点击取消闭音，执行取消会议闭音方法
+			// if (callControl.isInConfCall())
+			// {
+			// TEAttendee attendee = new TEAttendee();
+			// cVoip.muteAttendee(attendee, TupBool.TUP_FALSE);
+			// }
+			callControl.setLocalMute(true, false);
+			Log.i(TAG, "open local MIC Success");
+			isDone = false;
+		} else
+		{
+			view.setImageResource(micClickRes[0][1]);
+			view.setTag(Constants.CLICK);
+
+			callControl.setLocalMute(true, true);
+			Log.i(TAG, "close local MIC Success");
+			isDone = false;
+		}
 	}
 
 	/**
@@ -1461,7 +1462,7 @@ public class MenuBarContalPanel implements OnClickListener, com.huawei.te.exampl
 	 */
 	public void closeSpeakerComfirm()
 	{
-		morePopControlSpeaker(true);
+		// morePopControlSpeaker(true);
 		ImageView micView = menuBar.getMenuItemsImg(VideoMenuBar.SPEAKER);
 		micView.setTag("");
 		closeSpeaker(micView);
@@ -1472,7 +1473,7 @@ public class MenuBarContalPanel implements OnClickListener, com.huawei.te.exampl
 	 */
 	public void openSpeakerComfirm()
 	{
-		morePopControlSpeaker(false);
+		// morePopControlSpeaker(false);
 		ImageView micView = menuBar.getMenuItemsImg(VideoMenuBar.SPEAKER);
 		micView.setTag(Constants.CLICK);
 		closeSpeaker(micView);
@@ -1487,32 +1488,36 @@ public class MenuBarContalPanel implements OnClickListener, com.huawei.te.exampl
 	@Override
 	public void closeSpeaker(ImageView view)
 	{
-		// if (null == cVoip) {
-		// Log.e(TAG, "error: CVoip is null");
-		// return;
-		// }
-		//
-		// if (isDone) {
-		// Log.i(TAG, "other click not readly");
-		// return;
-		// }
-		// isDone = true;
-		//
-		// if (Constant.CLICK.equals(view.getTag())) {
-		// view.setImageResource(outputClickRes[0][0]);
-		// view.setTag("");
-		//
-		// cVoip.oratorMute(false);
-		// Log.i(TAG, "open local Speaker");
-		// isDone = false;
-		// } else {
-		// view.setImageResource(outputClickRes[0][1]);
-		// view.setTag(Constant.CLICK);
-		//
-		// cVoip.oratorMute(true);
-		// Log.i(TAG, "close local Speaker");
-		// isDone = false;
-		// }
+		if (null == callControl)
+		{
+			Log.e(TAG, "error: callControl is null");
+			return;
+		}
+
+		if (isDone)
+		{
+			Log.i(TAG, "other click not readly");
+			return;
+		}
+		isDone = true;
+
+		if (Constants.CLICK.equals(view.getTag()))
+		{
+			view.setImageResource(outputClickRes[0][0]);
+			view.setTag("");
+
+			callControl.oratorMute(false);
+			Log.i(TAG, "open local Speaker");
+			isDone = false;
+		} else
+		{
+			view.setImageResource(outputClickRes[0][1]);
+			view.setTag(Constants.CLICK);
+
+			callControl.oratorMute(true);
+			Log.i(TAG, "close local Speaker");
+			isDone = false;
+		}
 	}
 
 	/**
@@ -1856,19 +1861,22 @@ public class MenuBarContalPanel implements OnClickListener, com.huawei.te.exampl
 	 */
 	private void resetMIC()
 	{
-		// if (null == cVoip) {
-		// Log.e(TAG, "error: CVoip is null");
-		// return;
-		// }
-		//
-		// // 一路通话结束还原麦克
-		// menuBar.getMenuItemsImg(VideoMenuBar.MIC).setImageResource(micClickRes[0][0]);
-		// operPool.execute(new Runnable() {
-		// @Override
-		// public void run() {
-		// cVoip.setLocalMute(true, false);
-		// }
-		// });
+		if (null == callControl)
+		{
+			Log.e(TAG, "error: callControl is null");
+			return;
+		}
+
+		// 一路通话结束还原麦克
+		menuBar.getMenuItemsImg(VideoMenuBar.MIC).setImageResource(micClickRes[0][0]);
+		operPool.execute(new Runnable()
+		{
+			@Override
+			public void run()
+			{
+				callControl.setLocalMute(true, false);
+			}
+		});
 	}
 
 	/**
@@ -1876,19 +1884,22 @@ public class MenuBarContalPanel implements OnClickListener, com.huawei.te.exampl
 	 */
 	private void resetSpeaker()
 	{
-		// if (null == cVoip) {
-		// Log.e(TAG, "error: CVoip is null");
-		// return;
-		// }
-		//
-		// // 一路通话结束还原扬声器
-		// menuBar.getMenuItemsImg(VideoMenuBar.SPEAKER).setImageResource(outputClickRes[0][0]);
-		// operPool.execute(new Runnable() {
-		// @Override
-		// public void run() {
-		// cVoip.oratorMute(false);
-		// }
-		// });
+		if (null == callControl)
+		{
+			Log.e(TAG, "error: callControl is null");
+			return;
+		}
+
+		// 一路通话结束还原扬声器
+		menuBar.getMenuItemsImg(VideoMenuBar.SPEAKER).setImageResource(outputClickRes[0][0]);
+		operPool.execute(new Runnable()
+		{
+			@Override
+			public void run()
+			{
+				callControl.oratorMute(false);
+			}
+		});
 	}
 
 	/**
@@ -1908,10 +1919,12 @@ public class MenuBarContalPanel implements OnClickListener, com.huawei.te.exampl
 	{
 		// // 软终端在二次拨号拨号盘界面结束通话时，二次拨号拨号盘不消失
 		// if (ActivityStackManager.INSTANCE.getCurrentActivity() instanceof
-		// FileBrowserActivity) {
+		// FileBrowserActivity)
+		// {
 		// if (((FileBrowserActivity)
 		// ActivityStackManager.INSTANCE.getCurrentActivity()).getType() ==
-		// FileBrowserActivity.PDF) {
+		// FileBrowserActivity.PDF)
+		// {
 		// ActivityStackManager.INSTANCE.getCurrentActivity().finish();
 		// }
 		// }
@@ -2298,43 +2311,6 @@ public class MenuBarContalPanel implements OnClickListener, com.huawei.te.exampl
 		}
 		menuBar.getMenuItemsImg(VideoMenuBar.MIC).setImageResource(micClickRes[0][0]);
 		menuBar.getMenuItemsImg(VideoMenuBar.MIC).setTag("");
-	}
-
-	/**
-	 * 更多菜单栏中开关扬声器图标变化
-	 */
-	private void morePopControlSpeaker(boolean isClose)
-	{
-		// if (null != speekerControlImg) {
-		// speekerControlImg.setImageDrawable(
-		// rootView.getResources().getDrawable(isClose ?
-		// R.drawable.te_phone_more_close_speaker :
-		// R.drawable.te_phone_more_open_speaker));
-		// }
-		// if (null != speekerControlTxt) {
-		// speekerControlTxt.setText(speekerControlTxt.getResources().getString(isClose
-		// ? R.string.close_speaker : R.string.open_speaker));
-		// }
-	}
-
-	/**
-	 * 更多弹窗开关扬声器可见性设置 切换正常通话与会议通话时 更多菜单栏显示 会议通话有会控功能时，开关扬声器菜单处于更多弹窗栏
-	 */
-	private void morePopSpeakerVisibility(boolean isVisiable)
-	{
-		// if (null != speekerControl) {
-		// speekerControl.setVisibility(isVisiable ? View.VISIBLE : View.GONE);
-		// }
-		// if (null != speekerControlLine) {
-		// speekerControlLine.setVisibility(isVisiable ? View.VISIBLE :
-		// View.GONE);
-		// }
-		// if (null != emptyitem) {
-		// emptyitem.setVisibility(isVisiable ? View.VISIBLE : View.GONE);
-		// }
-		// if (null != emptyitemUpLine) {
-		// emptyitemUpLine.setVisibility(isVisiable ? View.VISIBLE : View.GONE);
-		// }
 	}
 
 	/**

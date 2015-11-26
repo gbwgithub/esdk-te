@@ -250,7 +250,8 @@ public class CallFragment extends Fragment implements OnClickListener
 			{
 				return;
 			}
-			refreshView(msg);
+			//refreshView已经添加到SDK中执行
+//			refreshView(msg);
 			break;
 		// case MsgCallFragment.MSG_ADD_VIDEO_TIME_OUT:
 		// showToast(R.string.add_video_time_out);
@@ -1409,19 +1410,6 @@ public class CallFragment extends Fragment implements OnClickListener
 	{
 		Intent intent = new Intent(rootView.getContext(), VideoInfoActivity.class);
 		startActivity(intent);
-	}
-
-	/**
-	 * 刷新LocalRender视频界面
-	 */
-	private void refreshView(Message msg)
-	{
-		synchronized (LocalHideRenderServer.class)
-		{
-			Log.i(TAG, "refresh_view");
-			Boolean str = (Boolean) msg.obj;
-			CallService.getInstance().refreshLocalHide(str);
-		}
 	}
 
 	//封装到SDK中，但没有执行在UI线程

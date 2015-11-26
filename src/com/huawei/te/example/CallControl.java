@@ -10,6 +10,7 @@ import com.huawei.common.CallErrorCode;
 import com.huawei.esdk.te.call.Call;
 import com.huawei.esdk.te.call.CallConstants.BFCPStatus;
 import com.huawei.esdk.te.call.CallConstants.CallStatus;
+import com.huawei.esdk.te.call.CallLogic;
 import com.huawei.esdk.te.call.CallNotification;
 import com.huawei.esdk.te.call.CallService;
 import com.huawei.esdk.te.data.Constants;
@@ -414,39 +415,6 @@ public class CallControl implements CallNotification
 	}
 
 	/**
-	 * 刷新view
-	 */
-	private void refrershView(EventData data)
-	{
-
-		Log.i(TAG, "refresh view()");
-		boolean cameraDataStatus = (null != data && data instanceof CameraViewRefresh);
-		if (cameraDataStatus)
-		{
-			// 目前只有本地采集点， 后续有做render事件时 再添加
-			CameraViewRefresh viewData = (CameraViewRefresh) data;
-
-			if (viewData.getMediaType() == CameraViewRefresh.MEDIA_TYPE_VIDEO || viewData.getMediaType() == CameraViewRefresh.MEDIA_TYPE_PREVIEW)
-			{
-				if (viewData.getViewType() == CameraViewRefresh.VIEW_TYPE_LOCAL_ADD)
-				{
-					CallActivity.getInstance().getCallFragment().sendHandlerMessage(MsgCallFragment.MSG_REFRESH_VIEW, true);
-				} else if (viewData.getViewType() == CameraViewRefresh.VIEW_TYPE_LOCAL_REMOVE)
-				{
-					CallActivity.getInstance().getCallFragment().sendHandlerMessage(MsgCallFragment.MSG_REFRESH_VIEW, false);
-				}
-				try
-				{
-					Thread.sleep(1000);
-				} catch (InterruptedException e)
-				{
-					Log.e(TAG, "Progress get an Exception.");
-				}
-			}
-		}
-	}
-
-	/**
 	 * 来电通知 4102
 	 * 
 	 * @param callsession
@@ -511,6 +479,38 @@ public class CallControl implements CallNotification
 		return callCodeString;
 	}
 
+	/**
+	 * 二次拨号
+	 * 
+	 * @param code
+	 *            号码
+	 */
+	public boolean reDial(String code)
+	{
+		return CallService.getInstance().reDial(code);
+	}
+
+	/**
+	 * 本地麦克风静音
+	 * 
+	 * @param isRefer
+	 *            是否会议中转移 true: 会议中转移， false：非会议中转移，对设备原来的静音状态取反。
+	 * @param isMute
+	 *            是否静音 true: 静音， false：取消静音
+	 */
+	public boolean setLocalMute(boolean isRefer, boolean isMute)
+	{
+		return CallService.getInstance().setLocalMute(isRefer, isMute);
+	}
+	
+    /**
+     * 扬声器静音
+     */
+    public boolean oratorMute(boolean isMute)
+    {
+    	return CallService.getInstance().oratorMute(isMute);
+    }
+	
 	/**
 	 * 接听呼叫，接听一个呼叫，包括音、视频呼叫，返回接听是否成功
 	 * 
@@ -581,7 +581,7 @@ public class CallControl implements CallNotification
 		{
 			Log.e(TAG, "closeCall CallFragment is null");
 		}
-		
+
 		// 重置Demo的CallStatus
 		setCallStatus(CallStatus.STATUS_CLOSE);
 	}
@@ -801,17 +801,6 @@ public class CallControl implements CallNotification
 	}
 
 	/**
-	 * view刷新通知
-	 */
-	@Override
-	public void onCallRefreshView(CameraViewRefresh data)
-	{
-		Log.d(TAG, "onCallRefreshView()");
-		// 刷新本地render显示
-		refrershView(data);
-	}
-
-	/**
 	 * 对方挂断
 	 */
 	@Override
@@ -921,5 +910,6 @@ public class CallControl implements CallNotification
 		CallService.getInstance().unregisterNotification(this);
 		instance = null;
 	}
+
 
 }

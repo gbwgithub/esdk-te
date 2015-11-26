@@ -155,7 +155,7 @@ public class RecallPopWindow extends PopupWindow
 					if (callControl != null)
 					{
 						// DTMF带内送号， 0~9 *对应10 # 对应11
-						// callControl.reDial(i + "");
+						callControl.reDial(i + "");
 					}
 				}
 				return false;
