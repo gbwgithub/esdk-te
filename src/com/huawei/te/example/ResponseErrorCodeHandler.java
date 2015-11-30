@@ -19,7 +19,6 @@ public final class ResponseErrorCodeHandler
 		 * 网络连接失败
 		 */
 		CONNECT_SERVER_ERROR,
-
 	}
 
 	/**
@@ -229,18 +228,6 @@ public final class ResponseErrorCodeHandler
 
 	private static void doEndShowDialog(boolean needShow, boolean showError, boolean delay, Activity baseActivity, String msgTitle, String msg)
 	{
-		// if (needShow && showError)
-		// {
-		// if (delay)
-		// {
-		// showAlertDialogDelay(baseActivity, msgTitle, msg);
-		// return;
-		// }
-		// String ok = baseActivity.getString(R.string.ok);
-		// baseActivity.showAlertDialog(msgTitle, msg, ok, null, null, null,
-		// null);
-		// }
-		// To invoke
 		if (baseActivity instanceof LoginActivity)
 		{
 			((LoginActivity) baseActivity).showAlertDialog(null, msg, null, null, null, null, null);

@@ -12,9 +12,6 @@ import com.huawei.common.CustomBroadcastConst;
 import com.huawei.common.LogSDK;
 import com.huawei.service.eSpaceService;
 
-/**
- * Copyright (C) 2008-2013 华为技术有限公司(Huawei Tech.Co.,Ltd)
- */
 public class NetConnectStatus extends BroadcastReceiver {
 
 	private static final String TAG = NetConnectStatus.class.getSimpleName();

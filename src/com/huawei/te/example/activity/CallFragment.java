@@ -535,7 +535,7 @@ public class CallFragment extends Fragment implements OnClickListener
 		if (isVideoCall)
 		{
 			// 初始化视频参数
-			CallService.getInstance().initCallVideo();
+			//CallService.getInstance().initCallVideo();
 			sendHandlerMessage(MsgCallFragment.MSG_DIALCALL_VIDEO, callNumber);
 		} else
 		{
@@ -1111,15 +1111,13 @@ public class CallFragment extends Fragment implements OnClickListener
 	{
 		// 获取远端视频
 		remoteVideoView.setVisibility(View.VISIBLE);
-		CallService.getInstance().addRenderToContain(localVideoView, remoteVideoView, true);
+		CallService.getInstance().openCallVideo(localVideoView, remoteVideoView, true);
 	}
 
 	/**
 	 * render控制锁
 	 */
 	private static final Object RENDER_CHANGE_LOCK = new Object();
-
-	// TODO 移到SDK里
 
 	/**
 	 * 更新呼叫中界面显示 （视频呼叫 语音呼叫）
@@ -1152,7 +1150,7 @@ public class CallFragment extends Fragment implements OnClickListener
 				menuBarPanel.show();
 			}
 
-			CallService.getInstance().addLocalRenderToContain(previewLayout);
+			CallService.getInstance().openLocalPreview(previewLayout);
 
 			return;
 		}
@@ -1353,11 +1351,11 @@ public class CallFragment extends Fragment implements OnClickListener
 			break;
 		case CallStatus.STATUS_CALLING:// 目前只有呼转进入
 			Log.i(TAG, "CallStatus.STATUS_CALLING:");
-			if (isVideo)
-			{
-				// 初始化视频参数
-				CallService.getInstance().initCallVideo();
-			}
+//			if (isVideo)
+//			{
+//				// 初始化视频参数
+//				CallService.getInstance().initCallVideo();
+//			}
 			updateLayout(CallStatus.STATUS_CALLING, callNumber, isVideo, tipTxt);
 			// HomeActivity.sendHandlerMessage(CallConstant.SHOW_CALL_LAYOUT,
 			// null);
@@ -1380,7 +1378,7 @@ public class CallFragment extends Fragment implements OnClickListener
 			// 如果是视频升级需要重新创建
 //			if (null == VideoHandler.getIns().getRemoteCallView())
 //			{
-				CallService.getInstance().initCallVideo();
+//				CallService.getInstance().initCallVideo();
 //			}
 			updateLayout(CallStatus.STATUS_VIDEOING, callNumber, true, tipTxt);
 

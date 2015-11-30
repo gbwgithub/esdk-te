@@ -1339,7 +1339,7 @@ public class MenuBarContalPanel implements OnClickListener, com.huawei.te.exampl
 		// 视频通话，打开手机自带相机功能，软终端本地视频卡住，不能通过开关摄像头按钮进行恢复
 		boolean operate = isDone
 				|| (CallStatus.STATUS_VIDEOING != CallService.getInstance().getVoipStatus() && CallStatus.STATUS_VIDEOINIT != CallService.getInstance()
-						.getVoipStatus()) || !CallService.getInstance().isVideoInit();
+						.getVoipStatus()) ;
 		if (operate)
 		{
 			Log.i(TAG, "last close video click was not readly");
@@ -1615,7 +1615,7 @@ public class MenuBarContalPanel implements OnClickListener, com.huawei.te.exampl
 		if (isDone
 				|| isCameraClose
 				|| (CallStatus.STATUS_VIDEOING != CallService.getInstance().getVoipStatus() && CallStatus.STATUS_VIDEOINIT != CallService.getInstance()
-						.getVoipStatus()) || !CallService.getInstance().isVideoInit())
+						.getVoipStatus()) )
 		{
 			Log.i(TAG, "other click not readly or camera is closed");
 			return;

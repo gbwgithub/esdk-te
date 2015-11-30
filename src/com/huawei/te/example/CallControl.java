@@ -348,7 +348,7 @@ public class CallControl implements CallNotification
 				Log.i(TAG, "not refresh ui the bfcpStatus is " + CallService.getInstance().getBfcpStatus());
 				return;
 			}
-			// end与VCT对接辅流时音视频变换，界面异常
+			// 与VCT对接辅流时音视频变换，界面异常
 			notifyCallActivityUpdateUI();
 		}
 		// 通知界面取消升级视频
@@ -485,9 +485,9 @@ public class CallControl implements CallNotification
 	 * @param code
 	 *            号码
 	 */
-	public boolean reDial(String code)
+	public boolean sendDTMF(String code)
 	{
-		return CallService.getInstance().reDial(code);
+		return CallService.getInstance().sendDTMF(code);
 	}
 
 	/**
