@@ -5,13 +5,28 @@
     android:gravity="center"
     android:orientation="vertical" >
 
-    <Button
-        android:id="@+id/button1"
+    <LinearLayout
+        android:id="@+id/linearlayout_setting_more"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:onClick="saveLog"
-        android:visibility="gone"
-        android:text="保存日志" />
+        android:layout_gravity="right|top"
+        android:padding="5dp"
+        android:visibility="gone" >
+
+        <Button
+            android:id="@+id/btn_save_log"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:onClick="saveLog"
+            android:text="保存日志" />
+
+        <Button
+            android:id="@+id/btn_setting"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:onClick="showSettingLayout"
+            android:text="设置" />
+    </LinearLayout>
 
     <RelativeLayout
         android:layout_width="306.75dp"
@@ -139,19 +154,20 @@
                     </EditText>
                 </RelativeLayout>
 
-                <TextView 
+                <TextView
                     android:id="@+id/tv_login_more"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="more"
                     android:clickable="true"
-                    android:onClick=""/>
+                    android:onClick=""
+                    android:text="more" />
+
                 <LinearLayout
                     android:id="@+id/linearlayout_login_more"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:visibility="gone"
-                    android:orientation="vertical" >
+                    android:orientation="vertical"
+                    android:visibility="gone" >
 
                     <TextView
                         android:layout_width="wrap_content"

@@ -611,7 +611,6 @@ public class CallFragment extends Fragment implements OnClickListener
 	private synchronized void processDialCall(final String callNumber, final boolean isVideoCall)
 	{
 		final String callRet = CallControl.getInstance().dialCall(callNumber, null, isVideoCall);
-
 	}
 
 	/**

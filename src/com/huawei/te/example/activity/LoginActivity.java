@@ -6,7 +6,6 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.os.Bundle;
-import android.os.Handler;
 import android.util.Log;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -23,14 +22,11 @@ import com.huawei.common.ThreadTimer;
 import com.huawei.esdk.te.TESDK;
 import com.huawei.esdk.te.call.CallService;
 import com.huawei.esdk.te.data.Constants;
-import com.huawei.service.ServiceProxy;
-import com.huawei.service.eSpaceService;
 import com.huawei.te.example.CallControl;
 import com.huawei.te.example.R;
 import com.huawei.te.example.ResponseErrorCodeHandler;
 import com.huawei.te.example.utils.FileUtil;
 import com.huawei.utils.StringUtil;
-import com.huawei.voip.CallManager.State;
 import com.huawei.voip.data.LoginInfo;
 
 public class LoginActivity extends BaseActivity
@@ -72,22 +68,9 @@ public class LoginActivity extends BaseActivity
 	private EditText edUsername;
 	private EditText edPassword;
 	private Button btnLogin;
-	private Handler innerHandler = null;
 	private TextView tvMore;
 	private LinearLayout loginMoreLayout;
-
-	/**
-	 * Handler对象
-	 */
-	private Handler handler;
-
-	private ServiceProxy serviceProxy;
-
-	/**
-	 * 用于在onLoginResponse中判断接收到的service.login广播是登录响应，还是被踢响应，
-	 * 取决于是否同时接收HomeActivityShow
-	 */
-	private boolean isLogin;
+	private LinearLayout settingLayout;
 
 	/**
 	 * 用户eSpace账号
@@ -116,6 +99,7 @@ public class LoginActivity extends BaseActivity
 	private void initView()
 	{
 		loginMoreLayout = (LinearLayout) findViewById(R.id.linearlayout_login_more);
+		settingLayout = (LinearLayout) findViewById(R.id.linearlayout_setting_more);
 		edUsername = (EditText) findViewById(R.id.et_username);
 		edPassword = (EditText) findViewById(R.id.et_password);
 		edServerIP = (EditText) findViewById(R.id.et_server_ip);
@@ -133,6 +117,13 @@ public class LoginActivity extends BaseActivity
 		edServerPort.setText(PORT);
 		edSipURI.setText(SIPURI);
 		edLicenseServer.setText(LICENSESERVER);
+	}
+
+	// 点击设置按钮显示设置界面
+	public void showSettingLayout(View v)
+	{
+		Intent intent = new Intent(this, SettingActivity.class);
+		startActivityForResult(intent, Constants.REQUEST_GOTO_SETTINGVIEW);
 	}
 
 	// 保存日志
@@ -221,32 +212,25 @@ public class LoginActivity extends BaseActivity
 			Toast.makeText(this, "请输入账号或密码", Toast.LENGTH_SHORT).show();
 			return;
 		}
-		doLoginClicked(account, password, false);
+		eSpaceNumber = account;
+		eSpaceWordPass = password;
+		doLoginClicked(false);
 	}
 
-	private void doLoginClicked(String username, String wordpass, final boolean isAnonymous)
+	private void doLoginClicked(boolean isAnonymous)
 	{
-		eSpaceNumber = isAnonymous ? Constants.ANONYMOUS_ACCOUNT : username;
-		eSpaceWordPass = isAnonymous ? "" : wordpass;
-		
-		connectToServer123(isAnonymous);
-	}
-	
-	
-	private void connectToServer123(boolean isAnonymousLogin){
-		
 		LoginInfo info = new LoginInfo();
-		info.setAnonymousLogin(isAnonymousLogin);
+		info.setAnonymousLogin(isAnonymous);
 		info.setAutoLogin(false);
 		info.setLicenseServer(licenseServer);
-		if (!isAnonymousLogin)
+		if (!isAnonymous)
 		{
 			info.setServerIP(serverIP);
 			info.setServerPort(serverPort);
 			info.setSipuri(sipURI);
 		}
 		// 匿名呼叫自动使用UDP传输协议 -- TLS TCP UDP协议登录时记录设置端口
-		info.setProtocolType(isAnonymousLogin ? "UDP" : "TLS");
+		info.setProtocolType(isAnonymous ? "UDP" : "TLS");
 		// Log传输协议
 		Log.i(TAG, "ProtocolType is " + info.getProtocolType());
 		// 设置心跳
@@ -274,17 +258,16 @@ public class LoginActivity extends BaseActivity
 		info.setSipPort(5060);
 		info.setMediaPort(10002);
 		info.setServerPort("5061");
-		
+
 		TESDK.getInstance().login(info);
 	}
-	
+
 	@Override
 	protected void onDestroy()
 	{
 		Log.d(TAG, "onDestroy()");
 		super.onDestroy();
 		unRegister();
-		innerHandler = null;
 		instance = null;
 	}
 
@@ -344,21 +327,16 @@ public class LoginActivity extends BaseActivity
 		if (result == Resource.REQUEST_OK)
 		{
 
-			CallService callPresenter = CallService.getInstance();
-			if (null != callPresenter)
+			CallService callService = CallService.getInstance();
+			if (null != callService)
 			{
 				CallControl.getInstance();
 				onLoginResp();
 			} else
 			{
-				Log.e(TAG, "callPresenter is null !");
+				Log.e(TAG, "callService is null !");
 			}
 		}
-		// else if (result == Resource.REG_ERR_CODE.ERR_LICENSE_APPLY_FAILED)
-		// {
-		// Toast.makeText(LoginActivity.this, "license申请失败,请重新申请license",
-		// Toast.LENGTH_LONG).show();
-		// }
 	}
 
 	/**
@@ -536,11 +514,12 @@ public class LoginActivity extends BaseActivity
 		if (View.VISIBLE == loginMoreLayout.getVisibility())
 		{
 			loginMoreLayout.setVisibility(View.GONE);
+			settingLayout.setVisibility(View.GONE);
 			tvMore.setVisibility(View.VISIBLE);
 		} else
 		{
 			loginMoreLayout.setVisibility(View.VISIBLE);
-			tvMore.setVisibility(View.VISIBLE);
+			settingLayout.setVisibility(View.VISIBLE);
 			tvMore.setVisibility(View.GONE);
 		}
 	}

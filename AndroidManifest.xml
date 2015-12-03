@@ -106,7 +106,13 @@
             android:theme="@android:style/Theme.Translucent"
             android:windowSoftInputMode="adjustResize|stateAlwaysHidden" >
         </activity>
-
+        <activity
+            android:name=".activity.SettingActivity"
+            android:launchMode="singleTop"
+            android:screenOrientation="unspecified"
+			android:theme="@android:style/Theme.Translucent.NoTitleBar"
+            android:windowSoftInputMode="adjustResize|stateAlwaysHidden" >
+        </activity>
         <service android:name="com.huawei.service.eSpaceService" />
         <service android:name="com.huawei.esdk.te.video.LocalHideRenderServer" />
 

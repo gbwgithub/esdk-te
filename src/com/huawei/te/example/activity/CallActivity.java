@@ -28,6 +28,7 @@ import com.huawei.esdk.te.data.Constants;
 import com.huawei.esdk.te.data.Constants.CallConstant;
 import com.huawei.esdk.te.data.Constants.MSG_FOR_HOMEACTIVITY;
 import com.huawei.esdk.te.data.Constants.MsgCallFragment;
+import com.huawei.esdk.te.util.LayoutUtil;
 import com.huawei.manager.DataManager;
 import com.huawei.te.example.CallControl;
 import com.huawei.te.example.R;
@@ -79,6 +80,7 @@ public class CallActivity extends BaseActivity
 		initComponent();
 		initHandler();
 		registerBroadcast();
+		LayoutUtil.getInstance().initialize();
 		instance.ins = this;
 	}
 
@@ -496,7 +498,6 @@ public class CallActivity extends BaseActivity
 	 */
 	private void logoutProcess()
 	{
-
 		// 注销后点击到注销 导致崩溃
 		if (null == handler)
 		{

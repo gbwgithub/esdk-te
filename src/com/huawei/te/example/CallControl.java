@@ -200,8 +200,6 @@ public class CallControl implements CallNotification
 		}
 
 		Log.d(TAG, "callid->" + callid);
-		Log.d(TAG, "isCurrentCall->" + isCurrentCall(callid));
-		Log.d(TAG, "isCurrentSDKCall->" + isCurrentSDKCall(callid));
 		if (StringUtil.isNotEmpty(callid) && StringUtil.isNotEmpty(this.callID) && callid.equals(this.callID))
 		{
 			if (!StringUtil.isStringEmpty(reasonText))
@@ -631,7 +629,7 @@ public class CallControl implements CallNotification
 	}
 
 	/**
-	 * 通话过程中请求升级到视频通话
+	 * 音频通话过程中请求升级到视频通话
 	 * 
 	 * @param caps
 	 *            视频参数
@@ -750,19 +748,6 @@ public class CallControl implements CallNotification
 		hasHeader = !StringUtil.isStringEmpty(reasonHeader)
 				&& (reasonHeader.indexOf("VoIP Unavailable") != -1 || reasonHeader.replaceAll(Constants.CHARACTER_MARK.BLANK_MARK, "").indexOf("cause=1") != -1);
 		return hasHeader;
-	}
-
-	private boolean isCurrentSDKCall(String callid)
-	{
-		Log.i(TAG, "isCurrentCall exec ");
-		boolean ret = false;
-		String currentCallID = CallService.getInstance().getCurrentCallID();
-		if (StringUtil.isNotEmpty(callid) && StringUtil.isNotEmpty(currentCallID) && callid.equals(currentCallID))
-		{
-			ret = true;
-		}
-		Log.d(TAG, "isCurrentCall return ret->" + ret);
-		return ret;
 	}
 
 	private boolean isCurrentCall(String callid)

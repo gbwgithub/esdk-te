@@ -233,7 +233,7 @@ public class FileUtil
 		{
 			copyFolder("/data/tombstones", DeviceUtil.getSdcardPath() + "/TESDKLog");
 		}
-		// end add by wx183960 reasonn:拷贝崩溃文件到指定目录下
+		// end:拷贝崩溃文件到指定目录下
 		String[] paths = findLogFile(context, type);
 		if (paths == null)
 		{
@@ -247,7 +247,6 @@ public class FileUtil
 			// 无sdcard情况下提示 日志打包失败,无SDCard
 			Toast.makeText(context, context.getString(R.string.err_report_zip_false) + " ," + context.getString(R.string.no_sdcard), Toast.LENGTH_LONG)
 					.show();
-			// 2014/1/18reason:U8850手机无内存卡，单击“通过电子邮件发送故障报告”按钮无提示信息，用户体验不好
 			return;
 		}
 

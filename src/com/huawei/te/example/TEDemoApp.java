@@ -1,9 +1,10 @@
 package com.huawei.te.example;
 
-import com.huawei.application.BaseApp;
+import android.app.Application;
+
 import com.huawei.esdk.te.TESDK;
 
-public class TEDemoApp extends BaseApp
+public class TEDemoApp extends Application
 {
 	@Override
 	public void onCreate()
