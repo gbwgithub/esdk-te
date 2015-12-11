@@ -1,9 +1,10 @@
 package com.huawei.te.example;
 
+import java.util.List;
+
 import object.StreamInfo;
 import android.content.Intent;
 import android.util.Log;
-import android.widget.Button;
 
 import com.huawei.application.BaseApp;
 import com.huawei.common.CallErrorCode;
@@ -17,13 +18,12 @@ import com.huawei.esdk.te.data.Constants;
 import com.huawei.esdk.te.data.Constants.CallConstant;
 import com.huawei.esdk.te.data.Constants.MSG_FOR_HOMEACTIVITY;
 import com.huawei.esdk.te.data.Constants.MsgCallFragment;
+import com.huawei.esdk.te.util.LogUtil;
 import com.huawei.esdk.te.util.MediaUtil;
 import com.huawei.te.example.activity.CallActivity;
 import com.huawei.te.example.activity.CallComingActivity;
 import com.huawei.te.example.activity.CallFragment;
 import com.huawei.utils.StringUtil;
-import com.huawei.voip.data.CameraViewRefresh;
-import com.huawei.voip.data.EventData;
 
 public class CallControl implements CallNotification
 {
@@ -443,9 +443,52 @@ public class CallControl implements CallNotification
 	}
 
 	/**
+	 * BFCP接收开始
+	 * 
+	 * @param callid
+	 *            呼叫唯一标识
+	 */
+	public void processBFCPAccptedStart(String callid)
+	{
+		notifyPDFViewUpdate(BFCPStatus.BFCP_RECEIVE);
+	}
+
+	/**
+	 * BFCP接收开始
+	 * 
+	 * @param callid
+	 *            呼叫唯一标识
+	 */
+	public void processBFCPStoped(String callid)
+	{
+		if (null != callid && !callid.equals(CallService.getInstance().getCurrentCallID()))
+		{
+			LogUtil.d(TAG, "stop bfcp recevice do non because callid != currentCallId");
+			return;
+		}
+
+		// notice the GUI side the bfcp is stoped
+		LogUtil.i(TAG, " BFCP is stoped,callid=" + callid);
+		notifyPDFViewUpdate(BFCPStatus.BFCP_END);
+	}
+
+	/**
 	 * _______________________________________ 这些是动作
 	 * _________________________________________________
 	 */
+
+	/**
+	 * 通知通话界面刷新
+	 */
+	public void notifyPDFViewUpdate(String bfcpState)
+	{
+		if (CallStatus.STATUS_TALKING == CallService.getInstance().getVoipStatus())
+		{
+			return;
+		}
+
+		CallActivity.getInstance().sendHandlerMessage(CallConstant.VOIP_PDF_UPDATE_UI, bfcpState);
+	}
 
 	/**
 	 * 发起呼叫
@@ -500,15 +543,15 @@ public class CallControl implements CallNotification
 	{
 		return CallService.getInstance().setLocalMute(isRefer, isMute);
 	}
-	
-    /**
-     * 扬声器静音
-     */
-    public boolean oratorMute(boolean isMute)
-    {
-    	return CallService.getInstance().oratorMute(isMute);
-    }
-	
+
+	/**
+	 * 扬声器静音
+	 */
+	public boolean oratorMute(boolean isMute)
+	{
+		return CallService.getInstance().oratorMute(isMute);
+	}
+
 	/**
 	 * 接听呼叫，接听一个呼叫，包括音、视频呼叫，返回接听是否成功
 	 * 
@@ -673,6 +716,14 @@ public class CallControl implements CallNotification
 	public boolean localCameraControl(boolean isCloseAction)
 	{
 		return CallService.getInstance().localCameraControl(isCloseAction);
+	}
+
+	/**
+	 * 获取当前支持的音频路由 第一个为正在使用的音频路由
+	 */
+	public List<Integer> getAudioRouteList()
+	{
+		return CallService.getInstance().getAudioRouteList();
 	}
 
 	/**
@@ -890,11 +941,22 @@ public class CallControl implements CallNotification
 		processCallNtfRinging(currentCall);
 	}
 
+	@Override
+	public void onDataReceiving(String callId)
+	{
+		processBFCPAccptedStart(callId);
+	}
+
+	@Override
+	public void onDataStopped(String callId)
+	{
+		processBFCPStoped(callId);
+	}
+
 	public void clear()
 	{
 		CallService.getInstance().unregisterNotification(this);
 		instance = null;
 	}
-
 
 }

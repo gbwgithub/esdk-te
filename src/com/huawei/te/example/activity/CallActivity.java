@@ -1,5 +1,6 @@
 package com.huawei.te.example.activity;
 
+import android.R.integer;
 import android.app.AlertDialog;
 import android.app.FragmentManager;
 import android.app.FragmentTransaction;
@@ -22,6 +23,7 @@ import com.huawei.common.CustomBroadcastConst;
 import com.huawei.common.LogSDK;
 import com.huawei.common.Resource;
 import com.huawei.esdk.te.TESDK;
+import com.huawei.esdk.te.call.CallConstants.BFCPStatus;
 import com.huawei.esdk.te.call.CallConstants.CallStatus;
 import com.huawei.esdk.te.call.CallService;
 import com.huawei.esdk.te.data.Constants;
@@ -29,6 +31,7 @@ import com.huawei.esdk.te.data.Constants.CallConstant;
 import com.huawei.esdk.te.data.Constants.MSG_FOR_HOMEACTIVITY;
 import com.huawei.esdk.te.data.Constants.MsgCallFragment;
 import com.huawei.esdk.te.util.LayoutUtil;
+import com.huawei.esdk.te.util.LogUtil;
 import com.huawei.manager.DataManager;
 import com.huawei.te.example.CallControl;
 import com.huawei.te.example.R;
@@ -250,7 +253,7 @@ public class CallActivity extends BaseActivity
 				parallelHandleMessageTwo(msg);
 				// parallelHandleMessageThree(msg);
 				parallelHandleMessageFour(msg);
-				// parallelHandleMessageFive(msg);
+				parallelHandleMessageFive(msg);
 				parallelHandleMessageSix(msg);
 				// parallelHandleMessageConf(msg);
 				super.handleMessage(msg);
@@ -389,6 +392,41 @@ public class CallActivity extends BaseActivity
 		}
 	}
 
+	private void parallelHandleMessageFive(Message msg)
+	{
+		switch (msg.what) {
+		case Constants.REQUEST_GOTO_SHOW_CALLRECORD:
+			// refreshNavigation();
+			// doCallRecField(callRecField);
+			break;
+		case CallConstant.VOIP_CALL_RECORD:
+			// callFragment.recodeImg((Boolean) msg.obj);
+			break;
+		case CallConstant.VOIP_PDF_UPDATE_UI:
+			updatePDFView((String) msg.obj);
+			break;
+		case Constants.RESULT_UNREAD_MISSCALL_COUNT:
+			// 显示未读未接来电
+			// refreshUnreadMissCallCount((Integer) msg.obj);
+			break;
+		case CallConstant.SLIENT_VOICE:
+			break;
+		case Constants.MSG_NEED_SET_GRAY:
+			// setGrayEnable(false);
+			break;
+		case Constants.MSG_NO_NEED_SET_GRAY:
+			// setGrayEnable(true);
+			break;
+		// case ENTERPRISE_BOOK_TYPE.LDAP:
+		// case ENTERPRISE_BOOK_TYPE.FTPS:
+		// contactsFragment.notifyContactsFragmentChange((Boolean) msg.obj);
+		// confFragment.notifyConferenceFragmentChange((Boolean) msg.obj);
+		// break;
+		default:
+			break;
+		}
+	}
+
 	private void parallelHandleMessageSix(Message msg)
 	{
 		switch (msg.what) {
@@ -452,6 +490,129 @@ public class CallActivity extends BaseActivity
 			break;
 		default:
 			break;
+		}
+	}
+
+	/**
+	 * 更新PDF预览界面
+	 */
+	private void updatePDFView(String bfcpState)
+	{
+		LogUtil.i(TAG, "enter updatePDFView bfcpState:" + bfcpState);
+		// 双方同时点击共享
+		if (BFCPStatus.BFCP_START.equals(bfcpState))
+		{
+			// LogUtil.i(TAG, "begin execu bfcp_start");
+			// callFragment.setBaseTime(callFragment.getBaseTime() + 1);
+			// callFragment.setSendBfcpTime(callFragment.getBaseTime());
+			// callFragment.setBfcpSendTag(false);
+			// //辅流发送功能目前没有要求，这里发送的相关接口还没有添加
+			// // callFragment.startDocShare();
+			// LogUtil.i(TAG, "end execu bfcp_start");
+		} else if (BFCPStatus.BFCP_END.equals(bfcpState))
+		{
+			LogUtil.i(TAG, "begin execu bfcp_end");
+			// 与pc互通，pad抢发辅流成功后，几秒之内自动停止辅流返回视频画面
+			final int oldBaseTime = callFragment.getBaseTime();
+			// 收到停止事件，马上将一些状态还原，以免一些操作出现混乱
+			callFragment.stopedDocShareState();
+			// 等待500毫秒，为解决辅流被抢占时，先回到视频节目再拉起辅流界面
+			LogUtil.i(TAG, "end execu bfcp_end and start thread");
+			// 与pc互通，pc抢发辅流，pad端先显示视频画面，再显示pc辅流画面
+			new Thread(new Runnable()
+			{
+				@Override
+				public void run()
+				{
+					threadSleep(500);
+
+					if (0 < callFragment.getRecvBfpcTime())
+					{
+						return;
+					}
+					runOnUiThread(new Runnable()
+					{
+						@Override
+						public void run()
+						{
+							// 如果收到共享停止后，快速还有其他发送或者接收事件进来，则不处理停止，以防界面快速切换
+							if (callFragment.getBaseTime() != oldBaseTime)
+							{
+								LogUtil.i(TAG, "has receive other return;");
+								return;
+							}
+							LogUtil.i(TAG, "execu stopedDocShare");
+							// 刷新界面用UI线程
+							callFragment.stopedDocShare();
+						}
+					});
+				}
+			}).start();
+			// end modify by cwx176935 reason :DTS2014032003425
+			// 与pc互通，pad抢发辅流成功后，几秒之内自动停止辅流返回视频画面
+			// end add by cwx176935 reason: DTS2014012204924
+			// 与pc互通，pc抢发辅流，pad端先显示视频画面，再显示pc辅流画面
+		} else if (BFCPStatus.BFCP_RECEIVE.equals(bfcpState))
+		{
+			LogUtil.i(TAG, "begin execu bfcp_receive");
+			callFragment.setBaseTime(callFragment.getBaseTime() + 1);
+			callFragment.setRecvBfpcTime(callFragment.getBaseTime());
+
+			LogUtil.i(TAG, "end execu bfcp_receive and start thread");
+			// 内部有while循环等待，需新起线程，以防卡住
+			new Thread(new Runnable()
+			{
+
+				@Override
+				public void run()
+				{
+					// tag不为0时，即执行共享中，则收到辅流共享，则等待主动共享结果
+					boolean condition = callFragment.isBfcpSendTag();
+					while (condition)
+					{
+						// 睡眠100毫秒，防止空转，耗资源
+						threadSleep(100);
+						condition = callFragment.isBfcpSendTag();
+					}
+
+					if (callFragment.getRecvBfpcTime() >= callFragment.getSendBfcpTime())
+					{
+						LogUtil.i(TAG, "execu bfcp receive in ui thread");
+						callFragment.setRecvBfpcTime(-1);
+						// 刷新界面用UI线程
+						runOnUiThread(new Runnable()
+						{
+
+							@Override
+							public void run()
+							{
+								callFragment.receiveDoc();
+							}
+						});
+					}
+				}
+			}).start();
+		}
+		// begin modified by cwx176934 2013/11/02 Reason:DTS2013103106988
+		// 添加共享失败弹窗
+		else if (BFCPStatus.BFCP_FAIL.equals(bfcpState))
+		{
+			// LogUtil.i(TAG, "execu bfcp_fail");
+			// callFragment.failShareBfcp(getString(R.string.share_fail));
+		}
+		// end modified by cwx176934 2013/11/11 Reason:DTS2013103106782 双方同时点击共享
+		// end modified by cwx176934 2013/11/02 Reason:DTS2013103106988 添加共享失败弹窗
+		LogUtil.i(TAG, "leave updatePDFView bfcpState:" + bfcpState);
+	}
+
+	private void threadSleep(int sleepTime)
+	{
+		try
+		{
+			Thread.sleep(sleepTime);
+		} catch (InterruptedException e)
+		{
+			LogUtil.e(TAG, "threadSleep has been   Interrupted");
 		}
 	}
 
@@ -656,7 +817,7 @@ public class CallActivity extends BaseActivity
 			} else if (CustomBroadcastConst.ACTION_LOGIN_RESPONSE.equals(action))
 			{
 				// dismissProgressDialog();
-				// LogUI.i("loginSuccessResp in home");
+				// LogUtil.i(TAG, "loginSuccessResp in home");
 				// loginSuccessResp();
 
 				// ===
@@ -753,6 +914,19 @@ public class CallActivity extends BaseActivity
 	/*******************************************************************
 	 * 处理HandlerMessage finish
 	 *******************************************************************/
+
+	private int cameraOritation = 0;
+	private int localOritation = 0;
+
+	public void setCameraOritation(View v)
+	{
+		CallService.getInstance().setCameraDegree(++cameraOritation, 0);
+	}
+
+	public void setLocalOritation(View v)
+	{
+		CallService.getInstance().setCameraDegree(0, ++localOritation);
+	}
 
 	@Override
 	public void onBackPressed()

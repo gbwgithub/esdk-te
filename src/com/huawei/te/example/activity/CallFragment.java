@@ -15,17 +15,19 @@ import android.view.SurfaceView;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.ViewGroup;
-import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.huawei.esdk.te.call.CallConstants.CallStatus;
+import com.huawei.esdk.te.call.CallLogic;
 import com.huawei.esdk.te.call.CallService;
 import com.huawei.esdk.te.data.Constants;
 import com.huawei.esdk.te.data.Constants.CallConstant;
 import com.huawei.esdk.te.data.Constants.MsgCallFragment;
+import com.huawei.esdk.te.util.LayoutUtil;
+import com.huawei.esdk.te.util.LogUtil;
 import com.huawei.esdk.te.video.LocalHideRenderServer;
 import com.huawei.esdk.te.video.VariationView;
 import com.huawei.esdk.te.video.VideoHandler;
@@ -121,6 +123,91 @@ public class CallFragment extends Fragment implements OnClickListener
 	 * 是否处于会话保持状态
 	 */
 	private boolean isSessionHold = false;
+
+	/**
+	 * doc锁
+	 */
+	private static final Object DOCLOCK = new Object();
+
+	/**
+	 * 是否正在接受辅流
+	 */
+	private boolean isReceiving;
+
+	/**
+	 * 是否正在共享
+	 */
+	private boolean isDocSharing;
+
+	/**
+	 * 是否在文档预览
+	 */
+	private boolean isPdfView;
+
+	/**
+	 * 是否处于辅流界面
+	 */
+	private boolean isBfcpView = false;
+
+	/**
+	 * 接收和发送事件基准
+	 */
+	private int baseTime = 0;
+
+	public int getBaseTime()
+	{
+		return baseTime;
+	}
+
+	public void setBaseTime(int baseTime)
+	{
+		this.baseTime = baseTime;
+	}
+
+	/*
+	 * 主动发送辅流相对时间点
+	 */
+	private int sendBfcpTime = 0;
+
+	public int getSendBfcpTime()
+	{
+		return sendBfcpTime;
+	}
+
+	public void setSendBfcpTime(int sendBfcpTime)
+	{
+		this.sendBfcpTime = sendBfcpTime;
+	}
+
+	/**
+	 * 辅流发送标志
+	 */
+	private boolean bfcpSendTag = false;
+
+	public boolean isBfcpSendTag()
+	{
+		return bfcpSendTag;
+	}
+
+	public void setBfcpSendTag(boolean bfcpSendTag)
+	{
+		this.bfcpSendTag = bfcpSendTag;
+	}
+
+	/*
+	 * 收到辅流共享相对时间点
+	 */
+	private int recvBfpcTime = 0;
+
+	public int getRecvBfpcTime()
+	{
+		return recvBfpcTime;
+	}
+
+	public void setRecvBfpcTime(int recvBfpcTime)
+	{
+		this.recvBfpcTime = recvBfpcTime;
+	}
 
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState)
@@ -250,8 +337,8 @@ public class CallFragment extends Fragment implements OnClickListener
 			{
 				return;
 			}
-			//refreshView已经添加到SDK中执行
-//			refreshView(msg);
+			// refreshView已经添加到SDK中执行
+			// refreshView(msg);
 			break;
 		// case MsgCallFragment.MSG_ADD_VIDEO_TIME_OUT:
 		// showToast(R.string.add_video_time_out);
@@ -535,7 +622,7 @@ public class CallFragment extends Fragment implements OnClickListener
 		if (isVideoCall)
 		{
 			// 初始化视频参数
-			//CallService.getInstance().initCallVideo();
+			// CallService.getInstance().initCallVideo();
 			sendHandlerMessage(MsgCallFragment.MSG_DIALCALL_VIDEO, callNumber);
 		} else
 		{
@@ -1092,12 +1179,12 @@ public class CallFragment extends Fragment implements OnClickListener
 			Log.i(TAG, "STATUS_VIDEOING addVideoView");
 			// 设置下发图片格式 - 重协商或者视频通话的时候
 			// resetFramesize();
-//			View remoteVV = VideoHandler.getIns().getRemoteCallView();
-//			if (null != remoteVV && null == remoteVV.getParent())
-//			{
-				// 只有第一次进入视频通话的时候才去添加view，如果是视频参数更改之类的就不去做此操作
-				addVideoView();
-//			}
+			// View remoteVV = VideoHandler.getIns().getRemoteCallView();
+			// if (null != remoteVV && null == remoteVV.getParent())
+			// {
+			// 只有第一次进入视频通话的时候才去添加view，如果是视频参数更改之类的就不去做此操作
+			addVideoView();
+			// }
 			// 保持屏幕长亮
 			// DeviceUtil.setKeepScreenOn(this.getActivity());
 		}
@@ -1298,7 +1385,7 @@ public class CallFragment extends Fragment implements OnClickListener
 		// 呼叫中刷新，用于呼叫转移
 		boolean isVideo = CallService.getInstance().isVideoCall();
 		// 变更menuBarPanel的音频路由显示
-		// updateAudioRoute();
+		updateAudioRoute();
 		// 将判断逻辑发在外层，便于修改
 		boolean isCalling = false;
 		boolean isRefer = false;
@@ -1350,11 +1437,11 @@ public class CallFragment extends Fragment implements OnClickListener
 			break;
 		case CallStatus.STATUS_CALLING:// 目前只有呼转进入
 			Log.i(TAG, "CallStatus.STATUS_CALLING:");
-//			if (isVideo)
-//			{
-//				// 初始化视频参数
-//				CallService.getInstance().initCallVideo();
-//			}
+			// if (isVideo)
+			// {
+			// // 初始化视频参数
+			// CallService.getInstance().initCallVideo();
+			// }
 			updateLayout(CallStatus.STATUS_CALLING, callNumber, isVideo, tipTxt);
 			// HomeActivity.sendHandlerMessage(CallConstant.SHOW_CALL_LAYOUT,
 			// null);
@@ -1375,10 +1462,10 @@ public class CallFragment extends Fragment implements OnClickListener
 		case CallStatus.STATUS_VIDEOACEPT:
 		case CallStatus.STATUS_VIDEOING:
 			// 如果是视频升级需要重新创建
-//			if (null == VideoHandler.getIns().getRemoteCallView())
-//			{
-//				CallService.getInstance().initCallVideo();
-//			}
+			// if (null == VideoHandler.getIns().getRemoteCallView())
+			// {
+			// CallService.getInstance().initCallVideo();
+			// }
 			updateLayout(CallStatus.STATUS_VIDEOING, callNumber, true, tipTxt);
 
 			CallActivity.getInstance().sendHandlerMessage(CallConstant.SHOW_CALL_LAYOUT, null);
@@ -1409,42 +1496,232 @@ public class CallFragment extends Fragment implements OnClickListener
 		startActivity(intent);
 	}
 
-	//封装到SDK中，但没有执行在UI线程
-//	/**
-//	 * 底下事件刷新
-//	 * 
-//	 * @param isAdd
-//	 *            true添加
-//	 */
-//	private void refreshLocalHide(boolean isAdd)
-//	{
-//		View localHI = VideoHandler.getIns().getLocalHideView();
-//		if (localHI == null)
-//		{
-//			Log.i(TAG, "localHI is null");
-//			return;
-//		}
-//		if (null == LocalHideRenderServer.getInstance())
-//		{
-//			Log.i(TAG, "localHideRenderServer is null");
-//			return;
-//		}
-//		if (!isAdd)
-//		{
-//			LocalHideRenderServer.getInstance().removeView(localHI);
-//		} else
-//		{
-//			LocalHideRenderServer.getInstance().addView(localHI);
-//
-//			// 刷新下view
-//			// reason：新增程序后台运行的时候关闭摄像头，回来的时候要打开，在开打的时候偶现本远端画面出现黑屏，只有在本远端切换的时候才能恢复
-//			if (null != VideoHandler.getIns().getRemoteCallView() && null != VideoHandler.getIns().getLocalCallView())
-//			{
-//				VideoHandler.getIns().getRemoteCallView().postInvalidate();
-//				VideoHandler.getIns().getLocalCallView().postInvalidate();
-//			}
-//		}
-//	}
+	/**
+	 * 接收文档
+	 */
+	public void receiveDoc()
+	{
+		LogUtil.i(TAG, "ender recevieDoc()");
+		synchronized (DOCLOCK)
+		{
+			resetRender();
+			// 与pc互通，pc抢发辅流，pad端先显示视频画面，再显示pc辅流画面
+			boolean bRet = recvDocCondition();
+			if (!bRet)
+			{
+				return;
+			}
+			synchronized (RENDER_CHANGE_LOCK)
+			{
+				bRet = CallService.getInstance().openBFCPReceive(localVideoView, remoteVideoView);
+			}
+			if (bRet)
+			{
+				return;
+			}
+
+			// 与pc互通，pc抢发辅流，pad端先显示视频画面，再显示pc辅流画面
+			// 从后台启动拉起界面
+			// 接收辅流，点亮屏幕1s
+			// lightScreen(DeviceUtil.LIGHT_TIME_MIN);
+			// 设置正在共享标识位
+			isReceiving = true;
+			isDocSharing = true;
+			isBfcpView = true;
+			isPdfView = false;
+
+			// 改变菜单栏模式
+			menuBarPanel.changeMode(Mode.PDF_IS_SHARED);
+
+			Log.i(TAG, "menuBarPanel is not null");
+			// menuBarPanel.removeLinkedView(topMenuLayout);
+			// menuBarPanel.addLink(mobileVideoLayout);
+
+			if (!LayoutUtil.isPhone())
+			{
+				menuBarPanel.setRemoteNumberVisible(true);
+			}
+
+			// topMenuLayout.setVisibility(View.GONE);
+			// mobileVideoLayout.setVisibility(View.VISIBLE);
+			// processTipLayout.setVisibility(View.VISIBLE);
+			// videocallTextView.setVisibility(View.GONE);
+			// videoShareTip.setVisibility(View.VISIBLE);
+			menuBarPanel.setPipEnable(false);
+
+			// 显示状态：远端正在共享
+			// videocallTipView.setVisibility(View.VISIBLE);
+			// videocallTipView.setText(getString(R.string.pdf_doc_sharing));
+
+			if (null != remoteVideoView.getChildAt(0))
+			{
+				remoteVideoView.getChildAt(0).setVisibility(View.GONE);
+			}
+
+			// 手机的图标置为左
+			// videoShareTip.setImageDrawable(getActivity().getResources().getDrawable(R.drawable.te_phone_vedio_share_right));
+
+			menuBarPanel.show();
+			// 返回，共享，停止共享按钮不可见
+			// backBtn.setVisibility(View.GONE);
+			// shareBtn.setVisibility(View.GONE);
+			// stopShareBtn.setVisibility(View.GONE);
+			// 设置小窗口
+			localVideoLayout.setVisibility(View.VISIBLE);
+			menuBarPanel.setPipTips(true);
+
+			localVideoLayout.setVisibility(View.GONE);
+			menuBarPanel.setPipTips(false);
+			menuBarPanel.setPipEnable(false);
+
+			// 为防止此方法比第一帧解码还要慢的时候
+			// 如果还没有解码，就不设置
+			// remoteBfcpView.setVisibility(View.GONE);
+			// addBFCPRender();
+		}
+		LogUtil.i(TAG, "leave recevieDoc()");
+	}
+
+	private boolean recvDocCondition()
+	{
+		if (null == remoteVideoView || null == localVideoView || null == menuBarPanel || isReceiving)
+		{
+			LogUtil.e(TAG, "receiveDoc error. [remoteVideoView=" + remoteVideoView + "] [localVideoView=" + localVideoView + "] [menuBarPanel="
+					+ menuBarPanel + "] [isReceiving=" + isReceiving + ']');
+			LogUtil.i(TAG, "leave recevieDoc()");
+
+			if (isReceiving)
+			{
+				isDocSharing = true;
+				isPdfView = false;
+			}
+			return false;
+		}
+		return true;
+	}
+
+	/**
+	 * 对端停止共享
+	 */
+	public void stopedDocShare()
+	{
+		LogUtil.i(TAG, "enter stopedDocShare()");
+		synchronized (DOCLOCK)
+		{
+			if (menuBarPanel == null)
+			{
+				LogUtil.e(TAG, "menuBarPanel is null !");
+				return;
+			}
+			// isRecvDataDecode = false;
+			LogUtil.i(TAG, "bfcp stoped,pdfView show:" + isPdfView);
+
+			// 后台运行，拉起界面
+			// 停止辅流，点亮屏幕1s
+			// lightScreen(DeviceUtil.LIGHT_TIME_MIN);
+			// 设置正在共享标识位
+			isDocSharing = false;
+			isReceiving = false;
+			// shareBtn.setEnabled(true);
+			// 改变菜单栏模式,停止后回到视频模式
+			if (CallStatus.STATUS_VIDEOING == CallLogic.getInstance().getVoipStatus())
+			{
+				// start 会话保持阶段显示“通话被保持”
+				if (isSessionHold)
+				{
+					Log.i(TAG, "isSessionHold =" + isSessionHold);
+					// videocallTipView.setText(getString(R.string.session_holding));
+					menuBarPanel.changeMode(Mode.SESSION_HOLD);
+				} else
+				{
+					// videocallTipView.setText(getString(R.string.video_chat));
+					menuBarPanel.changeMode(Mode.VIDEO_CALL);
+				}
+			}
+			// end added by c00349133 reason: 会话保持阶段显示“通话被保持”
+			menuBarPanel.setPipTips(true);
+
+			// 本地小窗口可见
+			// isCloseLocal = false;// 重置关闭本地图标状态
+			localVideoLayout.setVisibility(View.VISIBLE);
+
+			// 如果是pad时，联系人提示显示出来
+			if (!LayoutUtil.isPhone())
+			{
+				// menuBarPanel.addLink(mobileVideoLayout);
+				menuBarPanel.setRemoteNumberVisible(false);
+				// mobileVideoLayout.setVisibility(View.VISIBLE);
+				// 显示的联系人名字或号码
+				// videocallTextView.setVisibility(View.VISIBLE);
+				// videoShareTip.setVisibility(View.GONE);
+			}
+			// 手机模式
+			if (LayoutUtil.isPhone())
+			{
+				// 显示的联系人名字或号码
+				// videocallTextView.setVisibility(View.VISIBLE);
+				// videoShareTip.setVisibility(View.GONE);
+				// 停止共享后，显示状态：正在视频通话
+				// videocallTipView.setText(getString(R.string.video_chat));
+				// videocallTipView.setVisibility(View.VISIBLE);
+				CallService.getInstance().openCallVideo(localVideoView, remoteVideoView, true);
+
+				resetRender();
+				LogUtil.i(TAG, "leave stopedDocShare() phone");
+				return;
+			}
+
+			// 取消菜单栏绑定（5秒后消失）
+			// menuBarPanel.removeLinkedView(topMenuLayout);
+			menuBarPanel.show();
+			// 预览时停止共享
+			if (isPdfView && isReceiving)
+			{
+				// begin add by wx183960 reason:共享停止添加提示
+				showToast(R.string.remote_stop_share);
+				// topMenuLayout.setVisibility(View.VISIBLE);
+				// shareText.setVisibility(View.GONE);
+				// stopShareBtn.setVisibility(View.GONE);
+				// backBtn.setVisibility(View.VISIBLE);
+				// shareBtn.setVisibility(View.VISIBLE);
+				// shareBtn.setEnabled(true);
+			} else
+			{
+				// 在主动共享时，收到令牌剥夺也会执行此分支
+				// 共享停止添加提示
+				showToast(R.string.pdf_stoped);
+				// 设置共享菜单栏不可见
+				// topMenuLayout.setVisibility(View.GONE);
+				// shareText.setVisibility(View.GONE);
+				// backBtn.setVisibility(View.VISIBLE);
+				// shareBtn.setVisibility(View.VISIBLE);
+
+				// begin modify by cwx176935 reason: DTS2013103000918
+				// 软终端视频通话时，本地与远端视频切换时，软终端概率性异常退出
+				CallService.getInstance().openCallVideo(localVideoView, remoteVideoView, true);
+				// end modify by cwx176935 reason: DTS2013103000918
+				// 软终端视频通话时，本地与远端视频切换时，软终端概率性异常退出
+				resetRender();
+			}
+		}
+		LogUtil.i(TAG, "leave stopedDocShare() pad");
+	}
+
+	/**
+	 * 对端停止辅流时需调用的 目前接收到对端停止辅流事件会等待一段时间 看是否需要执行stopedDocShare，
+	 * 但是在接收到辅流的时候一些状态必须先置回去,, eg:解码成功消息，主发也会抛解码成功，如果执行等待 则解码成功标志就一直是true，会出现残留帧
+	 */
+	public void stopedDocShareState()
+	{
+		// isRecvDataDecode = false;
+		LogUtil.i(TAG, "bfcp stoped, reset same doc share state,pdfView show:" + isPdfView);
+
+		// 后台运行，拉起界面
+		// 停止辅流，点亮屏幕1s
+		// lightScreen(DeviceUtil.LIGHT_TIME_MIN);
+		// 设置正在共享标识位
+		isDocSharing = false;
+	}
 
 	// /**
 	// * 暂停fragment时候自动调用
@@ -1460,6 +1737,7 @@ public class CallFragment extends Fragment implements OnClickListener
 	// DeviceUtil.releaseWakeLock();
 	// }
 	// }
+
 	/**
 	 * 销毁fragment时候自动调用
 	 */
@@ -1522,8 +1800,51 @@ public class CallFragment extends Fragment implements OnClickListener
 	@Override
 	public void onClick(View v)
 	{
-		// TODO Auto-generated method stub
+	}
 
+	/**
+	 * 将辅流相关的状态重置
+	 */
+	private void resetDocShareState()
+	{
+		LogUtil.i(TAG, "resetDocShareState enter.");
+
+		baseTime = 0;
+		sendBfcpTime = 0;
+		recvBfpcTime = 0;
+		bfcpSendTag = false;
+		// isRenderRemoveDone = true;
+		//
+		// 还原状态,防止如本远端切换界面出错
+		// isRecvDataDecode = false;
+		isDocSharing = false;
+		synchronized (DOCLOCK)
+		{
+			isReceiving = false;
+		}
+		isPdfView = false;
+		isBfcpView = false;
+
+		// shareBtn.setEnabled(true);
+		// backBtn.setVisibility(View.VISIBLE);
+		// shareBtn.setVisibility(View.VISIBLE);
+		// stopShareBtn.setVisibility(View.GONE);
+		// shareText.setVisibility(View.GONE);
+		// synchronized (PDFLOCK)
+		// {
+		// if (readDoc != null)
+		// {
+		// readDoc.releaseResource();
+		// readDoc = null;
+		// }
+		// }
+		// if (readerView != null)
+		// {
+		// readerView.unregReaderChangeListener(this);
+		// readerView = null;
+		// }
+
+		LogUtil.i(TAG, "resetDocShareState leave.");
 	}
 
 }

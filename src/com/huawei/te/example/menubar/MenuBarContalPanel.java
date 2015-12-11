@@ -1,5 +1,6 @@
 package com.huawei.te.example.menubar;
 
+import java.util.List;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
@@ -22,15 +23,18 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.huawei.esdk.te.call.CallConstants.CallStatus;
+import com.huawei.esdk.te.call.CallLogic;
 import com.huawei.esdk.te.call.CallService;
 import com.huawei.esdk.te.data.Constants;
 import com.huawei.esdk.te.data.Constants.MsgCallFragment;
 import com.huawei.esdk.te.util.LayoutUtil;
+import com.huawei.esdk.te.util.LogUtil;
 import com.huawei.esdk.te.video.VideoHandler;
 import com.huawei.te.example.CallControl;
 import com.huawei.te.example.R;
 import com.huawei.te.example.activity.CallActivity;
 import com.huawei.te.example.utils.ImageResourceUtil;
+import com.huawei.voip.data.EarpieceMode;
 import com.huawei.voip.data.VoiceQuality.VoiceQualityLevel;
 
 /**
@@ -842,7 +846,6 @@ public class MenuBarContalPanel implements OnClickListener, com.huawei.te.exampl
 
 			// 会场列表
 			menuBar.setMenuItemVisible(VideoMenuBar.CONFLIST, View.GONE);
-			menuBar.setMenuItemVisible(VideoMenuBar.BLUETOOTH, View.GONE);
 			menuBar.setMenuItemVisible(VideoMenuBar.SHOW_DATA, View.GONE);
 			// 音频全屏、半屏切换 ，视频的在popwindow里
 			menuBar.setMenuItemVisible(VideoMenuBar.AUDIO_SCREEN, View.GONE);
@@ -946,43 +949,47 @@ public class MenuBarContalPanel implements OnClickListener, com.huawei.te.exampl
 	 */
 	private void refreshAudioRouteItem()
 	{
-		// List<Integer> audioRouteList = cVoip.getAudioRouteList();
-		// // Pad上只有扬声器时，则不显示图标， 另：使用有线耳机时不支持切换
-		// if (audioRouteList.size() <= 1 || EarpieceMode.TYPE_EARPHONE ==
-		// audioRouteList.get(0)) {
-		// menuBar.setMenuItemVisible(VideoMenuBar.BLUETOOTH, View.GONE);
-		//
-		// } else {
-		// int curAudioRoute = audioRouteList.get(0);
-		// int resId = 0;
-		// Log.i(TAG, "Handset switch -> " + curAudioRoute);
-		// switch (curAudioRoute) {
-		// // 蓝牙
-		// case EarpieceMode.TYPE_BLUETOOTH:
-		// resId = blueToothRes[0][0];
-		// break;
-		//
-		// // 扬声器
-		// case EarpieceMode.TYPE_LOUD_SPEAKER:
-		// resId = blueToothRes[0][1];
-		// break;
-		//
-		// // 听筒
-		// case EarpieceMode.TYPE_TELRECEIVER:
-		// resId = blueToothRes[0][2];
-		// break;
-		//
-		// default:
-		// break;
-		// }
-		// if (0 < resId) {
-		// menuBar.setMenuItemVisible(VideoMenuBar.BLUETOOTH, View.VISIBLE);
-		// menuBar.getMenuItemsImg(VideoMenuBar.BLUETOOTH).setImageResource(resId);
-		// }
-		// if (DeviceUtil.isInSIMCall()) {
-		// enableMenu(false);
-		// }
-		// }
+		List<Integer> audioRouteList = CallLogic.getInstance().getAudioRouteList();
+		// Pad上只有扬声器时，则不显示图标， 另：使用有线耳机时不支持切换
+		if (audioRouteList.size() <= 1 || EarpieceMode.TYPE_EARPHONE == audioRouteList.get(0))
+		{
+			menuBar.setMenuItemVisible(VideoMenuBar.BLUETOOTH, View.GONE);
+
+		} else
+		{
+			int curAudioRoute = audioRouteList.get(0);
+			int resId = 0;
+			Log.i(TAG, "Handset switch -> " + curAudioRoute);
+			switch (curAudioRoute) {
+			// 蓝牙
+			case EarpieceMode.TYPE_BLUETOOTH:
+				resId = blueToothRes[0][0];
+				break;
+
+			// 扬声器
+			case EarpieceMode.TYPE_LOUD_SPEAKER:
+				resId = blueToothRes[0][1];
+				break;
+
+			// 听筒
+			case EarpieceMode.TYPE_TELRECEIVER:
+				resId = blueToothRes[0][2];
+				break;
+
+			default:
+				break;
+			}
+			if (0 < resId)
+			{
+				menuBar.setMenuItemVisible(VideoMenuBar.BLUETOOTH, View.VISIBLE);
+				menuBar.getMenuItemsImg(VideoMenuBar.BLUETOOTH).setImageResource(resId);
+			}
+			// 判断是否在SIM卡通话状态中
+			// if (DeviceUtil.isInSIMCall())
+			// {
+			// enableMenu(false);
+			// }
+		}
 	}
 
 	/**
@@ -1339,7 +1346,7 @@ public class MenuBarContalPanel implements OnClickListener, com.huawei.te.exampl
 		// 视频通话，打开手机自带相机功能，软终端本地视频卡住，不能通过开关摄像头按钮进行恢复
 		boolean operate = isDone
 				|| (CallStatus.STATUS_VIDEOING != CallService.getInstance().getVoipStatus() && CallStatus.STATUS_VIDEOINIT != CallService.getInstance()
-						.getVoipStatus()) ;
+						.getVoipStatus());
 		if (operate)
 		{
 			Log.i(TAG, "last close video click was not readly");
@@ -1448,6 +1455,7 @@ public class MenuBarContalPanel implements OnClickListener, com.huawei.te.exampl
 		closeMIC(micView);
 	}
 
+	int oritation = 0;
 	/**
 	 * 是否要关闭speaker 用于外部调用/
 	 */
@@ -1555,37 +1563,51 @@ public class MenuBarContalPanel implements OnClickListener, com.huawei.te.exampl
 	@Override
 	public void blueToothClick(ImageView view)
 	{
-		// if (null == cVoip) {
-		// Log.e(TAG, "error: CVoip is null");
-		// return;
-		// }
-		//
-		// if (isDone) {
-		// Log.i(TAG, "other click not readly");
-		// return;
-		// }
-		// isDone = true;
-		//
-		// List<Integer> audioRouteList = cVoip.getAudioRouteList();
-		// // 如果是扬声器，则切换到听筒模式（蓝牙，耳机，听筒），但不知道是什么听筒模式，等待刷新
-		// if (EarpieceMode.TYPE_LOUD_SPEAKER == audioRouteList.get(0)) {
-		// Log.i(TAG, "click change to telreceiver");
-		// }
-		// // 如果是听筒模式，则切到扬声器
-		// else {
-		// // 如果是蓝牙，设为扬声器
-		// view.setImageResource(blueToothRes[0][1]);
-		// Log.i(TAG, "click change to loudspeaker");
-		// }
-		//
-		// operPool.execute(new Runnable() {
+		if (null == callControl)
+		{
+			Log.e(TAG, "error: callControl is null");
+			return;
+		}
+
+		if (isDone)
+		{
+			Log.i(TAG, "other click not readly");
+			return;
+		}
+		isDone = true;
+
+		List<Integer> audioRouteList = callControl.getAudioRouteList();
+		// 如果是扬声器，则切换到听筒模式（蓝牙，耳机，听筒），但不知道是什么听筒模式，等待刷新
+		if (EarpieceMode.TYPE_LOUD_SPEAKER == audioRouteList.get(0))
+		{
+			Log.i(TAG, "click change to telreceiver");
+		}
+		// 如果是听筒模式，则切到扬声器
+		else
+		{
+			// 如果是蓝牙，设为扬声器
+			view.setImageResource(blueToothRes[0][1]);
+			Log.i(TAG, "click change to loudspeaker");
+		}
+
+		// operPool.execute(new Runnable()
+		// {
 		// @Override
-		// public void run() {
-		// cVoip.setAudioRouteOnUI();
+		// public void run()
+		// {
+		// CallService.getInstance().changeAudioRoute();
 		// Log.i(TAG, "blue click");
 		// isDone = false;
 		// }
 		// });
+
+		// 试试看改为在主线程中执行会不会有问题
+
+		CallService.getInstance().changeAudioRoute();
+		Log.i(TAG, "blue click");
+		isDone = false;
+
+		refreshAudioRouteItem();
 	}
 
 	/**
@@ -1615,7 +1637,7 @@ public class MenuBarContalPanel implements OnClickListener, com.huawei.te.exampl
 		if (isDone
 				|| isCameraClose
 				|| (CallStatus.STATUS_VIDEOING != CallService.getInstance().getVoipStatus() && CallStatus.STATUS_VIDEOINIT != CallService.getInstance()
-						.getVoipStatus()) )
+						.getVoipStatus()))
 		{
 			Log.i(TAG, "other click not readly or camera is closed");
 			return;

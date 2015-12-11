@@ -20,6 +20,7 @@ import com.huawei.common.Resource;
 import com.huawei.common.ResponseCodeHandler.ResponseCode;
 import com.huawei.common.ThreadTimer;
 import com.huawei.esdk.te.TESDK;
+import com.huawei.esdk.te.TESDK.LoginParameter;
 import com.huawei.esdk.te.call.CallService;
 import com.huawei.esdk.te.data.Constants;
 import com.huawei.te.example.CallControl;
@@ -27,25 +28,42 @@ import com.huawei.te.example.R;
 import com.huawei.te.example.ResponseErrorCodeHandler;
 import com.huawei.te.example.utils.FileUtil;
 import com.huawei.utils.StringUtil;
-import com.huawei.voip.data.LoginInfo;
 
 public class LoginActivity extends BaseActivity
 {
 	// 产品环境
-	// private static final String SERVER = "10.174.4.226";
-	// private static final String PORT = "5061";
-	// private static final String ACCOUNT = "20150512";
-	// private static final String PASSWORD = "huawei123";
-	// private static final String SIPURI = "";
-	// private static final String LICENSESERVER = "10.174.199.239";
+	// Wifi w00327180_DW_Tes
+	// TEMobile需要手动在LoginInfo中set,设置licenseServer
+//	 private static final String ACCOUNT = "20150512";
+//	 private static final String PASSWORD = "huawei123";
+//	 private static final String SERVER = "10.174.4.226";
+//	 private static final String PORT = "5061";
+//	 private static final String SIPURI = "20150512@10.174.4.226";
+//	 private static final String LICENSESERVER = "10.174.199.239";
 
 	// //172.22.8.4环境
+	// private static final String SERVER = "172.22.8.4";
+	// private static final String PORT = "5061";
+	// private static final String ACCOUNT = "01058888";
+	// private static final String PASSWORD = "Huawei@123";
+	// private static final String SIPURI = "";
+	// private static final String LICENSESERVER = "";
+
+	// //172.22.8.4环境
+	// private static final String SERVER = "172.22.8.4";
+	// private static final String PORT = "5061";
+	// private static final String ACCOUNT = "01058888";
+	// private static final String PASSWORD = "Huawei@123";
+	// private static final String SIPURI = "01058888@172.22.8.4";
+	// private static final String LICENSESERVER = "172.22.9.21";
+
+	// 开启license环境
 	private static final String SERVER = "172.22.8.4";
 	private static final String PORT = "5061";
 	private static final String ACCOUNT = "01058888";
 	private static final String PASSWORD = "Huawei@123";
-	private static final String SIPURI = "";
-	private static final String LICENSESERVER = "";
+	private static final String SIPURI = "01058888@172.22.8.4";
+	private static final String LICENSESERVER = "172.22.9.22";
 
 	// //产品环境
 	// private static final String SERVER = "172.22.8.4";
@@ -196,12 +214,18 @@ public class LoginActivity extends BaseActivity
 	 */
 	private void login()
 	{
+		String account = edUsername.getText().toString().trim();
+		String password = edPassword.getText().toString();
 		serverIP = edServerIP.getText().toString().trim();
 		serverPort = edServerPort.getText().toString().trim();
 		sipURI = edSipURI.getText().toString().trim();
+		if (sipURI.equals("") && !serverIP.equals("") && !account.equals(""))
+		{
+			// 暂时用于测试，在没有填写sipUri的时候自动生成sipUri
+			edSipURI.setText(account + "@" + serverIP);
+			return;
+		}
 		licenseServer = edLicenseServer.getText().toString().trim();
-		String account = edUsername.getText().toString().trim();
-		String password = edPassword.getText().toString();
 		if (null == serverIP || serverIP.equals(""))
 		{
 			Toast.makeText(this, "请输入服务器地址", Toast.LENGTH_SHORT).show();
@@ -219,8 +243,7 @@ public class LoginActivity extends BaseActivity
 
 	private void doLoginClicked(boolean isAnonymous)
 	{
-		LoginInfo info = new LoginInfo();
-		info.setAnonymousLogin(isAnonymous);
+		LoginParameter info = new LoginParameter();
 		info.setAutoLogin(false);
 		info.setLicenseServer(licenseServer);
 		if (!isAnonymous)
@@ -323,6 +346,7 @@ public class LoginActivity extends BaseActivity
 	 */
 	private void onLoginResponse(final Intent intent)
 	{
+		Log.d(TAG, "onLoginResponse() result -> " + intent.getIntExtra(Resource.SERVICE_RESPONSE_RESULT, Resource.REQUEST_FAIL));
 		int result = intent.getIntExtra(Resource.SERVICE_RESPONSE_RESULT, Resource.REQUEST_FAIL);
 		if (result == Resource.REQUEST_OK)
 		{

@@ -26,6 +26,7 @@ import android.os.Environment;
 import android.util.Log;
 import android.widget.Toast;
 
+import com.huawei.esdk.te.TESDK;
 import com.huawei.esdk.te.data.Constants;
 import com.huawei.esdk.te.util.DeviceUtil;
 import com.huawei.te.example.R;
@@ -229,9 +230,11 @@ public class FileUtil
 		if (null == DeviceUtil.getSdcardPath())
 		{
 			copyFolder("/data/tombstones", "/data/data/com.huawei.te.example/TESDKLog");
+			copyFolder(TESDK.getInstance().getLogPath(), "/data/data/com.huawei.te.example/TESDKLog");
 		} else
 		{
 			copyFolder("/data/tombstones", DeviceUtil.getSdcardPath() + "/TESDKLog");
+			copyFolder(TESDK.getInstance().getLogPath(), DeviceUtil.getSdcardPath() + "/TESDKLog");
 		}
 		// end:拷贝崩溃文件到指定目录下
 		String[] paths = findLogFile(context, type);
@@ -387,6 +390,7 @@ public class FileUtil
 			{
 				list.add("/data/anr/traces.txt");
 			}
+			list.add(TESDK.getInstance().getLogPath());
 		}
 		String[] strs = new String[list.size()];
 		return list.toArray(strs);

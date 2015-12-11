@@ -5,7 +5,7 @@
     android:layout_height="wrap_content"
     android:gravity="center"
     android:orientation="vertical" >
-    
+
     <!-- 更多 -->
 
     <LinearLayout
@@ -21,25 +21,24 @@
             android:layout_width="90.50dp"
             android:layout_height="51.50dp"
             android:layout_gravity="center"
-            android:gravity="center" 
             android:background="@drawable/te_state_menu_top_left"
-            >
+            android:gravity="center" >
 
             <ImageView
                 android:id="@+id/audio_screen_img"
                 android:layout_width="90dp"
                 android:layout_height="52dp"
-                android:layout_marginLeft="0.50dp"
                 android:layout_centerInParent="true"
+                android:layout_marginLeft="0.50dp"
                 android:duplicateParentState="true"
                 android:src="@drawable/te_state_audio_minimum" />
         </RelativeLayout>
-	<View 
-	    android:id="@+id/line_audio_screen"
-	    android:layout_width="1dp"
-	    android:layout_height="fill_parent"
-	    android:background="@drawable/te_line_portrait"
-	/>
+
+        <View
+            android:id="@+id/line_audio_screen"
+            android:layout_width="1dp"
+            android:layout_height="fill_parent"
+            android:background="@drawable/te_line_portrait" />
         <!-- 扩展 -->
 
         <RelativeLayout
@@ -47,25 +46,24 @@
             android:layout_width="90.50dp"
             android:layout_height="51.50dp"
             android:layout_gravity="center"
-            android:gravity="center" 
             android:background="@drawable/te_state_menu_top_left"
-            >
+            android:gravity="center" >
 
             <ImageView
                 android:id="@+id/more_img"
                 android:layout_width="90dp"
                 android:layout_height="52dp"
-                android:layout_marginLeft="0.50dp"
                 android:layout_centerInParent="true"
+                android:layout_marginLeft="0.50dp"
                 android:duplicateParentState="true"
                 android:src="@drawable/te_state_extend" />
         </RelativeLayout>
-	<View 
-	    android:id="@+id/line_more"
-	    android:layout_width="1dp"
-	    android:layout_height="fill_parent"
-	    android:background="@drawable/te_line_portrait"
-	/>
+
+        <View
+            android:id="@+id/line_more"
+            android:layout_width="1dp"
+            android:layout_height="fill_parent"
+            android:background="@drawable/te_line_portrait" />
         <!-- MIC -->
 
         <RelativeLayout
@@ -73,52 +71,49 @@
             android:layout_width="90.50dp"
             android:layout_height="51.50dp"
             android:layout_gravity="center"
-            android:gravity="center" 
             android:background="@drawable/te_pad_menu_item"
-            >
+            android:gravity="center" >
 
             <ImageView
                 android:id="@+id/video_mic_img"
                 android:layout_width="90dp"
                 android:layout_height="52dp"
-                android:layout_marginLeft="0.50dp"
                 android:layout_centerInParent="true"
+                android:layout_marginLeft="0.50dp"
                 android:duplicateParentState="true"
                 android:src="@drawable/te_state_mic" />
         </RelativeLayout>
-	<View 
-	    android:id="@+id/line_video_mic"
-	    android:layout_width="1dp"
-	    android:layout_height="fill_parent"
-	    android:background="@drawable/te_line_portrait"
-	/>
+
+        <View
+            android:id="@+id/line_video_mic"
+            android:layout_width="1dp"
+            android:layout_height="fill_parent"
+            android:background="@drawable/te_line_portrait" />
         <!-- 蓝牙，只有手机下，有 -->
 
         <RelativeLayout
             android:id="@+id/voice_bluetooth"
-            android:layout_width="0dp"
-            android:layout_height="0dp"
+            android:layout_width="90.50dp"
+            android:layout_height="51.50dp"
             android:layout_gravity="center"
-            android:gravity="center"
-            android:visibility="gone" 
             android:background="@drawable/te_pad_menu_item"
-            >
+            android:gravity="center" >
 
             <ImageView
                 android:id="@+id/voice_bluetooth_img"
-                android:layout_width="0dp"
-                android:layout_height="0dp"
+                android:layout_width="90dp"
+                android:layout_height="52dp"
                 android:layout_centerInParent="true"
+                android:layout_marginLeft="0.50dp"
                 android:duplicateParentState="true"
-                android:src="#000000" />
+                android:src="@drawable/te_state_menu_route_bluetooth" />
         </RelativeLayout>
-	<View 
-	    android:id="@+id/line_voice_bluetooth"
-	    android:layout_width="0dp"
-	    android:layout_height="fill_parent"
-            android:visibility="gone" 
-		    android:background="@drawable/te_line_portrait"
-		    />
+
+        <View
+            android:id="@+id/line_voice_bluetooth"
+            android:layout_width="1dp"
+            android:layout_height="fill_parent"
+            android:background="@drawable/te_line_portrait" />
         <!-- 扬声器 -->
 
         <RelativeLayout
@@ -126,50 +121,49 @@
             android:layout_width="90.50dp"
             android:layout_height="51.50dp"
             android:layout_gravity="center"
-            android:gravity="center" 
             android:background="@drawable/te_pad_menu_item"
-            >
+            android:gravity="center" >
 
             <ImageView
                 android:id="@+id/video_speaker_img"
                 android:layout_width="90dp"
                 android:layout_height="52dp"
-                android:layout_marginLeft="0.50dp"
                 android:layout_centerInParent="true"
+                android:layout_marginLeft="0.50dp"
                 android:duplicateParentState="true"
-                android:src="@drawable/te_state_speaker" />
+                android:src="@drawable/te_phone_menu_speaker" />
         </RelativeLayout>
-	<View 
-	    android:id="@+id/line_video_speaker"
-	    android:layout_width="1dp"
-	    android:layout_height="fill_parent"
-	    android:background="@drawable/te_line_portrait"
-	/>
-        <!-- 查看会场列表 -->	
+
+        <View
+            android:id="@+id/line_video_speaker"
+            android:layout_width="1dp"
+            android:layout_height="fill_parent"
+            android:background="@drawable/te_line_portrait" />
+        <!-- 查看会场列表 -->
+
         <RelativeLayout
             android:id="@+id/video_conf_list"
             android:layout_width="90.50dp"
             android:layout_height="51.50dp"
             android:layout_gravity="center"
-            android:gravity="center" 
             android:background="@drawable/te_pad_menu_item"
-            >
+            android:gravity="center" >
 
             <ImageView
                 android:id="@+id/video_conf_list_img"
                 android:layout_width="90dp"
                 android:layout_height="52dp"
-                android:layout_marginLeft="0.50dp"
                 android:layout_centerInParent="true"
+                android:layout_marginLeft="0.50dp"
                 android:duplicateParentState="true"
                 android:src="@drawable/te_phone_menu_conflist" />
-        </RelativeLayout>	
-	<View 
-	    android:id="@+id/line_video_conf_list"
-	    android:layout_width="1dp"
-	    android:layout_height="fill_parent"
-	    android:background="@drawable/te_line_portrait"
-	/>
+        </RelativeLayout>
+
+        <View
+            android:id="@+id/line_video_conf_list"
+            android:layout_width="1dp"
+            android:layout_height="fill_parent"
+            android:background="@drawable/te_line_portrait" />
         <!-- 音频转视频 -->
 
         <RelativeLayout
@@ -177,25 +171,24 @@
             android:layout_width="90.50dp"
             android:layout_height="51.50dp"
             android:layout_gravity="center"
-            android:gravity="center" 
             android:background="@drawable/te_pad_menu_item"
-            >
+            android:gravity="center" >
 
             <ImageView
                 android:id="@+id/audio_switch_video_img"
                 android:layout_width="90dp"
                 android:layout_height="52dp"
-                android:layout_marginLeft="0.50dp"
                 android:layout_centerInParent="true"
+                android:layout_marginLeft="0.50dp"
                 android:duplicateParentState="true"
                 android:src="@drawable/te_state_audio_switch_video" />
         </RelativeLayout>
-	<View 
-	    android:id="@+id/line_audio_switch_video"
-	    android:layout_width="1dp"
-	    android:layout_height="fill_parent"
-	    android:background="@drawable/te_line_portrait"
-	/>
+
+        <View
+            android:id="@+id/line_audio_switch_video"
+            android:layout_width="1dp"
+            android:layout_height="fill_parent"
+            android:background="@drawable/te_line_portrait" />
         <!-- 共享 -->
 
         <RelativeLayout
@@ -203,25 +196,24 @@
             android:layout_width="90.50dp"
             android:layout_height="51.50dp"
             android:layout_gravity="center"
-            android:gravity="center" 
             android:background="@drawable/te_pad_menu_item"
-            >
+            android:gravity="center" >
 
             <ImageView
                 android:id="@+id/share_data_img"
                 android:layout_width="90dp"
                 android:layout_height="52dp"
-                android:layout_marginLeft="0.50dp"
                 android:layout_centerInParent="true"
+                android:layout_marginLeft="0.50dp"
                 android:duplicateParentState="true"
                 android:src="@drawable/te_state_share" />
         </RelativeLayout>
-	<View 
-	    android:id="@+id/line_share_data"
-	    android:layout_width="1dp"
-	    android:layout_height="fill_parent"
-	    android:background="@drawable/te_line_portrait"
-	/>
+
+        <View
+            android:id="@+id/line_share_data"
+            android:layout_width="1dp"
+            android:layout_height="fill_parent"
+            android:background="@drawable/te_line_portrait" />
         <!-- 二次拨号盘 -->
 
         <RelativeLayout
@@ -229,25 +221,24 @@
             android:layout_width="90.50dp"
             android:layout_height="51.50dp"
             android:layout_gravity="center"
-            android:gravity="center" 
             android:background="@drawable/te_pad_menu_item"
-            >
+            android:gravity="center" >
 
             <ImageView
                 android:id="@+id/redial_board_img"
                 android:layout_width="90dp"
                 android:layout_height="52dp"
-                android:layout_marginLeft="0.50dp"
                 android:layout_centerInParent="true"
+                android:layout_marginLeft="0.50dp"
                 android:duplicateParentState="true"
                 android:src="@drawable/te_state_dial" />
         </RelativeLayout>
-	<View 
-	    android:id="@+id/line_redial_board"
-	    android:layout_width="1dp"
-	    android:layout_height="fill_parent"
-	    android:background="@drawable/te_line_portrait"
-	/>
+
+        <View
+            android:id="@+id/line_redial_board"
+            android:layout_width="1dp"
+            android:layout_height="fill_parent"
+            android:background="@drawable/te_line_portrait" />
         <!-- 挂断 -->
 
         <RelativeLayout
@@ -255,38 +246,35 @@
             android:layout_width="90.50dp"
             android:layout_height="51.50dp"
             android:layout_gravity="center"
-            android:gravity="center" 
             android:background="@drawable/te_state_menu_top_right"
-            >
+            android:gravity="center" >
 
             <ImageView
                 android:id="@+id/video_hangup_img"
                 android:layout_width="90dp"
                 android:layout_height="52dp"
-                android:layout_marginLeft="0.50dp"
                 android:layout_centerInParent="true"
+                android:layout_marginLeft="0.50dp"
                 android:duplicateParentState="true"
                 android:src="@drawable/te_state_hangup" />
         </RelativeLayout>
-
     </LinearLayout>
 
     <!-- 底部 -->
 
-	<View 
-	    android:id="@+id/line_menu_bar_bottom"
-	    android:layout_width="fill_parent"
-	    android:layout_height="1dp"
-	    android:background="@drawable/te_line_crosswise"
-	    android:layout_alignParentTop="true"
-	/>
+    <View
+        android:id="@+id/line_menu_bar_bottom"
+        android:layout_width="fill_parent"
+        android:layout_height="1dp"
+        android:layout_alignParentTop="true"
+        android:background="@drawable/te_line_crosswise" />
+
     <RelativeLayout
         android:id="@+id/menu_bar_bottom"
         android:layout_width="match_parent"
         android:layout_height="34.50dp"
-        android:gravity="center_horizontal" 
-	android:background="@drawable/te_state_menu_bottom_left_right_normal"
-	>
+        android:background="@drawable/te_state_menu_bottom_left_right_normal"
+        android:gravity="center_horizontal" >
 
         <LinearLayout
             android:id="@+id/remote_number_layout"
@@ -297,8 +285,8 @@
             android:layout_marginRight="17dp"
             android:layout_marginTop="0.50dp"
             android:gravity="right|center_vertical"
-            android:orientation="horizontal" 
-            android:visibility="gone">
+            android:orientation="horizontal"
+            android:visibility="gone" >
 
             <TextView
                 android:layout_width="wrap_content"
@@ -368,8 +356,6 @@
                 android:layout_height="0dp"
                 android:visibility="gone" />
         </RelativeLayout>
-
     </RelativeLayout>
-
 
 </LinearLayout>
