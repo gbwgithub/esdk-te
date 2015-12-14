@@ -38,6 +38,7 @@ import com.huawei.te.example.call.VoipCallModifyLogic;
 import com.huawei.te.example.menubar.MenuBarContalPanel;
 import com.huawei.te.example.menubar.MenuBarContalPanel.MenuItemServer;
 import com.huawei.te.example.menubar.MenuBarContalPanel.Mode;
+import com.huawei.utils.PlatformInfo;
 import com.huawei.utils.StringUtil;
 import com.huawei.voip.data.VoiceQuality.VoiceQualityLevel;
 
@@ -895,6 +896,104 @@ public class CallFragment extends Fragment implements OnClickListener
 		}
 
 		Log.i(TAG, "onCallClosed leave.");
+	}
+
+	// private void doFromBackground()
+	// {
+	// if (null != LocalHideRenderServer.getInstance())
+	// {
+	// if (null != menuBarPanel && !menuBarPanel.isCameraClose())
+	// {
+	// Executors.newSingleThreadExecutor().execute(new BackFromBackground());
+	// } else
+	// {
+	// LocalHideRenderServer.getInstance().setBackground(false);
+	// }
+	// }
+	//
+	// // begin 针对3.0系统下的 render
+	// if (VideoHandler.getIns().getRemoteBfcpView() != null &&
+	// remoteVideoView.getChildAt(0) ==
+	// VideoHandler.getIns().getRemoteBfcpView())
+	// {
+	// return;
+	// }
+	//
+	// // //非gl需要重新加载一次
+	// if (PlatformInfo.getAndroidVersion() < PlatformInfo.ANDROID_VER_3_0)
+	// {
+	// reLoadRemoteLocal();
+	// }
+	// }
+
+	/**
+	 * 重新激活时视频动作
+	 */
+	@Override
+	public void onResume()
+	{
+		super.onResume();
+		// int voipStatus = CallLogic.getIns().getVoipStatus();
+		// //保持屏幕常亮
+		// if (CallLogic.STATUS_VIDEOING == voipStatus)
+		// {
+		// DeviceUtil.setKeepScreenOn(this.getActivity());
+		// }
+		//
+		// isRunBehind = false;
+
+		// 把耗时的工作放到handler中执行
+		if (null != menuBarPanel)
+		{
+			doFromBackground();
+		}
+
+	}
+
+	private boolean reLoadRemoteLocal()
+	{
+		if (null == CallLogic.getInstance())
+		{
+			return false;
+		}
+		return CallLogic.getInstance().function(remoteVideoView, localVideoView, !menuBarPanel.isCameraClose());
+	}
+
+	private void doFromBackground()
+	{
+		if (null != LocalHideRenderServer.getInstance())
+		{
+			if (null != menuBarPanel && !menuBarPanel.isCameraClose())
+			{
+				Executors.newSingleThreadExecutor().execute(new BackFromBackground());
+			} else
+			{
+				LocalHideRenderServer.getInstance().setBackground(false);
+			}
+		}
+
+		if (VideoHandler.getIns().getRemoteBfcpView() != null && remoteVideoView.getChildAt(0) == VideoHandler.getIns().getRemoteBfcpView())
+		{
+			return;
+		}
+
+		// 非gl需要重新加载一次
+		if (PlatformInfo.getAndroidVersion() < PlatformInfo.ANDROID_VER_3_0)
+		{
+			reLoadRemoteLocal();
+		}
+	}
+
+	/**
+	 * 后台切换内部类
+	 */
+	private static final class BackFromBackground implements Runnable
+	{
+		@Override
+		public void run()
+		{
+			LocalHideRenderServer.getInstance().doBackFromBackground();
+		}
 	}
 
 	/**
@@ -1813,7 +1912,6 @@ public class CallFragment extends Fragment implements OnClickListener
 		sendBfcpTime = 0;
 		recvBfpcTime = 0;
 		bfcpSendTag = false;
-		// isRenderRemoveDone = true;
 		//
 		// 还原状态,防止如本远端切换界面出错
 		// isRecvDataDecode = false;

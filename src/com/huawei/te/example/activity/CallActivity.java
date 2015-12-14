@@ -1,6 +1,5 @@
 package com.huawei.te.example.activity;
 
-import android.R.integer;
 import android.app.AlertDialog;
 import android.app.FragmentManager;
 import android.app.FragmentTransaction;
@@ -12,6 +11,7 @@ import android.content.IntentFilter;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
+import android.text.InputType;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
@@ -32,6 +32,7 @@ import com.huawei.esdk.te.data.Constants.MSG_FOR_HOMEACTIVITY;
 import com.huawei.esdk.te.data.Constants.MsgCallFragment;
 import com.huawei.esdk.te.util.LayoutUtil;
 import com.huawei.esdk.te.util.LogUtil;
+import com.huawei.esdk.te.video.LocalHideRenderServer;
 import com.huawei.manager.DataManager;
 import com.huawei.te.example.CallControl;
 import com.huawei.te.example.R;
@@ -85,6 +86,25 @@ public class CallActivity extends BaseActivity
 		registerBroadcast();
 		LayoutUtil.getInstance().initialize();
 		instance.ins = this;
+	}
+
+	@Override
+	protected void onStop()
+	{
+		super.onStop();
+
+		if (null != LocalHideRenderServer.getInstance())
+		{
+			LocalHideRenderServer.getInstance().doInBackground();
+		}
+	}
+
+	@Override
+	protected void onStart()
+	{
+		super.onStart();
+
+		TESDK.getInstance().function();
 	}
 
 	public static CallActivity getInstance()
@@ -920,12 +940,12 @@ public class CallActivity extends BaseActivity
 
 	public void setCameraOritation(View v)
 	{
-		CallService.getInstance().setCameraDegree(++cameraOritation, 0);
+		CallService.getInstance().setCameraDegree(++cameraOritation, localOritation);
 	}
 
 	public void setLocalOritation(View v)
 	{
-		CallService.getInstance().setCameraDegree(0, ++localOritation);
+		CallService.getInstance().setCameraDegree(cameraOritation, ++localOritation);
 	}
 
 	@Override
@@ -979,4 +999,75 @@ public class CallActivity extends BaseActivity
 		}
 	}
 
+	public void setCallBandWidth(View view)
+	{
+		AlertDialog.Builder builder = new AlertDialog.Builder(this);
+		builder.setTitle("设置呼叫带宽");
+		builder.setMessage("请输入要设置的带宽数值：  (Kbit/s)");
+		final EditText et = new EditText(this);
+		et.setInputType(InputType.TYPE_CLASS_NUMBER);
+		et.setHint("请输入呼叫带宽");
+		builder.setView(et);
+		builder.setPositiveButton(android.R.string.ok, new DialogInterface.OnClickListener()
+		{
+			@Override
+			public void onClick(DialogInterface dialog, int which)
+			{
+				String bandwidth = et.getText().toString().trim();
+				if (bandwidth.equals(""))
+				{
+					Toast.makeText(CallActivity.this, "输入内容不能为空", Toast.LENGTH_SHORT).show();
+				} else
+				{
+					long longBandwidth = Integer.parseInt(bandwidth);
+					if (longBandwidth <= 64)
+					{
+						if (CallService.getInstance().setBandwidth(64))
+						{
+							Toast.makeText(CallActivity.this, "呼叫带宽设置为：64 Kbit/s", Toast.LENGTH_LONG).show();
+						}
+					} else if (longBandwidth <= 128)
+					{
+						if (CallService.getInstance().setBandwidth(128))
+						{
+							Toast.makeText(CallActivity.this, "呼叫带宽设置为：128 Kbit/s", Toast.LENGTH_LONG).show();
+						}
+					} else if (longBandwidth <= 256)
+					{
+						if (CallService.getInstance().setBandwidth(256))
+						{
+							Toast.makeText(CallActivity.this, "呼叫带宽设置为：256 Kbit/s", Toast.LENGTH_LONG).show();
+						}
+					} else if (longBandwidth <= 384)
+					{
+						if (CallService.getInstance().setBandwidth(384))
+						{
+							Toast.makeText(CallActivity.this, "呼叫带宽设置为：384 Kbit/s", Toast.LENGTH_LONG).show();
+						}
+					} else if (longBandwidth <= 512)
+					{
+						if (CallService.getInstance().setBandwidth(512))
+						{
+							Toast.makeText(CallActivity.this, "呼叫带宽设置为：512 Kbit/s", Toast.LENGTH_LONG).show();
+						}
+					} else
+					{
+						if (CallService.getInstance().setBandwidth(768))
+						{
+							Toast.makeText(CallActivity.this, "呼叫带宽设置为：768 Kbit/s", Toast.LENGTH_LONG).show();
+						}
+					}
+				}
+			}
+		});
+		builder.setNegativeButton(android.R.string.cancel, new DialogInterface.OnClickListener()
+		{
+			@Override
+			public void onClick(DialogInterface dialog, int which)
+			{
+				dialog.dismiss();
+			}
+		});
+		builder.create().show();
+	}
 }

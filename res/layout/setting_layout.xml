@@ -39,9 +39,9 @@
 
         <RelativeLayout
             android:id="@+id/logSwitchLayout"
-            android:layout_below="@id/titleLayout"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_below="@id/titleLayout"
             android:layout_marginLeft="11dp"
             android:layout_marginRight="11dp" >
 
@@ -69,6 +69,7 @@
                 android:button="@drawable/translucent"
                 android:clickable="false" />
         </RelativeLayout>
+        
     </RelativeLayout>
 
 </RelativeLayout>

@@ -14,11 +14,11 @@
 
         <LinearLayout
             android:id="@+id/ll_focuse"
-            android:orientation="vertical"
             android:layout_width="match_parent"
             android:layout_height="1dp"
             android:focusable="true"
-            android:focusableInTouchMode="true" >
+            android:focusableInTouchMode="true"
+            android:orientation="vertical" >
         </LinearLayout>
 
         <EditText
@@ -26,8 +26,8 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginBottom="92dp"
-            android:hint="请输入您要呼叫的号码"
-            android:ems="10" >
+            android:ems="10"
+            android:hint="请输入您要呼叫的号码" >
         </EditText>
 
         <Button
@@ -55,6 +55,15 @@
             android:layout_alignParentTop="true"
             android:text="注销" />
 
+        <Button
+            android:id="@+id/btn_set_bandwidth"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignBaseline="@id/btn_logout"
+            android:layout_alignParentTop="true"
+            android:layout_toLeftOf="@id/btn_logout"
+            android:onClick="setCallBandWidth"
+            android:text="设置带宽" />
     </RelativeLayout>
 
     <LinearLayout

@@ -34,12 +34,12 @@ public class LoginActivity extends BaseActivity
 	// 产品环境
 	// Wifi w00327180_DW_Tes
 	// TEMobile需要手动在LoginInfo中set,设置licenseServer
-//	 private static final String ACCOUNT = "20150512";
-//	 private static final String PASSWORD = "huawei123";
-//	 private static final String SERVER = "10.174.4.226";
-//	 private static final String PORT = "5061";
-//	 private static final String SIPURI = "20150512@10.174.4.226";
-//	 private static final String LICENSESERVER = "10.174.199.239";
+	// private static final String ACCOUNT = "20150512";
+	// private static final String PASSWORD = "huawei123";
+	// private static final String SERVER = "10.174.4.226";
+	// private static final String PORT = "5061";
+	// private static final String SIPURI = "20150512@10.174.4.226";
+	// private static final String LICENSESERVER = "10.174.199.239";
 
 	// //172.22.8.4环境
 	// private static final String SERVER = "172.22.8.4";
@@ -238,20 +238,16 @@ public class LoginActivity extends BaseActivity
 		}
 		eSpaceNumber = account;
 		eSpaceWordPass = password;
-		doLoginClicked(false);
+		doLoginClicked();
 	}
 
-	private void doLoginClicked(boolean isAnonymous)
+	private void doLoginClicked()
 	{
 		LoginParameter info = new LoginParameter();
-		info.setAutoLogin(false);
 		info.setLicenseServer(licenseServer);
-		if (!isAnonymous)
-		{
-			info.setServerIP(serverIP);
-			info.setServerPort(serverPort);
-			info.setSipuri(sipURI);
-		}
+		info.setServerIP(serverIP);
+		info.setServerPort(serverPort);
+		boolean isAnonymous = false;
 		// 匿名呼叫自动使用UDP传输协议 -- TLS TCP UDP协议登录时记录设置端口
 		info.setProtocolType(isAnonymous ? "UDP" : "TLS");
 		// Log传输协议
@@ -280,7 +276,6 @@ public class LoginActivity extends BaseActivity
 		// 添加本地Sip端口和媒体端口
 		info.setSipPort(5060);
 		info.setMediaPort(10002);
-		info.setServerPort("5061");
 
 		TESDK.getInstance().login(info);
 	}
