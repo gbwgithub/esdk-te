@@ -93,18 +93,16 @@ public class CallActivity extends BaseActivity
 	{
 		super.onStop();
 
-		if (null != LocalHideRenderServer.getInstance())
-		{
-			LocalHideRenderServer.getInstance().doInBackground();
-		}
+//		if (null != LocalHideRenderServer.getInstance())
+//		{
+//			LocalHideRenderServer.getInstance().doInBackground();
+//		}
 	}
 
 	@Override
 	protected void onStart()
 	{
 		super.onStart();
-
-		TESDK.getInstance().function();
 	}
 
 	public static CallActivity getInstance()

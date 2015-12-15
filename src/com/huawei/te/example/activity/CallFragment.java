@@ -942,22 +942,18 @@ public class CallFragment extends Fragment implements OnClickListener
 		//
 		// isRunBehind = false;
 
-		// 把耗时的工作放到handler中执行
-		if (null != menuBarPanel)
-		{
-			doFromBackground();
-		}
-
+		// doFromBackground();
 	}
 
-	private boolean reLoadRemoteLocal()
-	{
-		if (null == CallLogic.getInstance())
-		{
-			return false;
-		}
-		return CallLogic.getInstance().function(remoteVideoView, localVideoView, !menuBarPanel.isCameraClose());
-	}
+	// private boolean reLoadRemoteLocal()
+	// {
+	// if (null == CallLogic.getInstance())
+	// {
+	// return false;
+	// }
+	// return CallLogic.getInstance().reLoadRemoteLocal(remoteVideoView,
+	// localVideoView, !menuBarPanel.isCameraClose());
+	// }
 
 	private void doFromBackground()
 	{
@@ -977,11 +973,11 @@ public class CallFragment extends Fragment implements OnClickListener
 			return;
 		}
 
-		// 非gl需要重新加载一次
-		if (PlatformInfo.getAndroidVersion() < PlatformInfo.ANDROID_VER_3_0)
-		{
-			reLoadRemoteLocal();
-		}
+		// // 非gl需要重新加载一次
+		// if (PlatformInfo.getAndroidVersion() < PlatformInfo.ANDROID_VER_3_0)
+		// {
+		// reLoadRemoteLocal();
+		// }
 	}
 
 	/**
