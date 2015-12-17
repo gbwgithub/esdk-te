@@ -171,8 +171,6 @@ public class VideoMenuBar implements View.OnClickListener, Runnable
 	 * 获得回调事件
 	 * 
 	 * @return 回调事件
-	 * @since 1.1
-	 * @history 2013-8-15 v1.0.0 cWX176935 create
 	 */
 	public MenuItemServer getItemServer()
 	{
@@ -184,8 +182,6 @@ public class VideoMenuBar implements View.OnClickListener, Runnable
 	 * 
 	 * @param itemServer
 	 *            菜单项的触发事件
-	 * @since 1.1
-	 * @history 2013-8-15 v1.0.0 cWX176935 create
 	 */
 	public void setItemServer(MenuItemServer itemServer)
 	{
@@ -197,8 +193,6 @@ public class VideoMenuBar implements View.OnClickListener, Runnable
 	 * 
 	 * @param itemServer
 	 *            菜单项的触发事件
-	 * @since 1.1
-	 * @history 2014-4-16 v1.0.0 l00220604 create
 	 */
 	// public void setItemsBackground(int visible, Boolean isEraphone)
 	// {
@@ -304,8 +298,6 @@ public class VideoMenuBar implements View.OnClickListener, Runnable
 	 * @param item
 	 *            项名称
 	 * @return 菜单项
-	 * @since 1.1
-	 * @history 2013-10-14 v1.0.0 cWX176935 create
 	 */
 	public View getMenuItems(String item)
 	{
@@ -334,8 +326,6 @@ public class VideoMenuBar implements View.OnClickListener, Runnable
 	 *            项名称
 	 * @param visible
 	 *            View.GONE不可见
-	 * @since 1.1
-	 * @history 2013-10-15 v1.0.0 cWX176935 create
 	 */
 	public void setMenuItemVisible(String item, int visible)
 	{
@@ -350,8 +340,6 @@ public class VideoMenuBar implements View.OnClickListener, Runnable
 	// * 设置item的背景是否显示，主要针对音频通话时的情况
 	// * @param item 项名称
 	// * @param visible View.GONE不可见
-	// * @since 1.1
-	// * @history
 	// * 2014-4-16 v1.0.0 l00220604 create
 	// */
 	// public void setMenuItemBackground(String item, int visible)
@@ -392,9 +380,6 @@ public class VideoMenuBar implements View.OnClickListener, Runnable
 	 * 
 	 * @param item
 	 *            图片view
-	 * @return
-	 * @since 1.1
-	 * @history 2013-10-15 v1.0.0 cWX176935 create
 	 */
 	public ImageView getMenuItemsImg(String item)
 	{
@@ -481,9 +466,6 @@ public class VideoMenuBar implements View.OnClickListener, Runnable
 
 	/**
 	 * 重置所有菜单
-	 * 
-	 * @since 1.1
-	 * @history 2013-10-14 v1.0.0 cWX176935 create
 	 */
 	public void resetAllMenuItems()
 	{
@@ -506,7 +488,7 @@ public class VideoMenuBar implements View.OnClickListener, Runnable
 		}
 	}
 
-	// BEGIN add by cwx176935 reason:DTS2013103003991 音视频通话页面中通话时间显示不对
+	// 音视频通话页面中通话时间显示不对
 	/**
 	 * 重置所有的view的tag
 	 */
@@ -525,15 +507,12 @@ public class VideoMenuBar implements View.OnClickListener, Runnable
 		}
 	}
 
-	// end add by cwx176935 reason:DTS2013103003991 音视频通话页面中通话时间显示不对
 
 	/**
 	 * 挂断电话方法
 	 * 
 	 * @param view
 	 *            点击的view
-	 * @since 1.1
-	 * @history 2013-10-14 v1.0.0 cWX176935 create
 	 */
 	private void endCall(View view)
 	{
@@ -588,8 +567,6 @@ public class VideoMenuBar implements View.OnClickListener, Runnable
 	 * 得到菜单长度
 	 * 
 	 * @return 菜单长度
-	 * @since 1.1
-	 * @history 2013-10-14 v1.0.0 cWX176935 create
 	 */
 	public int getMenuWidth()
 	{
@@ -600,8 +577,6 @@ public class VideoMenuBar implements View.OnClickListener, Runnable
 	 * 得到菜单栏
 	 * 
 	 * @return 菜单栏
-	 * @since 1.1
-	 * @history 2013-10-14 v1.0.0 cWX176935 create
 	 */
 	public View getMenuBar()
 	{
@@ -610,9 +585,6 @@ public class VideoMenuBar implements View.OnClickListener, Runnable
 
 	/**
 	 * 自动隐藏线程
-	 * 
-	 * @since 1.1
-	 * @history 2013-8-19 v1.0.0 cWX176935 create
 	 */
 	@Override
 	public void run()
@@ -635,11 +607,6 @@ public class VideoMenuBar implements View.OnClickListener, Runnable
 
 	}
 
-	/**
-	 * 
-	 * @since 1.1
-	 * @history 2013-9-27 v1.0.0 wWX183960 create
-	 */
 	public void dismiss()
 	{
 		if (!autoHidden)
@@ -667,9 +634,6 @@ public class VideoMenuBar implements View.OnClickListener, Runnable
 
 	/**
 	 * 显示
-	 * 
-	 * @since 1.1
-	 * @history 2013-8-19 v1.0.0 cWX176935 create
 	 */
 	public void showAndGone()
 	{
@@ -708,7 +672,6 @@ public class VideoMenuBar implements View.OnClickListener, Runnable
 			new Thread(this, THREAD_NAME).start();
 			threadStart = true;
 		}
-		// end modify by cwx176935 reason : ANDRIOD-208 点击显示变隐藏，隐藏变显示
 	}
 
 	/**
@@ -716,8 +679,6 @@ public class VideoMenuBar implements View.OnClickListener, Runnable
 	 * 
 	 * @param view
 	 *            同步的view
-	 * @since 1.1
-	 * @history 2013-9-27 v1.0.0 wWX183960 create
 	 */
 	public void addLink(View view)
 	{
@@ -736,9 +697,6 @@ public class VideoMenuBar implements View.OnClickListener, Runnable
 
 	/**
 	 * 解除所有绑定的view
-	 * 
-	 * @since 1.1
-	 * @history 2013-9-27 v1.0.0 wWX183960 create
 	 */
 	public void clearAllLinkedView()
 	{
@@ -750,8 +708,6 @@ public class VideoMenuBar implements View.OnClickListener, Runnable
 	 * 
 	 * @param view
 	 *            要解除的view
-	 * @since 1.1
-	 * @history 2013-9-30 v1.0.0 cWX176935 create
 	 */
 	public void removeLinkView(View view)
 	{
@@ -768,8 +724,6 @@ public class VideoMenuBar implements View.OnClickListener, Runnable
 	 * 是否可以自动隐藏
 	 * 
 	 * @return true可以，false不可以
-	 * @since 1.1
-	 * @history 2013-8-19 v1.0.0 cWX176935 create
 	 */
 	public boolean isAutoHidden()
 	{
@@ -781,8 +735,6 @@ public class VideoMenuBar implements View.OnClickListener, Runnable
 	 * 
 	 * @param autoHidden
 	 *            true可以，false不可以
-	 * @since 1.1
-	 * @history 2013-8-19 v1.0.0 cWX176935 create
 	 */
 	public void setAutoHidden(boolean autoHidden)
 	{
@@ -791,9 +743,6 @@ public class VideoMenuBar implements View.OnClickListener, Runnable
 
 	/**
 	 * 进入 动画
-	 * 
-	 * @since 1.1
-	 * @history 2013-8-19 v1.0.0 cWX176935 create
 	 */
 	protected void animationIn(final View view)
 	{
@@ -827,13 +776,9 @@ public class VideoMenuBar implements View.OnClickListener, Runnable
 		view.startAnimation(anim);
 	}
 
-	// begin add by cwx176935 reason: DTS2013112808491
 	// 话机视频通话一段时间后，注销再重新登录，出现异常退出现象
 	/**
 	 * 清除数据
-	 * 
-	 * @since 1.1
-	 * @history 2013-12-9 v1.0.0 cWX176935 create
 	 */
 	public void clearData()
 	{
@@ -855,15 +800,8 @@ public class VideoMenuBar implements View.OnClickListener, Runnable
 		handler = null;
 	}
 
-	// end add by cwx176935 reason: DTS2013112808491
-	// 话机视频通话一段时间后，注销再重新登录，出现异常退出现象
 	/**
 	 * 菜单项
-	 * 
-	 * Copyright (C) 2008-2013 华为技术有限公司(Huawei Tech.Co.,Ltd)
-	 * 
-	 * @since 1.1
-	 * @history 2013-10-15 v1.0.0 cWX176935 create
 	 */
 	private static final class MenuBarItem
 	{
@@ -887,10 +825,6 @@ public class VideoMenuBar implements View.OnClickListener, Runnable
 
 		/**
 		 * 设置item的可见性
-		 * 
-		 * @param visible
-		 * @since 1.1
-		 * @history 2013-10-15 v1.0.0 cWX176935 create
 		 */
 		public void setItemVisible(int visible)
 		{
@@ -904,29 +838,21 @@ public class VideoMenuBar implements View.OnClickListener, Runnable
 			}
 		}
 
-		// /**
-		// * 设置item的背景
-		// * @param visible
-		// * @since 1.1
-		// * @history
-		// * 2014-4-16 v1.0.0 l00220604 create
-		// */
-		// public void setItemBackground(int resid)
-		// {
-		// if (null != item)
-		// {
-		// item.setBackgroundDrawable(new
-		// BitmapDrawable(ImageResourceUtil.getIns().readBitMap(rootView.getContext()
-		// , resid)));
-		// }
-		// }
+//		/**
+//		 * 设置item的背景
+//		 */
+//		public void setItemBackground(int resid)
+//		{
+//			if (null != item)
+//			{
+//				item.setBackgroundDrawable(new BitmapDrawable(ImageResourceUtil.getIns().readBitMap(rootView.getContext(), resid)));
+//			}
+//		}
 
 		/**
 		 * 得到菜单项
 		 * 
 		 * @return 菜单项
-		 * @since 1.1
-		 * @history 2013-10-15 v1.0.0 cWX176935 create
 		 */
 		public View getItem()
 		{
@@ -937,8 +863,6 @@ public class VideoMenuBar implements View.OnClickListener, Runnable
 		 * 得到菜单项的图片
 		 * 
 		 * @return 菜单项图片
-		 * @since 1.1
-		 * @history 2013-10-15 v1.0.0 cWX176935 create
 		 */
 		public ImageView getItemImg()
 		{
@@ -951,10 +875,6 @@ public class VideoMenuBar implements View.OnClickListener, Runnable
 		}
 	}
 
-	/**
-	 * @author cWX176935
-	 * 
-	 */
 	private class DialogClickListener implements DialogInterface.OnClickListener
 	{
 
@@ -981,24 +901,11 @@ public class VideoMenuBar implements View.OnClickListener, Runnable
 		}
 	}
 
-	/**
-	 * 
-	 * 
-	 * Copyright (C) 2008-2013 华为技术有限公司(Huawei Tech.Co.,Ltd)
-	 * 
-	 * @since 1.1
-	 * @history 2013-8-15 v1.0.0 cWX176935 create
-	 */
 	public interface MenuItemServer
 	{
 
 		/**
 		 * 显示更多
-		 * 
-		 * @param view
-		 *            点击的view
-		 * @since 1.1
-		 * @history 2013-10-16 v1.0.0 cWX176935 create
 		 */
 		void showMoreOpre(View view);
 
@@ -1006,125 +913,71 @@ public class VideoMenuBar implements View.OnClickListener, Runnable
 
 		/**
 		 * 关闭本地MIC
-		 * 
-		 * @param view
-		 *            点击的view
-		 * @since 1.1
-		 * @history 2013-8-15 v1.0.0 cWX176935 create
 		 */
 		void closeMIC(ImageView view);
 
 		/**
 		 * 关闭扬声器
-		 * 
-		 * @param view
-		 *            点击的view
-		 * @since 1.1
-		 * @history 2013-8-15 v1.0.0 cWX176935 create
 		 */
 		void closeSpeaker(ImageView view);
 
 		/**
 		 * 蓝牙
-		 * 
-		 * @param view
-		 *            点击的view
-		 * @since 1.1
-		 * @history 2013-8-15 v1.0.0 cWX176935 create
 		 */
 		void blueToothClick(ImageView view);
 
 		/**
 		 * 摄像头切换
-		 * 
-		 * @param view
-		 *            点击的view
-		 * @since 1.1
-		 * @history 2013-8-15 v1.0.0 cWX176935 create
 		 */
 		void switchCamere(View view);
 
 		/**
 		 * 视频转语音
-		 * 
-		 * @param view
-		 *            点击的view
-		 * @since 1.1
-		 * @history 2013-8-15 v1.0.0 cWX176935 create
 		 */
 		void videoToAudio(View view);
 
 		/**
 		 * 二次拨号盘图标点击
-		 * 
-		 * @param view
-		 *            点击的view
-		 * @since 1.1
-		 * @history 2013-8-15 v1.0.0 cWX176935 create
 		 */
 		void audioRecall(View view);
 
 		/**
 		 * 共享
-		 * 
-		 * @since 1.1
-		 * @history 2013-8-15 v1.0.0 cWX176935 create
 		 */
 		void shareFile();
 
 		/**
 		 * 退出
-		 * 
-		 * @since 1.1
-		 * @history 2013-8-23 v1.0.0 cWX176935 create
 		 */
 		void endVideoCall();
 
 		/**
 		 * 清除弹出的PopupWindow
-		 * 
-		 * @since 1.1
-		 * @history 2013-8-23 v1.0.0 cWX183956 create
 		 */
 		void dismissPopupWindow();
 
 		/**
 		 * 清除弹出的PopupWindow
-		 * 
-		 * @since 1.1
-		 * @history 2013-8-23 v1.0.0 cWX183956 create
 		 */
 		void dismissMorePopWindow();
 
 		/**
 		 * 设置音频模式下是否是全屏
-		 * 
-		 * @since 1.1
-		 * @history 2014-3-28 v1.0.0 l00220604 create
 		 */
 		void setAudioScreen(ImageView view);
 
 		/**
 		 * 设置是否关闭麦克风
-		 * 
-		 * @since 1.1
-		 * @history 2014-3-28 v1.0.0 l00220604 create
 		 */
 		void setMicClose(boolean isClose);
 
 		/**
 		 * 设置是否关闭扬声器
-		 * 
-		 * @since 1.1
-		 * @history 2014-3-28 v1.0.0 l00220604 create
 		 */
 		void setSpeakerClose(boolean isClose);
 
 		/**
 		 * 查看会场列表
-		 * 
-		 * @since 1.1
-		 * @history 2015-6-5 v1.0.0 pWX178217 create
 		 */
 		void showConfList();
 	}

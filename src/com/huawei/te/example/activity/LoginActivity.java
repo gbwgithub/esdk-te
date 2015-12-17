@@ -32,7 +32,7 @@ import com.huawei.utils.StringUtil;
 public class LoginActivity extends BaseActivity
 {
 	// 产品环境
-	// Wifi w00327180_DW_Tes
+	// Wifi w00327180_DW_Test
 	// TEMobile需要手动在LoginInfo中set,设置licenseServer
 	// private static final String ACCOUNT = "20150512";
 	// private static final String PASSWORD = "huawei123";
@@ -40,6 +40,17 @@ public class LoginActivity extends BaseActivity
 	// private static final String PORT = "5061";
 	// private static final String SIPURI = "20150512@10.174.4.226";
 	// private static final String LICENSESERVER = "10.174.199.239";
+
+	// 城云环境
+	// Wifi w00327180_DW_Test
+	// TEMobile需要手动在LoginInfo中set,设置licenseServer
+	private static final String ACCOUNT = "wgl.cci";
+	private static final String PASSWORD = "123";
+	private static final String SERVER = "tp.onecc.me";
+	private static final String PORT = "5061";
+	private static final String LICENSESERVER = "10.10.160.99";
+	private static final String SIPURI = "wgl.cci@onecc.me";
+	// private static final String SIPURI = "wgl.cci@tp.onecc.me";
 
 	// //172.22.8.4环境
 	// private static final String SERVER = "172.22.8.4";
@@ -57,13 +68,13 @@ public class LoginActivity extends BaseActivity
 	// private static final String SIPURI = "01058888@172.22.8.4";
 	// private static final String LICENSESERVER = "172.22.9.21";
 
-	// 开启license环境
-	private static final String SERVER = "172.22.8.4";
-	private static final String PORT = "5061";
-	private static final String ACCOUNT = "01058888";
-	private static final String PASSWORD = "Huawei@123";
-	private static final String SIPURI = "01058888@172.22.8.4";
-	private static final String LICENSESERVER = "172.22.9.22";
+	// 开启license环境 8.4
+//	private static final String SERVER = "172.22.8.4";
+//	private static final String PORT = "5061";
+//	private static final String ACCOUNT = "01058888";
+//	private static final String PASSWORD = "Huawei@123";
+//	private static final String SIPURI = "01058888@172.22.8.4";
+//	private static final String LICENSESERVER = "172.22.9.22";
 
 	// //产品环境
 	// private static final String SERVER = "172.22.8.4";
@@ -150,64 +161,6 @@ public class LoginActivity extends BaseActivity
 		Log.i(TAG, "save Fault Report.");
 		FileUtil.getIns().sendTEMobileLog(this, FileUtil.LOG_FILE_TYPE);
 	}
-
-	// /**
-	// * 初始化Handler
-	// *
-	// * @return Handler对象
-	// */
-	// public void initHandler()
-	// {
-	// if (null != handler)
-	// {
-	// Log.d(TAG, "the handler has init.");
-	// return;
-	// }
-	// handler = new Handler()
-	// {
-	// @Override
-	// public void handleMessage(Message msg)
-	// {
-	// super.handleMessage(msg);
-	// switch (msg.what) {
-	// case LOGINACTIVITY_MSG.BROADCAST_EVENT:
-	// // boolean statusBroadCastEvent = (isLoading ||
-	// EspaceVariable.getInstance().isLogin());
-	// // if (statusBroadCastEvent)
-	// // {
-	// // Intent intent = (Intent) msg.obj;
-	// // handlerBroadcastEvent(intent);
-	// // }
-	// break;
-	// case LOGINACTIVITY_MSG.ON_BACK_TO_LOGINVIEW:
-	// // restoreLoginView();
-	// break;
-	// // case INPUTOPEN:
-	// // inputAnimationUp();
-	// // break;
-	// // case INPUTCLOSED:
-	// // inputAnimationDown();
-	// // break;
-	// case LOGINACTIVITY_MSG.FORCE_LOGIN_CANCEL:
-	// // resetLoginDelayTimer();
-	// // dismissAlertDialog();
-	// // exit();
-	// // timer.cancel();
-	// // timer = null;
-	// break;
-	// case LOGINACTIVITY_MSG.REFRESH_LOGINBTN:
-	// // Intent intent = (Intent) msg.obj;
-	// // setLoginBtnTxt(intent);
-	// break;
-	// case LOGINACTIVITY_MSG.UNLOCK_LOGIN:
-	// // unlockLogin();
-	// break;
-	// default:
-	// break;
-	// }
-	// }
-	// };
-	// }
 
 	/**
 	 * 点击登录按钮
@@ -546,16 +499,6 @@ public class LoginActivity extends BaseActivity
 	public void showAlertDialog(String title, String msg, String firstBtnInfo, DialogInterface.OnClickListener firstBtnListener, String secondBtnInfo,
 			DialogInterface.OnClickListener secondBtnListener, DialogInterface.OnDismissListener dismissListener)
 	{
-		// dismissAlertDialog();
-		// if (secondBtnInfo == null && secondBtnListener == null)
-		// {
-		// return showAlertDIalogOne(title, msg, firstBtnInfo,
-		// firstBtnListener);
-		// } else
-		// {
-		// return showAlertDialogTwo(title, msg, firstBtnInfo, firstBtnListener,
-		// secondBtnInfo, secondBtnListener, dismissListener);
-		// }
 		if (null != instance)
 		{
 			Toast.makeText(this, msg, Toast.LENGTH_LONG).show();

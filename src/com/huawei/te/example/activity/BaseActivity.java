@@ -9,7 +9,6 @@ import android.widget.Toast;
 public abstract class BaseActivity extends FragmentActivity
 {
 	
-	//
 	@Override
 	protected void onCreate(Bundle savedInstanceState)
 	{
@@ -25,8 +24,8 @@ public abstract class BaseActivity extends FragmentActivity
 		{
 			ActivityStackManager.INSTANCE.setLastShowActivity(null);
 		}
-		// dismissAlertDialog();
-		// alertDialog = null;
+		
+		
 		ActivityStackManager.INSTANCE.popup(this);
 		super.finish();
 
@@ -51,7 +50,7 @@ public abstract class BaseActivity extends FragmentActivity
 	@Override
 	public void onBackPressed()
 	{
-		// this.dismissAllDialogs();
+		
 		super.onBackPressed();
 	}
 

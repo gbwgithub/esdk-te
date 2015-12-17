@@ -1456,6 +1456,7 @@ public class MenuBarContalPanel implements OnClickListener, com.huawei.te.exampl
 	}
 
 	int oritation = 0;
+
 	/**
 	 * 是否要关闭speaker 用于外部调用/
 	 */

@@ -780,7 +780,6 @@ public class FileUtil
 	// /**
 	// * Function: 根据路径删除文件
 	// *
-	// * @author luotianjia 00186254/huawei
 	// * @param path
 	// * 输入路径
 	// */
@@ -857,7 +856,6 @@ public class FileUtil
 	// /**
 	// * Function: 关闭IO流
 	// *
-	// * @author luotianjia 00186254/huawei
 	// * @param closeAble
 	// * InputStream OutPutStream 的上层接口
 	// */
@@ -878,7 +876,6 @@ public class FileUtil
 	// /**
 	// * Function: 保存UM图片到系统图片目录
 	// *
-	// * @author luotianjia 00186254/huawei
 	// * @param fromPath
 	// * 拷贝文件的路径
 	// * @return String 保存的文件路径
@@ -901,7 +898,6 @@ public class FileUtil
 	// /**
 	// * Function: 解析URL path
 	// *
-	// * @author luotianjia 00186254/huawei
 	// * @param uriPath
 	// * @return String
 	// */
@@ -951,7 +947,6 @@ public class FileUtil
 	// /**
 	// * Function: 将一个路径下的图片文件，压缩到另外一个目录下
 	// *
-	// * @author luotianjia 00186254/huawei
 	// * @param picPath
 	// * 原始图片路径
 	// * @param newPicPath
@@ -1056,7 +1051,6 @@ public class FileUtil
 	// /**
 	// * Function: 判断当前路径文件是否存在
 	// *
-	// * @author luotianjia 00186254/huawei
 	// * @param filePath
 	// * 文件路径
 	// * @return boolean

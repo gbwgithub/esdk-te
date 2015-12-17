@@ -349,12 +349,6 @@ public class CallComingActivity extends BaseActivity {
 
 			// 防止接听同时对端取消
 			if (!answerRet) {
-				// if (null == mToastHelp) {
-				// mToastHelp = new
-				// ToastHelp(ActivityStackManager.INSTANCE.getCurrentActivity());
-				// }
-				// mToastHelp.setText(getString(R.string.behangedup));
-				// mToastHelp.showToast(2000);
 			}
 		}
 	}
@@ -459,11 +453,6 @@ public class CallComingActivity extends BaseActivity {
 		if (null != handler) {
 			handler.removeCallbacks(callRejectTask);
 		}
-		// if (null != callRejectTimer)
-		// {
-		// callRejectTimer.stop();
-		// callRejectTimer = null;
-		// }
 	}
 
 }

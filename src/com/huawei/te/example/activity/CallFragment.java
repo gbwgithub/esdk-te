@@ -38,7 +38,6 @@ import com.huawei.te.example.call.VoipCallModifyLogic;
 import com.huawei.te.example.menubar.MenuBarContalPanel;
 import com.huawei.te.example.menubar.MenuBarContalPanel.MenuItemServer;
 import com.huawei.te.example.menubar.MenuBarContalPanel.Mode;
-import com.huawei.utils.PlatformInfo;
 import com.huawei.utils.StringUtil;
 import com.huawei.voip.data.VoiceQuality.VoiceQualityLevel;
 
@@ -672,19 +671,6 @@ public class CallFragment extends Fragment implements OnClickListener
 	 */
 	private synchronized void dialCall(final String callNumber, final boolean isVideoCall)
 	{
-		// 由于异步执行可能出现的问题，所以能同步执行的都改为同步执行
-		// if (null == callCtlThreadPool) {
-		// Log.e(TAG, "callCtlThreadPool is null");
-		// return;
-		// }
-		// callCtlThreadPool.execute(new Runnable() {
-		// @Override
-		// public void run() {
-		// processDialCall(callNumber, isVideoCall);
-		// }
-		// });
-
-		// TO invoke
 		processDialCall(callNumber, isVideoCall);
 	}
 
@@ -796,61 +782,8 @@ public class CallFragment extends Fragment implements OnClickListener
 	public void onCallClosed()
 	{
 		Log.i(TAG, "onCallClosed enter.");
-		// orientationEventListener.disable();
-		// VideoHandler.getIns().resetTurnDirc();
-		// if (!ConfigApp.getInstance().isUsePadLayout())
-		// {
-		// showScreenWithTitle();
-		// }
-		// // 取消长亮
-		// DeviceUtil.releaseWakeLock();
-		//
-		// Log.i(TAG, "onCallClosed VoipCallModifyLogic dismissAllDialogs.");
-		// // VoipCallModifyLogic.dismissAllDialogs();
-		// //取消显示升级对话框
-		// BaseActivity basAct = ActivityStackManager.INSTANCE
-		// .getCurrentActivity();
-		// if (null != basAct)
-		// {
-		// basAct.dismissUpdateDialog();
-		// basAct.dismissAllDialogs();
-		// }
-		//
-		// //取消通知
-		// NotificationUtil.getIns().clearBackgroundNotification();
-		//
-		// // 更新界面时取消所有dialog显示
-		// Log.i(TAG, "onCallClosed dismissAllDialogs.");
-		// //杀进程时需要挂断通话但此时界面已经不存在 会有异常
-		// BaseActivity mBaseActivity = (BaseActivity) getActivity();
-		// if (null != mBaseActivity)
-		// {
-		// mBaseActivity.dismissAllDialogs();
-		// }
-		//
-		// // 取消呼叫超时任务
-		// Log.i(TAG, "onCallClosed cancelCallTask.");
-		// cancelCallTask();
-		//
-		// //停止数据共享
-		// Log.i(TAG, "onCallClosed stopDocShare.");
-		// stopDocShare();
-		//
-		// 关闭网络状态等通话附属activity
 		Log.i(TAG, "onCallClosed destroyUtilActivity.");
 		destroyUtilActivity();
-		//
-		// //停止呼叫界面动画
-		// Log.i(TAG, "onCallClosed stopBackgroundAnimation.");
-		// AnimationUtil.stopBackgroundAnimation();
-		//
-		// // 挂断时再呼叫菜单还在
-		// topMenuLayout.setVisibility(View.GONE);
-		// if (menuBarPanel != null)
-		// {
-		// menuBarPanel.removeLinkedView(topMenuLayout);
-		// menuBarPanel.removeLinkedView(mobileVideoLayout);
-		// }
 
 		resetRender();
 
@@ -874,7 +807,6 @@ public class CallFragment extends Fragment implements OnClickListener
 			// 直接调用onDestroy可以解决问题，可能是Server定义的问题吧
 			LocalHideRenderServer.getInstance().onDestroy();
 		}
-		//
 		// Log.i(TAG, "onCallClosed sendHandlerMessage set state online.");
 		// HomeActivity.sendHandlerMessage(Constant.MSG_SELF_CHANGE_STATE,
 		// PersonalContact.ON_LINE);
@@ -898,34 +830,6 @@ public class CallFragment extends Fragment implements OnClickListener
 		Log.i(TAG, "onCallClosed leave.");
 	}
 
-	// private void doFromBackground()
-	// {
-	// if (null != LocalHideRenderServer.getInstance())
-	// {
-	// if (null != menuBarPanel && !menuBarPanel.isCameraClose())
-	// {
-	// Executors.newSingleThreadExecutor().execute(new BackFromBackground());
-	// } else
-	// {
-	// LocalHideRenderServer.getInstance().setBackground(false);
-	// }
-	// }
-	//
-	// // begin 针对3.0系统下的 render
-	// if (VideoHandler.getIns().getRemoteBfcpView() != null &&
-	// remoteVideoView.getChildAt(0) ==
-	// VideoHandler.getIns().getRemoteBfcpView())
-	// {
-	// return;
-	// }
-	//
-	// // //非gl需要重新加载一次
-	// if (PlatformInfo.getAndroidVersion() < PlatformInfo.ANDROID_VER_3_0)
-	// {
-	// reLoadRemoteLocal();
-	// }
-	// }
-
 	/**
 	 * 重新激活时视频动作
 	 */
@@ -933,63 +837,6 @@ public class CallFragment extends Fragment implements OnClickListener
 	public void onResume()
 	{
 		super.onResume();
-		// int voipStatus = CallLogic.getIns().getVoipStatus();
-		// //保持屏幕常亮
-		// if (CallLogic.STATUS_VIDEOING == voipStatus)
-		// {
-		// DeviceUtil.setKeepScreenOn(this.getActivity());
-		// }
-		//
-		// isRunBehind = false;
-
-		// doFromBackground();
-	}
-
-	// private boolean reLoadRemoteLocal()
-	// {
-	// if (null == CallLogic.getInstance())
-	// {
-	// return false;
-	// }
-	// return CallLogic.getInstance().reLoadRemoteLocal(remoteVideoView,
-	// localVideoView, !menuBarPanel.isCameraClose());
-	// }
-
-	private void doFromBackground()
-	{
-		if (null != LocalHideRenderServer.getInstance())
-		{
-			if (null != menuBarPanel && !menuBarPanel.isCameraClose())
-			{
-				Executors.newSingleThreadExecutor().execute(new BackFromBackground());
-			} else
-			{
-				LocalHideRenderServer.getInstance().setBackground(false);
-			}
-		}
-
-		if (VideoHandler.getIns().getRemoteBfcpView() != null && remoteVideoView.getChildAt(0) == VideoHandler.getIns().getRemoteBfcpView())
-		{
-			return;
-		}
-
-		// // 非gl需要重新加载一次
-		// if (PlatformInfo.getAndroidVersion() < PlatformInfo.ANDROID_VER_3_0)
-		// {
-		// reLoadRemoteLocal();
-		// }
-	}
-
-	/**
-	 * 后台切换内部类
-	 */
-	private static final class BackFromBackground implements Runnable
-	{
-		@Override
-		public void run()
-		{
-			LocalHideRenderServer.getInstance().doBackFromBackground();
-		}
 	}
 
 	/**
@@ -997,50 +844,10 @@ public class CallFragment extends Fragment implements OnClickListener
 	 */
 	private void destroyUtilActivity()
 	{
-
 		if (null != VideoInfoActivity.getInstance())
 		{
 			VideoInfoActivity.getInstance().finish();
 		}
-
-		// Activity pdfBrowserActivity = null;
-		// int length = ActivityStackManager.INSTANCE.getStackSize();
-		// for (int i = 0; i < length; i++)
-		// {
-		// LayoutUtil.releaseFrontToLock(ActivityStackManager.INSTANCE.getActivityByIndex(i));
-		// // 文件浏览的Activity只有在通话中有
-		// if (ActivityStackManager.INSTANCE.getActivityByIndex(i) instanceof
-		// FileBrowserActivity)
-		// {
-		// if (((FileBrowserActivity)
-		// ActivityStackManager.INSTANCE.getActivityByIndex(i)).getType() ==
-		// FileBrowserActivity.PDF)
-		// {
-		// pdfBrowserActivity =
-		// ActivityStackManager.INSTANCE.getActivityByIndex(i);
-		// }
-		// }
-		// }
-		// if (null != pdfBrowserActivity)
-		// {
-		// pdfBrowserActivity.finish();
-		// }
-		// ActivityStackManager.INSTANCE.getImgFileListActivityAndRemove();
-		// ActivityStackManager.INSTANCE.getImgShowActivityAndRemove();
-	}
-
-	/**
-	 * 关闭本地摄像头
-	 */
-	private void closeLocalView()
-	{
-		if (null != localVideoView.getChildAt(0))
-		{
-			localVideoView.getChildAt(0).setVisibility(View.GONE);
-		}
-
-		// isCloseLocal = true;
-		localVideoLayout.setVisibility(View.GONE);
 	}
 
 	/**
@@ -1086,45 +893,16 @@ public class CallFragment extends Fragment implements OnClickListener
 	 */
 	private void resetData()
 	{
-		// 重置小窗口位置
-		// resetLocalRender();
-		// isCloseLocal = false;
-
-		// 是否显示Record图标
-		// recodeImg(false);
-		// 重置PDF初始位置标识位
-		// isFirstTime = true;
-
-		// 重置大小屏标志位 默认为true
-		// isFullScreen = true;
-
-		// 取消菜单栏绑定（5秒后消失）
-		// if (null != menuBarPanel)
-		// {
-		// menuBarPanel.removeLinkedView(topMenuLayout);
-		// }
 		if (null != menuBarPanel)
 		{
 			menuBarPanel.resetData();
 		}
-
-		// topMenuLayout.setVisibility(View.GONE);
 
 		// 关闭采集点服务
 		if (null != LocalHideRenderServer.getInstance())
 		{
 			LocalHideRenderServer.getInstance().removeView();
 		}
-
-		// 双方同时点击共享
-		// resetDocShareState();
-
-		// 重置手机版本
-		// videoShareTip.setImageDrawable(rootView.getResources()
-		// .getDrawable(R.drawable.te_phone_vedio_share_right));
-		// videoShareTip.setImageBitmap(ImageResourceUtil.getIns()
-		// .readBitMap(rootView.getContext(),
-		// R.drawable.te_phone_vedio_share_right));
 	}
 
 	/**
@@ -1159,12 +937,9 @@ public class CallFragment extends Fragment implements OnClickListener
 			}
 		} else
 		{
-			// isCloseLocal = false;// 重置关闭本地图标状态
 			menuBarPanel.changeMode(Mode.AUDIO_CALL);
 			menuBarPanel.reSetVideoToAudioState();
 			menuBarPanel.setPipTips(true);
-			// 是否显示Record图标
-			// recodeImg(false);
 		}
 
 		// 视频通话中
@@ -1230,58 +1005,12 @@ public class CallFragment extends Fragment implements OnClickListener
 		// 不显示关闭本地视频按钮 语音通话按钮
 		audioCallLayout.setVisibility(View.GONE);
 
-		// BFCP 应该是共享相关的
-		// Log.i(TAG, "getBfcpStatus(): " +
-		// CallService.getInstance().getBfcpStatus());
-		// if
-		// (CallLogic.BFCP_END.equals(CallService.getInstance().getBfcpStatus()))
-		// {
-		// // 设置显示内容
-		// setVideoCallShowText(callNumber, tiptxt);
-		// videocallTipView.setVisibility(View.VISIBLE);
-		// videocallTextView.setVisibility(View.VISIBLE);
-		//
-		// processTipLayout.setVisibility(View.VISIBLE);
-		// mobileVideoLayout.setVisibility(View.VISIBLE);
-		//
-		// menuBarPanel.addLink(mobileVideoLayout);
-		// }
-		// // 处理恢复时本端在发辅流
-		// else if
-		// (CallLogic.BFCP_START.equals(CallService.getInstance().getBfcpStatus()))
-		// {
-		// changeToBfcpView();
-		// }
-		// // end added by c00349133 reason:处理恢复时本端在发辅流
-		// // 音频接听后转视频，如果对方本来是辅流发送状态的 要设置成辅流模式的menubar
-		// else {
-		// // 显示对方正在共享文档的提示信息
-		// // topMenuLayout.setVisibility(View.VISIBLE);
-		// // 停止辅流 开始发送 返回按钮不显示
-		// stopShareBtn.setVisibility(View.GONE);
-		// shareBtn.setVisibility(View.GONE);
-		// backBtn.setVisibility(View.GONE);
-		// // *** 视频通话中.. 不显示
-		// videocallTipView.setVisibility(View.GONE);
-		// processTipLayout.setVisibility(View.GONE);
-		// videocallTextView.setVisibility(View.GONE);
-		// mobileVideoLayout.setVisibility(View.GONE);
-		// }
 		menuBarPanel.show();
 		// 只有通话建立 才去addView
 		if (CallService.getInstance().getVoipStatus() == CallStatus.STATUS_VIDEOING)
 		{
 			Log.i(TAG, "STATUS_VIDEOING addVideoView");
-			// 设置下发图片格式 - 重协商或者视频通话的时候
-			// resetFramesize();
-			// View remoteVV = VideoHandler.getIns().getRemoteCallView();
-			// if (null != remoteVV && null == remoteVV.getParent())
-			// {
-			// 只有第一次进入视频通话的时候才去添加view，如果是视频参数更改之类的就不去做此操作
 			addVideoView();
-			// }
-			// 保持屏幕长亮
-			// DeviceUtil.setKeepScreenOn(this.getActivity());
 		}
 	}
 
@@ -1314,11 +1043,6 @@ public class CallFragment extends Fragment implements OnClickListener
 		// 视频呼叫中
 		if (isVideoCall)
 		{
-			// 设置显示text内容
-			// setVideoCallShowText(callNumber, tiptxt);
-			// videocallTipView.setVisibility(View.VISIBLE);
-			// videocallTextView.setVisibility(View.VISIBLE);
-
 			// 视频呼叫区域显示
 			audioCallLayout.setVisibility(View.GONE);
 			videoChatLayout.setVisibility(View.GONE);
@@ -1354,8 +1078,6 @@ public class CallFragment extends Fragment implements OnClickListener
 		// 语音通话区域显示
 		audioCallLayout.setVisibility(View.VISIBLE);
 		videoChatLayout.setVisibility(View.GONE);
-
-		// processTipLayout.setVisibility(View.GONE);
 
 		// 改变菜单栏模式
 		changeMode(Mode.AUDIO_CALLING);
@@ -1532,15 +1254,7 @@ public class CallFragment extends Fragment implements OnClickListener
 			break;
 		case CallStatus.STATUS_CALLING:// 目前只有呼转进入
 			Log.i(TAG, "CallStatus.STATUS_CALLING:");
-			// if (isVideo)
-			// {
-			// // 初始化视频参数
-			// CallService.getInstance().initCallVideo();
-			// }
 			updateLayout(CallStatus.STATUS_CALLING, callNumber, isVideo, tipTxt);
-			// HomeActivity.sendHandlerMessage(CallConstant.SHOW_CALL_LAYOUT,
-			// null);
-			// TO invite
 			CallActivity.getInstance().sendHandlerMessage(CallConstant.SHOW_CALL_LAYOUT, null);
 			break;
 		// 呼叫中刷新，用于呼叫转移
@@ -1548,21 +1262,11 @@ public class CallFragment extends Fragment implements OnClickListener
 		case CallStatus.STATUS_VIDEOINIT:// 目前只有视频升级请求
 			// 视频通话进行中
 			updateLayout(CallStatus.STATUS_VIDEOINIT, callNumber, false, tipTxt);
-			// setAudioCallShowText(callNumber, tipTxt);
-			// HomeActivity.sendHandlerMessage(CallConstant.SHOW_CALL_LAYOUT,
-			// null);
-			// TO invite
 			CallActivity.getInstance().sendHandlerMessage(CallConstant.SHOW_CALL_LAYOUT, null);
 			break;
 		case CallStatus.STATUS_VIDEOACEPT:
 		case CallStatus.STATUS_VIDEOING:
-			// 如果是视频升级需要重新创建
-			// if (null == VideoHandler.getIns().getRemoteCallView())
-			// {
-			// CallService.getInstance().initCallVideo();
-			// }
 			updateLayout(CallStatus.STATUS_VIDEOING, callNumber, true, tipTxt);
-
 			CallActivity.getInstance().sendHandlerMessage(CallConstant.SHOW_CALL_LAYOUT, null);
 			break;
 
@@ -1733,7 +1437,6 @@ public class CallFragment extends Fragment implements OnClickListener
 					menuBarPanel.changeMode(Mode.VIDEO_CALL);
 				}
 			}
-			// end added by c00349133 reason: 会话保持阶段显示“通话被保持”
 			menuBarPanel.setPipTips(true);
 
 			// 本地小窗口可见
@@ -1818,21 +1521,6 @@ public class CallFragment extends Fragment implements OnClickListener
 		isDocSharing = false;
 	}
 
-	// /**
-	// * 暂停fragment时候自动调用
-	// */
-	// @Override
-	// public void onPause() {
-	// super.onPause();
-	// // isRunBehind = true;
-	// // 安卓移动软终端入会过程中查看通话状态，仍会启动屏保
-	// // 软终端后台运行的时候释放常亮锁
-	// if (LocalHideRenderServer.getInstance() != null &&
-	// LocalHideRenderServer.getInstance().isBackground()) {
-	// DeviceUtil.releaseWakeLock();
-	// }
-	// }
-
 	/**
 	 * 销毁fragment时候自动调用
 	 */
@@ -1886,59 +1574,11 @@ public class CallFragment extends Fragment implements OnClickListener
 			}
 		});
 
-		// if ((remoteVideoView instanceof VariationView))
-		// {
-		// ((VariationView) remoteVideoView).regReaderChangeListener(this);
-		// }
 	}
 
 	@Override
 	public void onClick(View v)
 	{
-	}
-
-	/**
-	 * 将辅流相关的状态重置
-	 */
-	private void resetDocShareState()
-	{
-		LogUtil.i(TAG, "resetDocShareState enter.");
-
-		baseTime = 0;
-		sendBfcpTime = 0;
-		recvBfpcTime = 0;
-		bfcpSendTag = false;
-		//
-		// 还原状态,防止如本远端切换界面出错
-		// isRecvDataDecode = false;
-		isDocSharing = false;
-		synchronized (DOCLOCK)
-		{
-			isReceiving = false;
-		}
-		isPdfView = false;
-		isBfcpView = false;
-
-		// shareBtn.setEnabled(true);
-		// backBtn.setVisibility(View.VISIBLE);
-		// shareBtn.setVisibility(View.VISIBLE);
-		// stopShareBtn.setVisibility(View.GONE);
-		// shareText.setVisibility(View.GONE);
-		// synchronized (PDFLOCK)
-		// {
-		// if (readDoc != null)
-		// {
-		// readDoc.releaseResource();
-		// readDoc = null;
-		// }
-		// }
-		// if (readerView != null)
-		// {
-		// readerView.unregReaderChangeListener(this);
-		// readerView = null;
-		// }
-
-		LogUtil.i(TAG, "resetDocShareState leave.");
 	}
 
 }

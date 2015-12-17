@@ -274,30 +274,11 @@ public class VoipCallModifyLogic
 		return showing;
 	}
 
-	// public static void dismissAllDialogs()
-	// {
-	// if (null != dialogRender && dialogRender.isShowing())
-	// {
-	// dialogRender.dismiss();
-	// }
-	// }
 	private class DismisDialogTimerTask extends TimerTask
 	{
 		@Override
 		public void run()
 		{
-			// if (null != dialogRender)
-			// {
-			// dialogRender.dismiss();
-			// }
-			// 取消显示升级对话框
-			// BaseActivity basAct =
-			// ActivityStackManager.INSTANCE.getCurrentActivity();
-			// if (null != basAct)
-			// {
-			// basAct.dismissUpdateDialog();
-			// }
-
 			if (null != dialog)
 			{
 				dialog.dismiss();

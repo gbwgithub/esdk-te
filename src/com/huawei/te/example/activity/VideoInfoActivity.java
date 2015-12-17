@@ -1296,12 +1296,10 @@ public class VideoInfoActivity extends BaseActivity implements IMediaNetInfoList
 		// 分辨率
 		dataRecvFramsize = "--";
 		// 码率
-		// add modified by c00349133 reason:
 		// dataRecvDatarate = "--";
 		dataRecvDatarate.setLength(0);
 		dataRecvDatarate.append("--");
-		// add modified by c00349133 reason:
-		// begin added by pwx178217 reason:辅流延时抖动和丢包
+		// 辅流延时抖动和丢包
 		dataPacketLossProbability = "";
 		dataDelay = "";
 		dataJitter = "";
