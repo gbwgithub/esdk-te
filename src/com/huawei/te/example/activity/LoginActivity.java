@@ -6,6 +6,7 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.os.Bundle;
+import android.text.StaticLayout;
 import android.util.Log;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -31,6 +32,18 @@ import com.huawei.utils.StringUtil;
 
 public class LoginActivity extends BaseActivity
 {
+	// 公网环境
+	// /**
+	// * TCP\UDP 222.92.146.245：15060 -> 172.19.27.171：5060
+	// * TCP\UDP 222.92.146.245：15061 -> 172.19.27.171：5061
+	// */
+	// private static final String ACCOUNT = "20150512";
+	// private static final String PASSWORD = "huawei123";
+	// private static final String SERVER = "222.92.146.245";
+	// private static final String PORT = "15061";
+	// private static final String SIPURI = "20150512@222.92.146.245";
+	// private static final String LICENSESERVER = "222.92.146.245";
+
 	// 产品环境
 	// Wifi w00327180_DW_Test
 	// TEMobile需要手动在LoginInfo中set,设置licenseServer
@@ -44,13 +57,13 @@ public class LoginActivity extends BaseActivity
 	// 城云环境
 	// Wifi w00327180_DW_Test
 	// TEMobile需要手动在LoginInfo中set,设置licenseServer
-	private static final String ACCOUNT = "wgl.cci";
-	private static final String PASSWORD = "123";
-	private static final String SERVER = "tp.onecc.me";
-	private static final String PORT = "5061";
-	private static final String LICENSESERVER = "10.10.160.99";
-	private static final String SIPURI = "wgl.cci@onecc.me";
-	// private static final String SIPURI = "wgl.cci@tp.onecc.me";
+	// private static final String ACCOUNT = "wgl.cci";
+	// private static final String PASSWORD = "123";
+	// private static final String SERVER = "tp.onecc.me";
+	// private static final String PORT = "5061";
+	// private static final String LICENSESERVER = "10.10.160.99";
+	// // private static final String SIPURI = "wgl.cci@tp.onecc.me";
+	// private static final String SIPURI = "wgl.cci@onecc.me";
 
 	// //172.22.8.4环境
 	// private static final String SERVER = "172.22.8.4";
@@ -69,12 +82,12 @@ public class LoginActivity extends BaseActivity
 	// private static final String LICENSESERVER = "172.22.9.21";
 
 	// 开启license环境 8.4
-//	private static final String SERVER = "172.22.8.4";
-//	private static final String PORT = "5061";
-//	private static final String ACCOUNT = "01058888";
-//	private static final String PASSWORD = "Huawei@123";
-//	private static final String SIPURI = "01058888@172.22.8.4";
-//	private static final String LICENSESERVER = "172.22.9.22";
+	private static final String SERVER = "172.22.8.4";
+	private static final String PORT = "5061";
+	private static final String ACCOUNT = "01058888";
+	private static final String PASSWORD = "Huawei@123";
+	private static final String SIPURI = "01058888@172.22.8.4";
+	private static final String LICENSESERVER = "172.22.9.22";
 
 	// //产品环境
 	// private static final String SERVER = "172.22.8.4";
@@ -90,6 +103,18 @@ public class LoginActivity extends BaseActivity
 	private String serverPort; // 登录服务器地址
 	private String sipURI; // 代理服务器地址
 	private String licenseServer; // 验证服务器地址
+	private static String protocolType = "TLS"; // 传输协议
+
+	public static String getProtocolType()
+	{
+		return protocolType;
+	}
+
+	public static void setProtocolType(String protocolType)
+	{
+		LoginActivity.protocolType = protocolType;
+	}
+
 	private EditText edServerIP;
 	private EditText edServerPort;
 	private EditText edSipURI;
@@ -200,9 +225,11 @@ public class LoginActivity extends BaseActivity
 		info.setLicenseServer(licenseServer);
 		info.setServerIP(serverIP);
 		info.setServerPort(serverPort);
+		info.setSipuri(sipURI);
+		Log.d(TAG, "info.setSipuri -> " + sipURI);
 		boolean isAnonymous = false;
 		// 匿名呼叫自动使用UDP传输协议 -- TLS TCP UDP协议登录时记录设置端口
-		info.setProtocolType(isAnonymous ? "UDP" : "TLS");
+		info.setProtocolType(protocolType);
 		// Log传输协议
 		Log.i(TAG, "ProtocolType is " + info.getProtocolType());
 		// 设置心跳

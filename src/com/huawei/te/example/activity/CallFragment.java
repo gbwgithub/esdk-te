@@ -333,10 +333,11 @@ public class CallFragment extends Fragment implements OnClickListener
 		switch (msg.what) {
 
 		case MsgCallFragment.MSG_REFRESH_VIEW:// 这里只考虑本地采集点
-			if (null == msg.obj || null == LocalHideRenderServer.getInstance())
-			{
-				return;
-			}
+			// if (null == msg.obj || null ==
+			// LocalHideRenderServer.getInstance())
+			// {
+			// return;
+			// }
 			// refreshView已经添加到SDK中执行
 			// refreshView(msg);
 			break;

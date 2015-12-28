@@ -70,6 +70,31 @@
                 android:clickable="false" />
         </RelativeLayout>
         
+        
+        
+        
+        <RelativeLayout
+            android:id="@+id/transferProtocolSwitchLayout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/logSwitchLayout"
+            android:layout_marginLeft="11dp"
+            android:layout_marginRight="11dp" >
+
+            <TextView
+                android:id="@+id/tv_transfer_protocol_switch"
+                style="@style/text_style_24px_16"
+                android:layout_width="fill_parent"
+                android:layout_height="48dp"
+                android:layout_alignParentLeft="true"
+                android:layout_centerVertical="true"
+                android:gravity="center_vertical"
+                android:paddingLeft="11dp"
+                android:text="切换传输协议"
+                android:textColor="@color/black" >
+            </TextView>
+        </RelativeLayout>
+        
     </RelativeLayout>
 
 </RelativeLayout>

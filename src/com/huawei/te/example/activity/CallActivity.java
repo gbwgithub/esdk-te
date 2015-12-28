@@ -32,7 +32,6 @@ import com.huawei.esdk.te.data.Constants.MSG_FOR_HOMEACTIVITY;
 import com.huawei.esdk.te.data.Constants.MsgCallFragment;
 import com.huawei.esdk.te.util.LayoutUtil;
 import com.huawei.esdk.te.util.LogUtil;
-import com.huawei.esdk.te.video.LocalHideRenderServer;
 import com.huawei.manager.DataManager;
 import com.huawei.te.example.CallControl;
 import com.huawei.te.example.R;
@@ -93,10 +92,12 @@ public class CallActivity extends BaseActivity
 	{
 		super.onStop();
 
-//		if (null != LocalHideRenderServer.getInstance())
-//		{
-//			LocalHideRenderServer.getInstance().doInBackground();
-//		}
+		// 视频通话中锁屏的处理，已经迁移到SDK中执行了
+
+		// if (null != LocalHideRenderServer.getInstance())
+		// {
+		// LocalHideRenderServer.getInstance().doInBackground();
+		// }
 	}
 
 	@Override
@@ -1067,5 +1068,17 @@ public class CallActivity extends BaseActivity
 			}
 		});
 		builder.create().show();
+	}
+
+	private int videoMode = 0;
+
+	public void setVideoMode(View view)
+	{
+		Log.d(TAG, "Last mode -> " + videoMode);
+		if (CallService.getInstance().setVideoMode((++videoMode) % 2))
+		{
+			Toast.makeText(CallActivity.this, "已设置" + (Constants.VideoMode.VIDEO_PROCESS_MODE == videoMode % 2 ? "流畅优先" : "画质优先"), Toast.LENGTH_LONG)
+					.show();
+		}
 	}
 }
