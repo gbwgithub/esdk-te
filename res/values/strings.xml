@@ -4,8 +4,8 @@
     <string name="app_name">TE Mobile Demo</string>
     <string name="hello_world">Hello world!</string>
     <string name="action_settings">Settings</string>
-    
-        <string name="add_success">add success</string>
+
+    <string name="add_success">add success</string>
     <string name="replace">Replace</string>
     <string name="ok">OK</string>
     <string name="close">Close</string>
@@ -162,8 +162,8 @@
     <string name="set_password_offline">Offline,modify password failure</string>
     <string name="set_password_setting">Change the password, please wait...</string>
     <string name="set_password_formfalse">The new password format is not correct</string>
-    
-    
+
+
     <!-- data share -->
     <string name="share_success"> Document shared</string>
     <string name="share_fail"> Sharing failed</string>
@@ -244,7 +244,7 @@
     <string name="import_fail_format">Invalid file format.</string>
     <string name="import_end_toast" formatted="false">Imported: %d\t\nDuplicates: %d\t\nFailed: %d\t\n</string>
     <string name="import_fail_end">Import failed</string>
-    
+
     <string name="import_titile_group">Group</string>
     <string name="import_titile_name">Name</string>
     <string name="import_titile_number">Number</string>
@@ -256,8 +256,8 @@
     <string name="import_titile_officephone">OfficePhone</string>
     <string name="import_titile_definition">DN</string>
     <string name="import_titile_callType">Type</string>
-    <string name="import_titile_nickname">NickName</string>    
-    
+    <string name="import_titile_nickname">NickName</string>
+
     <string name="email_format_error">Invalid email address</string>
     <string name="search_failed">File search failed</string>
     <string name="talking_status">Cannot operate while in a call</string>
@@ -331,7 +331,7 @@
     <string name="switch_audio">Switch Audio</string>
 
     <!-- system tip -->
-    <string name="infotip" xml:space="preserve">\t\t\t\t\t\t</string>
+    <string name="infotip">\t\t\t\t\t\t</string>
     <string name="etimeout">Login timed out. Please check the network</string>
     <string name="network_on">Connected</string>
     <string name="network_off">Disconnected</string>
@@ -395,7 +395,7 @@
     <string name="dial_pan">Keypad</string>
     <string name="cannot_connect_server">cannot connect to server.</string>
     <string name="network_notavailable">network not available,please try again later.</string>
-    
+
 	<string name="conference">Conference</string>
     <string name="create_conference">Create a meeting</string>
     <string name="choose_conference">Add attendee</string>
@@ -425,10 +425,10 @@
 
     <string name="create_conference_success">Creating a conference successful , please wait ...</string>
     <string name="create_conference_back">Back</string>
-    
+
     <string name="create_conference_max">Can only choose up to 400 contacts</string>
     <string name="conference_ctrl_multy">Multi screen</string>
-    
+
     <string name="watch_conf_fail">Watch attendee failed</string>
     <string name="watch_conf_success">Watch attendee success</string>
 

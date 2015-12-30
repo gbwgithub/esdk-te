@@ -19,6 +19,7 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.PopupWindow;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -235,7 +236,7 @@ public class MenuBarContalPanel implements OnClickListener, com.huawei.te.exampl
 	/**
 	 * 开关扬声器布局
 	 */
-	private LinearLayout speekerControl;
+	private RelativeLayout speekerControl;
 
 	/**
 	 * 分割线条
@@ -540,7 +541,7 @@ public class MenuBarContalPanel implements OnClickListener, com.huawei.te.exampl
 		// ================================
 		// 此之间只有手机布局存在 使用时需注意判空
 		// 关闭扬声器
-		speekerControl = (LinearLayout) moreView.findViewById(R.id.video_speaker);
+		speekerControl = (RelativeLayout) moreView.findViewById(R.id.video_speaker);
 		// speekerControlLine =
 		// moreView.findViewById(R.id.video_speaker_up_line);
 		// emptyitem = (LinearLayout) moreView.findViewById(R.id.empty_layout);
@@ -663,49 +664,38 @@ public class MenuBarContalPanel implements OnClickListener, com.huawei.te.exampl
 			return;
 		}
 
-		switch (v.getId()) {
-
-		case R.id.full_screen:
+		int id = v.getId();
+		if (id == R.id.full_screen)
+		{
 			refreshFullScreen();
-			break;
-		case R.id.close_camera:
+		} else if (id == R.id.close_camera)
+		{
 			ImageView closeCameraImg = (ImageView) moreView.findViewById(R.id.close_camera_img);
 			operateCamera(closeCameraImg);
-			break;
-		case R.id.close_pip:
+		} else if (id == R.id.close_pip)
+		{
 			closePipUI();
-			break;
-		case R.id.switch_audio:
+		} else if (id == R.id.switch_audio)
+		{
 			videoToAudio(v);
-			break;
-		case R.id.switch_camera:
+		} else if (id == R.id.switch_camera)
+		{
 			switchCamere(switchCameraImg);
-			break;
-		case R.id.vedio_menu_single:
+		} else if (id == R.id.vedio_menu_single)
+		{
 			menuItemServer.showCallInfo();
-			break;
-		case R.id.share_data:
+		} else if (id == R.id.share_data)
+		{
 			shareFile();
 			dismissMorePopWindow();
-			break;
-		case R.id.share_pic:
+		} else if (id == R.id.share_pic)
+		{
 			sharePic();
 			dismissMorePopWindow();
-			break;
-		case R.id.video_speaker:
-			// 针对手机布局才在这里调用
-			// boolean isClose = (Boolean) speekerControl.getTag();
-			// speekerControl.setTag(!isClose);
-			// if (isClose)
-			// {
-			// closeSpeakerComfirm();
-			// } else
-			// {
-			// openSpeakerComfirm();
-			// }
-			break;
-		default:
-			break;
+		} else if (id == R.id.video_speaker)
+		{
+		} else
+		{
 		}
 	}
 

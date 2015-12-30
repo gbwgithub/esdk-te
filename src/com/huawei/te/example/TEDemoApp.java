@@ -11,7 +11,7 @@ public class TEDemoApp extends Application
 	{
 		super.onCreate();
 		TESDK.initSDK(this);
-		TESDK.getInstance().setLogPath(true, "");
-//		TESDK.getInstance().setLogPath(true, getFilesDir().getPath() + "/log/");
+		// TESDK.getInstance().setLogPath(true, "");
+		TESDK.getInstance().setLogPath(true, getFilesDir().getPath() + "/log/");
 	}
 }
