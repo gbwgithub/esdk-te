@@ -1,3 +1,18 @@
+/*
+ *    Copyright 2015 Huawei Technologies Co., Ltd. All rights reserved.
+ *    eSDK is licensed under the Apache License, Version 2.0 (the "License");
+ *    you may not use this file except in compliance with the License.
+ *    You may obtain a copy of the License at
+ *
+ *        http://www.apache.org/licenses/LICENSE-2.0
+ *
+ *    Unless required by applicable law or agreed to in writing, software
+ *    distributed under the License is distributed on an "AS IS" BASIS,
+ *    WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ *    See the License for the specific language governing permissions and
+ *    limitations under the License.
+ */
+
 package com.huawei.te.example.menubar;
 
 import java.util.ArrayList;
@@ -19,9 +34,6 @@ import android.widget.ImageView;
 import com.huawei.esdk.te.data.Constants;
 import com.huawei.te.example.R;
 
-/**
- * Copyright (C) 2008-2013 华为技术有限公司(Huawei Tech.Co.,Ltd)
- */
 public class VideoMenuBar implements View.OnClickListener, Runnable
 {
 	private static final String TAG = VideoMenuBar.class.getSimpleName();
@@ -415,52 +427,50 @@ public class VideoMenuBar implements View.OnClickListener, Runnable
 		{
 			return;
 		}
-		switch (viewVar.getId()) {
-		case R.id.more:// 更多
+		int id = viewVar.getId();
+		if (id == R.id.more)
+		{
 			// 菜单栏消失弹出框不消失
 			if (View.VISIBLE == menuBar.getVisibility())
 			{
 				itemServer.showMoreOpre(viewVar);
 			}
-			// END 菜单栏消失弹出框不消失
-			break;
-		case R.id.video_mic:
+		} else if (id == R.id.video_mic)
+		{
 			itemServer.closeMIC(getMenuItemsImg(MIC));
 			itemServer.setMicClose(!Constants.CLICK.equals(getMenuItemsImg(MIC)));
-			break;
-		case R.id.video_speaker:
+		} else if (id == R.id.video_speaker)
+		{
 			itemServer.closeSpeaker(getMenuItemsImg(SPEAKER));
 			itemServer.setSpeakerClose(!Constants.CLICK.equals(getMenuItemsImg(SPEAKER)));
-			break;
-		case R.id.voice_bluetooth:
+		} else if (id == R.id.voice_bluetooth)
+		{
 			itemServer.blueToothClick(getMenuItemsImg(BLUETOOTH));
-			break;
-		case R.id.audio_switch_video:
+		} else if (id == R.id.audio_switch_video)
+		{
 			itemServer.videoToAudio(viewVar);
-			break;
-		case R.id.redial_board:
+		} else if (id == R.id.redial_board)
+		{
 			itemServer.audioRecall(viewVar);
-			break;
-		case R.id.share_data:
+		} else if (id == R.id.share_data)
+		{
 			itemServer.shareFile();
 			if (View.VISIBLE == menuBar.getVisibility())
 			{
 				itemServer.showShareMorePopWindow(viewVar);
 			}
-			break;
-		case R.id.video_hangup:
+		} else if (id == R.id.video_hangup)
+		{
 			endCall(viewVar);
-			break;
-		case R.id.audio_screen:
+		} else if (id == R.id.audio_screen)
+		{
 			itemServer.setAudioScreen(getMenuItemsImg(AUDIO_SCREEN));
-			break;
-		// 显示会场列表点击
-		case R.id.video_conf_list:
+		} else if (id == R.id.video_conf_list)
+		{
 			itemServer.showConfList();
-			break;
-		default:
+		} else
+		{
 			endCall(viewVar);
-			break;
 		}
 	}
 
@@ -506,7 +516,6 @@ public class VideoMenuBar implements View.OnClickListener, Runnable
 			}
 		}
 	}
-
 
 	/**
 	 * 挂断电话方法
@@ -838,16 +847,18 @@ public class VideoMenuBar implements View.OnClickListener, Runnable
 			}
 		}
 
-//		/**
-//		 * 设置item的背景
-//		 */
-//		public void setItemBackground(int resid)
-//		{
-//			if (null != item)
-//			{
-//				item.setBackgroundDrawable(new BitmapDrawable(ImageResourceUtil.getIns().readBitMap(rootView.getContext(), resid)));
-//			}
-//		}
+		// /**
+		// * 设置item的背景
+		// */
+		// public void setItemBackground(int resid)
+		// {
+		// if (null != item)
+		// {
+		// item.setBackgroundDrawable(new
+		// BitmapDrawable(ImageResourceUtil.getIns().readBitMap(rootView.getContext(),
+		// resid)));
+		// }
+		// }
 
 		/**
 		 * 得到菜单项
