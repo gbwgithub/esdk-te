@@ -53,6 +53,7 @@ import com.huawei.te.example.call.VoipCallModifyLogic;
 import com.huawei.te.example.menubar.MenuBarContalPanel;
 import com.huawei.te.example.menubar.MenuBarContalPanel.MenuItemServer;
 import com.huawei.te.example.menubar.MenuBarContalPanel.Mode;
+import com.huawei.te.example.utils.AddTouchEventUtil;
 import com.huawei.utils.StringUtil;
 import com.huawei.voip.data.VoiceQuality.VoiceQualityLevel;
 
@@ -230,8 +231,6 @@ public class CallFragment extends Fragment implements OnClickListener
 		super.onCreateView(inflater, container, savedInstanceState);
 
 		rootView = (ViewGroup) inflater.inflate(R.layout.call_fraglayout, container, false);
-		// 设置全局点击事件
-
 		return rootView;
 	}
 
@@ -241,6 +240,14 @@ public class CallFragment extends Fragment implements OnClickListener
 		super.onActivityCreated(savedInstanceState);
 		// 初始化组件
 		initComponent();
+		
+		// 设置全局点击事件
+
+		// 设置小窗口可拖动
+		AddTouchEventUtil addTouchUtil = new AddTouchEventUtil(localVideoLayout, rootView.findViewById(R.id.line_left),
+				rootView.findViewById(R.id.line_right), rootView.findViewById(R.id.line_top), rootView.findViewById(R.id.line_bottom));
+		addTouchUtil.addTouchEvent(localVideoView);
+		
 		callCtlThreadPool = Executors.newSingleThreadExecutor();
 		setRootViewListener();
 	}
@@ -269,6 +276,7 @@ public class CallFragment extends Fragment implements OnClickListener
 
 		// 呼叫时本地视频显示区域
 		previewLayout = (LinearLayout) rootView.findViewById(R.id.pre_local_video);
+
 	}
 
 	private void initHandler()
@@ -312,7 +320,14 @@ public class CallFragment extends Fragment implements OnClickListener
 			@Override
 			public void setPip(boolean isPip)
 			{
-
+				LogUtil.i(TAG, "close PIP " + isPip);
+				if (isPip)
+				{
+					switchView();
+				} else
+				{
+					closeLocalView();
+				}
 			}
 
 			@Override
@@ -327,6 +342,32 @@ public class CallFragment extends Fragment implements OnClickListener
 
 			}
 		};
+	}
+
+	/**
+	 * 切换摄像头
+	 */
+	private void switchView()
+	{
+		localVideoLayout.setVisibility(View.VISIBLE);
+		if (null != localVideoView.getChildAt(0))
+		{
+			localVideoView.getChildAt(0).setVisibility(View.VISIBLE);
+		}
+		// isCloseLocal = false;
+	}
+
+	/**
+	 * 关闭本地摄像头
+	 */
+	private void closeLocalView()
+	{
+		if (null != localVideoView.getChildAt(0))
+		{
+			localVideoView.getChildAt(0).setVisibility(View.GONE);
+		}
+		// isCloseLocal = true;
+		localVideoLayout.setVisibility(View.GONE);
 	}
 
 	public void sendHandlerMessage(int what, Object object)

@@ -26,7 +26,6 @@ import com.huawei.common.CallErrorCode;
 import com.huawei.esdk.te.call.Call;
 import com.huawei.esdk.te.call.CallConstants.BFCPStatus;
 import com.huawei.esdk.te.call.CallConstants.CallStatus;
-import com.huawei.esdk.te.call.CallLogic;
 import com.huawei.esdk.te.call.CallNotification;
 import com.huawei.esdk.te.call.CallService;
 import com.huawei.esdk.te.data.Constants;
@@ -514,10 +513,6 @@ public class CallControl implements CallNotification
 	 *            域，暂时无用，可传空
 	 * @param isVideoCall
 	 *            是否视频通话
-	 * @param vcaps
-	 *            视频通话时，需设置的视频参数，
-	 * @param dataCaps
-	 *            bfcp参数
 	 * @return CallErrorCode 成功："0" 失败：CallErrorCode.isFail(callCodeString)为true
 	 */
 	public synchronized String dialCall(String fromPhone, String domain, boolean isVideoCall)

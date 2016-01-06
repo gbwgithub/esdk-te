@@ -32,6 +32,7 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
 import android.widget.Toast;
 
 import com.huawei.common.CustomBroadcastConst;
@@ -83,6 +84,11 @@ public class CallActivity extends BaseActivity
 	private Button exitBtn;
 	private EditText callNumEt;
 
+	/**
+	 * 控件区域layout
+	 */
+	private RelativeLayout controlsAreaLayout;
+	
 	/**
 	 * 通话区域layout
 	 */
@@ -166,6 +172,7 @@ public class CallActivity extends BaseActivity
 		// 初始化通话fragment
 		initCallFragment();
 
+		controlsAreaLayout = (RelativeLayout) findViewById(R.id.rl_controls);
 		callAreaLayout = (LinearLayout) findViewById(R.id.linear_local);
 
 		// 呼叫号码编辑框
@@ -743,6 +750,7 @@ public class CallActivity extends BaseActivity
 		Log.d(TAG, "removeCallComingActivity");
 		// 不显示CallFragment的部分
 		callAreaLayout.setVisibility(View.GONE);
+		controlsAreaLayout.setVisibility(View.VISIBLE);
 
 		if (null != CallComingActivity.getInstance())
 		{
@@ -758,6 +766,8 @@ public class CallActivity extends BaseActivity
 		Log.d(TAG, "showCallLayout()");
 		// 设置呼叫界面可见
 		callAreaLayout.setVisibility(View.VISIBLE);
+		controlsAreaLayout.setVisibility(View.GONE);
+		
 		// //设置本地视频 欢迎界面 不可见
 		// welcomeLayout.setVisibility(View.GONE);
 		// confEnterLayout.setVisibility(View.GONE);
@@ -807,6 +817,7 @@ public class CallActivity extends BaseActivity
 
 		// 设置呼叫界面 本地视频 不可见
 		callAreaLayout.setVisibility(View.GONE);
+		controlsAreaLayout.setVisibility(View.VISIBLE);
 		// TODO Final，添加本地视频时需要设置下边两个
 		// localVideoAreaLayout.setVisibility(View.GONE);
 		// 设置本地视频按钮可用

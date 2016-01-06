@@ -90,10 +90,6 @@ public final class ResponseErrorCodeHandler
 	 * 
 	 * @param errorCode
 	 *            错误码
-	 * @param Activity
-	 *            activity引用
-	 * @param laveCount
-	 *            只用于登录失败提示
 	 */
 	public static synchronized void handleRequestError(int errorCode, BaseActivity activity)
 	{
