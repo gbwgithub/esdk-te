@@ -434,7 +434,7 @@ public class LoginActivity extends BaseActivity
 		Log.w(TAG, "RequestError  errorType = " + errorType);
 		// isLoading = false;
 		// sendHandlerMessage(LOGINACTIVITY_MSG.ON_BACK_TO_LOGINVIEW, null);
-		TESDK.getInstance().stopSDKService();
+//		TESDK.getInstance().stopSDKService();
 		int errorCode = 0;
 		// 目前三种类型，鉴权失败，超时，服务器错误（作为服务器连接失败处理）
 		if (errorType.equals(Resource.LICENSEAPPLY_FAILED))
@@ -473,7 +473,7 @@ public class LoginActivity extends BaseActivity
 		Log.w(TAG, "ResponseError  code = " + errorCode + Constants.CHARACTER_MARK.VERTICAL_MARK + info + Constants.CHARACTER_MARK.VERTICAL_MARK);
 		// isLoading = false;
 		// sendHandlerMessage(LOGINACTIVITY_MSG.ON_BACK_TO_LOGINVIEW, null);
-		TESDK.getInstance().stopSDKService();
+//		TESDK.getInstance().stopSDKService();
 		ResponseErrorCodeHandler.handleError(errorCode, info, LoginActivity.this, true);
 	}
 
@@ -500,7 +500,7 @@ public class LoginActivity extends BaseActivity
 	{
 		if (intent != null)
 		{
-			Log.e(TAG, "handlerBroadcastEvent:intent.getAction()");
+			Log.e(TAG, "handlerBroadcastEvent:" + intent.getAction());
 			String action = intent.getAction();
 
 			if (CustomBroadcastConst.ACTION_LOGIN_RESPONSE.equals(action))
