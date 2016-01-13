@@ -21,10 +21,10 @@ import android.content.Intent;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.net.NetworkInfo.State;
-import android.util.Log;
 
 import com.huawei.common.CustomBroadcastConst;
 import com.huawei.common.LogSDK;
+import com.huawei.esdk.te.util.LogUtil;
 import com.huawei.service.eSpaceService;
 
 public class NetConnectStatus extends BroadcastReceiver {
@@ -60,7 +60,7 @@ public class NetConnectStatus extends BroadcastReceiver {
 		eSpaceService.postBroadcast(netIntent);
 		// 在没有网络的情况下开机启动 进入主界面之后 再打开网络，由于service为null 所以发送不过去设置连接状态
 		if (eSpaceService.getService() == null) {
-			Log.i(TAG, "eSpaceService is null only set connected is " + !isBreak);
+			LogUtil.i(TAG, "eSpaceService is null only set connected is " + !isBreak);
 		}
 	}
 

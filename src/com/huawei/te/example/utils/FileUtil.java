@@ -38,12 +38,12 @@ import java.util.zip.ZipOutputStream;
 import android.content.Context;
 import android.os.AsyncTask;
 import android.os.Environment;
-import android.util.Log;
 import android.widget.Toast;
 
 import com.huawei.esdk.te.TESDK;
 import com.huawei.esdk.te.data.Constants;
 import com.huawei.esdk.te.util.DeviceUtil;
+import com.huawei.esdk.te.util.LogUtil;
 import com.huawei.te.example.R;
 import com.huawei.te.example.activity.BaseActivity;
 import com.huawei.utils.ZipUtil;
@@ -215,11 +215,11 @@ public class FileUtil
 			return true;
 		} catch (FileNotFoundException e)
 		{
-			Log.e(TAG, "zip error.");
+			LogUtil.e(TAG, "zip error.");
 			return false;
 		} catch (IOException e)
 		{
-			Log.e(TAG, "zip error.");
+			LogUtil.e(TAG, "zip error.");
 			return false;
 		} finally
 		{
@@ -277,12 +277,12 @@ public class FileUtil
 		logPath.logpathArray = paths;
 		logPath.zippath = path;
 		logPath.zipPathFile = zipfile;
-		Log.d(TAG, "zippath ->" + path);
-		Log.d(TAG, "zipfile ->" + zipfile.getName());
-		Log.d(TAG, "logpathArray ->");
+		LogUtil.d(TAG, "zippath ->" + path);
+		LogUtil.d(TAG, "zipfile ->" + zipfile.getName());
+		LogUtil.d(TAG, "logpathArray ->");
 		for (int i = 0; i < paths.length; i++)
 		{
-			Log.d(TAG, paths[i]);
+			LogUtil.d(TAG, paths[i]);
 		}
 		new MyAsynTask(context).execute(logPath);
 	}
@@ -305,7 +305,7 @@ public class FileUtil
 			}
 		} catch (IOException e)
 		{
-			Log.i(TAG, "closeOutputString()...Exception->exp");
+			LogUtil.i(TAG, "closeOutputString()...Exception->exp");
 		}
 	}
 
@@ -326,7 +326,7 @@ public class FileUtil
 			}
 		} catch (IOException e)
 		{
-			Log.i(TAG, "closeInputStream()...Exception->exp");
+			LogUtil.i(TAG, "closeInputStream()...Exception->exp");
 		}
 	}
 
@@ -348,7 +348,7 @@ public class FileUtil
 			}
 		} catch (IOException e)
 		{
-			Log.i(TAG, "closeOutputString()...Exception->exp");
+			LogUtil.i(TAG, "closeOutputString()...Exception->exp");
 		}
 	}
 
@@ -427,7 +427,7 @@ public class FileUtil
 	// // begin add by wx183960 2013/11/25
 	// if (!isCreateSuccess)
 	// {
-	// Log.d(TAG, "directory already exists");
+	// LogUtil.d(TAG, "directory already exists");
 	// }
 	// // end add by wx183960 2013/11/25
 	// }
@@ -460,7 +460,7 @@ public class FileUtil
 	// boolean isCreateSuccess = outHandle.mkdirs();
 	// if (!isCreateSuccess)
 	// {
-	// Log.d(TAG, "directory already exists");
+	// LogUtil.d(TAG, "directory already exists");
 	// }
 	// }
 	//
@@ -468,7 +468,7 @@ public class FileUtil
 	//
 	// } catch (IOException e)
 	// {
-	// Log.e(TAG, "Progress get an IOException");
+	// LogUtil.e(TAG, "Progress get an IOException");
 	// outFile = "";
 	// }
 	//
@@ -491,7 +491,7 @@ public class FileUtil
 				boolean isCreateSuccess = root.mkdirs();
 				if (!isCreateSuccess)
 				{
-					Log.d(TAG, "directory already exists");
+					LogUtil.d(TAG, "directory already exists");
 				}
 			}
 			File[] fileList = root.listFiles();
@@ -506,7 +506,7 @@ public class FileUtil
 					{
 						if (!fileList[i].delete())
 						{
-							Log.d(TAG, fileName + " delete failed!");
+							LogUtil.d(TAG, fileName + " delete failed!");
 						}
 					}
 				}
@@ -523,11 +523,11 @@ public class FileUtil
 						if (!zipfile.createNewFile())
 						{
 							// add failed
-							Log.w(TAG, "getZIPfile() zipfile is exists. zipfile:" + ZipUtil.getCanonicalPath(zipfile) + " create failed");
+							LogUtil.w(TAG, "getZIPfile() zipfile is exists. zipfile:" + ZipUtil.getCanonicalPath(zipfile) + " create failed");
 						}
 					} else
 					{
-						Log.w(TAG, "getZIPfile() oldzipfile:" + ZipUtil.getCanonicalPath(zipfile) + " delete failed");
+						LogUtil.w(TAG, "getZIPfile() oldzipfile:" + ZipUtil.getCanonicalPath(zipfile) + " delete failed");
 						return null;
 					}
 
@@ -536,17 +536,17 @@ public class FileUtil
 					if (!zipfile.createNewFile())
 					{
 						// add failed
-						Log.w(TAG, "getZIPfile() zipfile:" + zipfile.getCanonicalPath() + " create failed");
+						LogUtil.w(TAG, "getZIPfile() zipfile:" + zipfile.getCanonicalPath() + " create failed");
 					}
 				}
 				return zipfile;
 			} catch (IOException e)
 			{
-				Log.e(TAG, "zip error.");
+				LogUtil.e(TAG, "zip error.");
 				return null;
 			} catch (SecurityException e)
 			{
-				Log.e(TAG, "zip error.");
+				LogUtil.e(TAG, "zip error.");
 				return null;
 			}
 		}
@@ -577,14 +577,14 @@ public class FileUtil
 			}
 			if (!mkSuccess)
 			{
-				Log.e(TAG, "Make Dirs Failed");
+				LogUtil.e(TAG, "Make Dirs Failed");
 				return;
 			}
 			File a = new File(oldPath);
 			String[] file = a.list();
 			if (null == file)
 			{
-				Log.d(TAG, "file[" + oldPath + "] is null.");
+				LogUtil.d(TAG, "file[" + oldPath + "] is null.");
 				return;
 			}
 			File temp = null;
@@ -623,10 +623,10 @@ public class FileUtil
 			}
 		} catch (FileNotFoundException e)
 		{
-			Log.e(TAG, "zip error -> FileNotFoundException.");
+			LogUtil.e(TAG, "zip error -> FileNotFoundException.");
 		} catch (IOException e)
 		{
-			Log.e(TAG, "zip error -> IOException.");
+			LogUtil.e(TAG, "zip error -> IOException.");
 		} finally
 		{
 			closeOutputStream(output);
@@ -671,10 +671,10 @@ public class FileUtil
 	// result = true;
 	// } catch (FileNotFoundException e)
 	// {
-	// Log.e(TAG, "zip error.");
+	// LogUtil.e(TAG, "zip error.");
 	// } catch (IOException e)
 	// {
-	// Log.e(TAG, "zip error.");
+	// LogUtil.e(TAG, "zip error.");
 	// } finally
 	// {
 	// // begin add by wx183960
@@ -734,15 +734,15 @@ public class FileUtil
 				{
 					// sendMailByIntent(zipfile, context);
 					Toast.makeText(context, "zipfile is ok ->" + zipfile.getAbsolutePath(), Toast.LENGTH_LONG).show();
-					Log.d(TAG, "zipfile is ok ->" + zipfile.getAbsolutePath());
+					LogUtil.d(TAG, "zipfile is ok ->" + zipfile.getAbsolutePath());
 //					try
 //					{
 //						copyFolder("/storage/emulated/0/TEMobile/log", "/mnt");
 //					} catch (Exception e)
 //					{
-//						Log.d(TAG, "copy folder failed.");
+//						LogUtil.d(TAG, "copy folder failed.");
 //					}
-//					Log.d(TAG, "copy folder!");
+//					LogUtil.d(TAG, "copy folder!");
 				} else
 				{
 					context.showAlertDialog(context.getString(R.string.err_report), context.getString(R.string.err_report_zip_false),
@@ -824,7 +824,7 @@ public class FileUtil
 	// }
 	// if (!file.delete()) // 删除所有文件
 	// {
-	// Log.e(TAG, file.getName() + " delete failed!");
+	// LogUtil.e(TAG, file.getName() + " delete failed!");
 	// }
 	// }
 	// }
@@ -854,7 +854,7 @@ public class FileUtil
 	// {
 	// if (!file.delete()) // 删除所有文件
 	// {
-	// Log.d(TAG, file.getName() + " delete failed!");
+	// LogUtil.d(TAG, file.getName() + " delete failed!");
 	// }
 	// } else if (file.isDirectory())
 	// {
@@ -864,7 +864,7 @@ public class FileUtil
 	// }
 	// if (!dir.delete())// 删除目录本身
 	// {
-	// Log.d(TAG, dir.getName() + " delete failed!");
+	// LogUtil.d(TAG, dir.getName() + " delete failed!");
 	// }
 	// }
 	//
@@ -883,7 +883,7 @@ public class FileUtil
 	// closeAble.close();
 	// } catch (IOException e)
 	// {
-	// Log.e(TAG, "zip error.");
+	// LogUtil.e(TAG, "zip error.");
 	// }
 	// }
 	// }

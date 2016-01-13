@@ -22,7 +22,6 @@ import object.AudioStreamInfo;
 import object.StreamInfo;
 import object.VideoStreamInfo;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.ViewGroup;
@@ -34,6 +33,7 @@ import com.huawei.esdk.te.call.CallConstants.CallStatus;
 import com.huawei.esdk.te.call.CallLogic;
 import com.huawei.esdk.te.call.CallService;
 import com.huawei.esdk.te.util.LayoutUtil;
+import com.huawei.esdk.te.util.LogUtil;
 import com.huawei.te.example.CallControl;
 import com.huawei.te.example.R;
 import com.huawei.te.example.call.IMediaNetInfoListener;
@@ -1065,7 +1065,7 @@ public class VideoInfoActivity extends BaseActivity implements IMediaNetInfoList
 			}
 		} catch (NumberFormatException e)
 		{
-			Log.d(TAG, "audioDelay format error.[audioDelay=" + audioDelay + ']');
+			LogUtil.d(TAG, "audioDelay format error.[audioDelay=" + audioDelay + ']');
 			audioDelay = "0";
 		}
 		// audioDelayInText.setText(audioDelay);
@@ -1259,7 +1259,7 @@ public class VideoInfoActivity extends BaseActivity implements IMediaNetInfoList
 				}
 			} catch (NumberFormatException e)
 			{
-				Log.d(TAG, "audioDelay format error.[audioDelay=" + audioDelay + ']');
+				LogUtil.d(TAG, "audioDelay format error.[audioDelay=" + audioDelay + ']');
 				audioDelay = "0";
 			}
 			audioJitter = jitter;

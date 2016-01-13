@@ -23,7 +23,6 @@ import java.util.Map;
 import android.content.DialogInterface;
 import android.os.Handler;
 import android.os.Message;
-import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.animation.AlphaAnimation;
@@ -32,6 +31,7 @@ import android.view.animation.Animation.AnimationListener;
 import android.widget.ImageView;
 
 import com.huawei.esdk.te.data.Constants;
+import com.huawei.esdk.te.util.LogUtil;
 import com.huawei.te.example.R;
 
 public class VideoMenuBar implements View.OnClickListener, Runnable
@@ -313,20 +313,20 @@ public class VideoMenuBar implements View.OnClickListener, Runnable
 	 */
 	public View getMenuItems(String item)
 	{
-		Log.d(TAG, "getMenuItems()");
+		LogUtil.d(TAG, "getMenuItems()");
 		if (null == items)
 		{
-			Log.d(TAG, "item is null");
+			LogUtil.d(TAG, "item is null");
 		} else
 		{
-			Log.d(TAG, "test items it not null");
+			LogUtil.d(TAG, "test items it not null");
 		}
 		if (null == items.get(item))
 		{
-			Log.d(TAG, "items.get(item) is null" + "item :" + item);
+			LogUtil.d(TAG, "items.get(item) is null" + "item :" + item);
 		} else
 		{
-			Log.d(TAG, "items.get(item) is not null" + "item :" + item);
+			LogUtil.d(TAG, "items.get(item) is not null" + "item :" + item);
 		}
 		return items.get(item).getItem();
 	}
@@ -397,10 +397,10 @@ public class VideoMenuBar implements View.OnClickListener, Runnable
 	{
 		if (null == items.get(item))
 		{
-			Log.d(TAG, "items.get(item) is null, item:" + item);
+			LogUtil.d(TAG, "items.get(item) is null, item:" + item);
 		} else
 		{
-			Log.d(TAG, "items.get(item) is not null, item:" + item);
+			LogUtil.d(TAG, "items.get(item) is not null, item:" + item);
 		}
 		return items.get(item).getItemImg();
 	}
@@ -529,7 +529,7 @@ public class VideoMenuBar implements View.OnClickListener, Runnable
 		// pad视频呼出，对端无响应，本端“挂机”与“取消”按钮无响应
 		if (!isNeedShowDialog)
 		{
-			Log.i(TAG, "No need to show confirm dialog because the call is ended ,return here!");
+			LogUtil.i(TAG, "No need to show confirm dialog because the call is ended ,return here!");
 			isNeedShowDialog = true;
 			return;
 		}
@@ -609,7 +609,7 @@ public class VideoMenuBar implements View.OnClickListener, Runnable
 			}
 		} catch (Exception e)
 		{
-			Log.d(TAG, "AbsMenuBar thread error");
+			LogUtil.d(TAG, "AbsMenuBar thread error");
 		}
 		handler.sendEmptyMessage(0);
 		threadStart = false;
@@ -659,7 +659,7 @@ public class VideoMenuBar implements View.OnClickListener, Runnable
 		startTime = System.currentTimeMillis();
 		animationIn(menuBar);
 		menuBar.setVisibility(View.VISIBLE);
-		Log.d(TAG, "menubar show()");
+		LogUtil.d(TAG, "menubar show()");
 		View view = null;
 		int linkSize = linkViews.size();
 		for (int i = 0; i < linkSize; i++)
@@ -908,7 +908,7 @@ public class VideoMenuBar implements View.OnClickListener, Runnable
 			Thread.sleep(DURATION);
 		} catch (InterruptedException e)
 		{
-			Log.e(TAG, "thread sleep error.");
+			LogUtil.e(TAG, "thread sleep error.");
 		}
 	}
 

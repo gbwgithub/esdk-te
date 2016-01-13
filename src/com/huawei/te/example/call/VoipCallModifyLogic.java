@@ -25,9 +25,9 @@ import android.content.DialogInterface.OnClickListener;
 import android.content.DialogInterface.OnDismissListener;
 import android.os.Handler;
 import android.os.Looper;
-import android.util.Log;
 import android.widget.Toast;
 
+import com.huawei.esdk.te.util.LogUtil;
 import com.huawei.te.example.CallControl;
 import com.huawei.te.example.R;
 import com.huawei.te.example.activity.CallActivity;
@@ -80,7 +80,7 @@ public class VoipCallModifyLogic
 			@Override
 			public void run()
 			{
-				Log.i(TAG, "voiceToVideo alert dialog!~");
+				LogUtil.i(TAG, "voiceToVideo alert dialog!~");
 				// begin added by pwx178217 reason:返回按钮点击拒绝不消失
 				OnClickListener ok = new DialogInterface.OnClickListener()
 				{
@@ -186,7 +186,7 @@ public class VoipCallModifyLogic
 			@Override
 			public void run()
 			{
-				Log.i(TAG, "modifyRequestFalied alert!~");
+				LogUtil.i(TAG, "modifyRequestFalied alert!~");
 
 				OnClickListener retry = new DialogInterface.OnClickListener()
 				{
@@ -232,7 +232,7 @@ public class VoipCallModifyLogic
 	 */
 	public void modifyRequestCancel()
 	{
-		Log.i(TAG, "modifyRequestCancel");
+		LogUtil.i(TAG, "modifyRequestCancel");
 		final CallActivity callActivity = CallActivity.getInstance();
 		if (null == callActivity)
 		{
@@ -300,7 +300,7 @@ public class VoipCallModifyLogic
 			}
 			// begin add by cwx176935 reason:ANDRIOD-167 视频升级对话框
 			callConrol.disAgreeUpgradeVideo();
-			Log.d(TAG, "dialog time out disAgreeUpg");
+			LogUtil.d(TAG, "dialog time out disAgreeUpg");
 		}
 
 	}

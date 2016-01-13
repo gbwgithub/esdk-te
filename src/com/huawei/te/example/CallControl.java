@@ -19,7 +19,6 @@ import java.util.List;
 
 import object.StreamInfo;
 import android.content.Intent;
-import android.util.Log;
 
 import com.huawei.application.BaseApp;
 import com.huawei.common.CallErrorCode;
@@ -110,7 +109,7 @@ public class CallControl implements CallNotification
 	{
 		if (null == instance)
 		{
-			Log.d(TAG, "CallControl construct");
+			LogUtil.d(TAG, "CallControl construct");
 			instance = new CallControl();
 		}
 		return instance;
@@ -124,7 +123,7 @@ public class CallControl implements CallNotification
 	 */
 	private CallControl()
 	{
-		Log.d(TAG, "CallControl() construct");
+		LogUtil.d(TAG, "CallControl() construct");
 		CallService.getInstance().registerNotification(this);
 	}
 
@@ -152,7 +151,7 @@ public class CallControl implements CallNotification
 	 */
 	public void notifyCallViewUpdate(boolean answer)
 	{
-		Log.d(TAG, "notifyCallViewUpdate()");
+		LogUtil.d(TAG, "notifyCallViewUpdate()");
 		CallActivity callActivity = CallActivity.getInstance();
 		CallFragment callFragment = callActivity.getCallFragment();
 		if (null != callActivity && null != callFragment)
@@ -173,19 +172,19 @@ public class CallControl implements CallNotification
 	{
 		if (currentCall == null)
 		{
-			Log.e(TAG, "session is null.");
+			LogUtil.e(TAG, "session is null.");
 			return;
 		}
 		String callid = currentCall.getCallID();
 		if (StringUtil.isStringEmpty(callid))
 		{
-			Log.e(TAG, "callid is null.");
+			LogUtil.e(TAG, "callid is null.");
 			return;
 		}
 
 		// bye原因
 		String reason = currentCall.getReleaseReason();
-		Log.i(TAG, "exceedingly call close : " + reason);
+		LogUtil.i(TAG, "exceedingly call close : " + reason);
 		reasonText = setCloseReasonText(reason, currentCall);
 	}
 
@@ -197,30 +196,30 @@ public class CallControl implements CallNotification
 	 */
 	private void processCallNtfClosed(Call currentCall)
 	{
-		Log.d(TAG, "processCallNtfClosed()");
+		LogUtil.d(TAG, "processCallNtfClosed()");
 		if (currentCall == null)
 		{
-			Log.e(TAG, "session is null.");
-			Log.i(TAG, "processCallNtfClosed leave.");
+			LogUtil.e(TAG, "session is null.");
+			LogUtil.i(TAG, "processCallNtfClosed leave.");
 			return;
 		}
 
 		String callid = currentCall.getCallID();
 		if (StringUtil.isStringEmpty(callid))
 		{
-			Log.e(TAG, "callid is null.");
-			Log.i(TAG, "processCallNtfClosed leave.");
+			LogUtil.e(TAG, "callid is null.");
+			LogUtil.i(TAG, "processCallNtfClosed leave.");
 			return;
 		}
 
-		Log.d(TAG, "callid->" + callid);
+		LogUtil.d(TAG, "callid->" + callid);
 		if (StringUtil.isNotEmpty(callid) && StringUtil.isNotEmpty(this.callID) && callid.equals(this.callID))
 		{
 			if (!StringUtil.isStringEmpty(reasonText))
 			{
-				Log.d(TAG, "for test ~  oncallDestroy is currentCall && reasonText is not empty");
+				LogUtil.d(TAG, "for test ~  oncallDestroy is currentCall && reasonText is not empty");
 				// 刷voip通话ui
-				Log.d(TAG, "processCallNtfClosed reason:" + reasonText);
+				LogUtil.d(TAG, "processCallNtfClosed reason:" + reasonText);
 
 				notifyCallActivityUpdateUI();
 			}
@@ -233,7 +232,7 @@ public class CallControl implements CallNotification
 			setCallStatus(CallStatus.STATUS_CLOSE);
 		} else
 		{
-			Log.d(TAG, "voip status:" + CallService.getInstance().getVoipStatus());
+			LogUtil.d(TAG, "voip status:" + CallService.getInstance().getVoipStatus());
 			// 对 当对方呼叫进来，本端还没有接听的时候对端挂断的情况
 			// 进行处理，此时还没有接听呼叫，所以isCurrentCall(callid)返回false;
 			// 如果有插入记录说明已经接听的会话(解决多路会话导致更新，插入记录无法判断)
@@ -241,10 +240,10 @@ public class CallControl implements CallNotification
 			{
 				CallActivity.getInstance().sendHandlerMessage(MSG_FOR_HOMEACTIVITY.MSG_NOTIFY_CALLCLOSE, callid);
 				comingCallID = null;
-				Log.d(TAG, "voip status:" + CallService.getInstance().getVoipStatus());
+				LogUtil.d(TAG, "voip status:" + CallService.getInstance().getVoipStatus());
 			}
 		}
-		Log.i(TAG, "processCallNtfClosed leave.");
+		LogUtil.i(TAG, "processCallNtfClosed leave.");
 	}
 
 	/**
@@ -254,13 +253,13 @@ public class CallControl implements CallNotification
 	{
 		if (currentCall == null)
 		{
-			Log.e(TAG, "processCallNtfTalk:session data is null");
+			LogUtil.e(TAG, "processCallNtfTalk:session data is null");
 			return;
 		}
 		String callid = currentCall.getCallID();
 		if (StringUtil.isStringEmpty(callid))
 		{
-			Log.e(TAG, "processCallNtfTalk:callid is empty.");
+			LogUtil.e(TAG, "processCallNtfTalk:callid is empty.");
 			return;
 		}
 
@@ -268,7 +267,7 @@ public class CallControl implements CallNotification
 		boolean notSameidAndlogicIsClose = (!callid.equals(currentCallID) || CallStatus.STATUS_CLOSE == CallService.getInstance().getVoipStatus());
 		if (notSameidAndlogicIsClose)
 		{
-			Log.e(TAG, "is not currentCallID or the CallLogic state is not STATUS_CLOSE, so CallNtfTalk return.");
+			LogUtil.e(TAG, "is not currentCallID or the CallLogic state is not STATUS_CLOSE, so CallNtfTalk return.");
 			return;
 		}
 
@@ -296,19 +295,19 @@ public class CallControl implements CallNotification
 	 */
 	private void processCallNtfModified(final Call currentCall)
 	{
-		Log.d(TAG, "processCallNtfModified()");
+		LogUtil.d(TAG, "processCallNtfModified()");
 		if (!isCurrentCall(currentCall.getCallID()))
 		{
-			Log.d(TAG, "[session=" + currentCall + "] [callID=" + currentCall.getCallID() + ']');
+			LogUtil.d(TAG, "[session=" + currentCall + "] [callID=" + currentCall.getCallID() + ']');
 			return;
 		}
 
 		String oper = currentCall.getOperation();
 		int videoModifyState = currentCall.getVideoModifyState();
-		Log.d(TAG, "videoModifyState = " + videoModifyState);
+		LogUtil.d(TAG, "videoModifyState = " + videoModifyState);
 
 		int voipStatus = callStatus;
-		Log.d(TAG, "voipStatus = " + callStatus);
+		LogUtil.d(TAG, "voipStatus = " + callStatus);
 
 		// 关闭视频成功 || 对端请求关闭视频
 		boolean isVideoClose = (0 == videoModifyState && CallStatus.STATUS_VIDEOING == voipStatus);
@@ -335,7 +334,7 @@ public class CallControl implements CallNotification
 				boolean isRemoteVideoClose = currentCall.getRemoteVideoState() == 1;
 				CallActivity.getInstance().getCallFragment().sendHandlerMessage(MsgCallFragment.MSG_REMOTE_VIDEO_UPDATE, isRemoteVideoClose);
 			}
-			Log.d(TAG, "Upgrade To Video Call");
+			LogUtil.d(TAG, "Upgrade To Video Call");
 			setCallStatus(CallStatus.STATUS_VIDEOING);
 			// resetAudioRoute(true);
 			notifyCallActivityUpdateUI();
@@ -357,7 +356,7 @@ public class CallControl implements CallNotification
 					.getInstance().getBfcpStatus()));
 			if (statusOfBFCP)
 			{
-				Log.i(TAG, "not refresh ui the bfcpStatus is " + CallService.getInstance().getBfcpStatus());
+				LogUtil.i(TAG, "not refresh ui the bfcpStatus is " + CallService.getInstance().getBfcpStatus());
 				return;
 			}
 			// 与VCT对接辅流时音视频变换，界面异常
@@ -383,7 +382,7 @@ public class CallControl implements CallNotification
 
 	private void processCallNtfRinging(Call currentCall)
 	{
-		Log.d(TAG, "processCallNtfRinging()  sessionId->" + currentCall.getCallID());
+		LogUtil.d(TAG, "processCallNtfRinging()  sessionId->" + currentCall.getCallID());
 		// 本地嘟嘟音
 		MediaUtil.getIns().playCallRspRing();
 	}
@@ -614,14 +613,14 @@ public class CallControl implements CallNotification
 	 */
 	public synchronized void closeCall()
 	{
-		Log.d(TAG, "closeCall()");
+		LogUtil.d(TAG, "closeCall()");
 		// 当前没有会话，不执行此操作
 		String currentCallID = CallService.getInstance().getCurrentCallID();
 		if (StringUtil.isStringEmpty(currentCallID))
 		{
-			Log.e(TAG, "currentCallID is null, notify call end.");
+			LogUtil.e(TAG, "currentCallID is null, notify call end.");
 			CallActivity.getInstance().getCallFragment().sendHandlerMessage(Constants.MSG_NOTIFY_CALL_END, null);
-			Log.i(TAG, "closeCall leave.");
+			LogUtil.i(TAG, "closeCall leave.");
 			return;
 		}
 
@@ -630,7 +629,7 @@ public class CallControl implements CallNotification
 			CallActivity.getInstance().getCallFragment().onCallClosed();
 		} else
 		{
-			Log.e(TAG, "closeCall CallFragment is null");
+			LogUtil.e(TAG, "closeCall CallFragment is null");
 		}
 
 		// 重置Demo的CallStatus
@@ -827,10 +826,10 @@ public class CallControl implements CallNotification
 	{
 		if (null == currentCall.getValue())
 		{
-			Log.e(TAG, "onCallComing(),but the sessionbean is null.");
+			LogUtil.e(TAG, "onCallComing(),but the sessionbean is null.");
 			return;
 		}
-		Log.d(TAG, "onCallComing()");
+		LogUtil.d(TAG, "onCallComing()");
 		processCallNtfComing(currentCall);
 	}
 
@@ -839,10 +838,10 @@ public class CallControl implements CallNotification
 	{
 		if (null == currentCall.getValue())
 		{
-			Log.e(TAG, "onCallConnect(),but the sessionbean is null.");
+			LogUtil.e(TAG, "onCallConnect(),but the sessionbean is null.");
 			return;
 		}
-		Log.d(TAG, "onCallConnect()");
+		LogUtil.d(TAG, "onCallConnect()");
 		processCallNtfTalk(currentCall);
 	}
 
@@ -854,10 +853,10 @@ public class CallControl implements CallNotification
 	{
 		if (null == currentCall.getValue())
 		{
-			Log.e(TAG, "onCallend(),but the sessionbean is null.");
+			LogUtil.e(TAG, "onCallend(),but the sessionbean is null.");
 			return;
 		}
-		Log.d(TAG, " - onCallend()");
+		LogUtil.d(TAG, " - onCallend()");
 		processCallNtfEnded(currentCall);
 	}
 
@@ -869,10 +868,10 @@ public class CallControl implements CallNotification
 	{
 		if (null == currentCall.getValue())
 		{
-			Log.e(TAG, "onCallDestroy(),but the sessionbean is null.");
+			LogUtil.e(TAG, "onCallDestroy(),but the sessionbean is null.");
 			return;
 		}
-		Log.d(TAG, " - onCallDestroy()");
+		LogUtil.d(TAG, " - onCallDestroy()");
 		processCallNtfClosed(currentCall);
 	}
 
@@ -881,7 +880,7 @@ public class CallControl implements CallNotification
 	@Override
 	public void onDataReady(int callId, int bfcpRet)
 	{
-		Log.d(TAG, " - onDataReady()");
+		LogUtil.d(TAG, " - onDataReady()");
 		boolean isBfcpEnabled = (bfcpRet == 1 ? true : false);
 		processBFCPConsultRet(callId + "", isBfcpEnabled);
 	}
@@ -891,10 +890,10 @@ public class CallControl implements CallNotification
 	{
 		if (null == currentCall.getValue())
 		{
-			Log.e(TAG, "onCallDestroy(),but the sessionbean is null.");
+			LogUtil.e(TAG, "onCallDestroy(),but the sessionbean is null.");
 			return;
 		}
-		Log.d(TAG, " - onCallViedoResult()");
+		LogUtil.d(TAG, " - onCallViedoResult()");
 		processCallNtfModified(currentCall);
 	}
 
@@ -906,7 +905,7 @@ public class CallControl implements CallNotification
 	{
 		if (null == currentCall.getValue())
 		{
-			Log.e(TAG, "onCallAddVideo(),but the sessionbean is null.");
+			LogUtil.e(TAG, "onCallAddVideo(),but the sessionbean is null.");
 			return;
 		}
 		processCallNtfModifyAlert(currentCall);
@@ -920,7 +919,7 @@ public class CallControl implements CallNotification
 	{
 		if (null == currentCall.getValue())
 		{
-			Log.e(TAG, "onCallDelViedo(),but the sessionbean is null.");
+			LogUtil.e(TAG, "onCallDelViedo(),but the sessionbean is null.");
 			return;
 		}
 		processCallNtfModified(currentCall);
@@ -934,7 +933,7 @@ public class CallControl implements CallNotification
 	{
 		if (null == currentCall.getValue())
 		{
-			Log.e(TAG, "onSessionModified(),but the sessionbean is null.");
+			LogUtil.e(TAG, "onSessionModified(),but the sessionbean is null.");
 			return;
 		}
 		processMediaDirectionModified(currentCall);
@@ -945,7 +944,7 @@ public class CallControl implements CallNotification
 	{
 		if (null == currentCall.getValue())
 		{
-			Log.e(TAG, "onRingBack(),but the sessionbean is null.");
+			LogUtil.e(TAG, "onRingBack(),but the sessionbean is null.");
 			return;
 		}
 		processCallNtfRinging(currentCall);

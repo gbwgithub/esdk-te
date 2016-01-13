@@ -16,7 +16,6 @@
 package com.huawei.te.example.menubar;
 
 import android.content.Context;
-import android.util.Log;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
@@ -28,6 +27,7 @@ import android.widget.PopupWindow;
 import android.widget.RelativeLayout;
 
 import com.huawei.common.Resource;
+import com.huawei.esdk.te.util.LogUtil;
 import com.huawei.te.example.CallControl;
 import com.huawei.te.example.R;
 
@@ -102,9 +102,9 @@ public class RecallPopWindow extends PopupWindow
 	public void initReCallPopWindow()
 	{
 		// 使用ViewGroup 加快效率
-		Log.i(TAG, "before inflate ");
+		LogUtil.i(TAG, "before inflate ");
 		topWindow = inflater.inflate(R.layout.recall_pop_window, viewGroup, false);
-		Log.i(TAG, "end inflate ");
+		LogUtil.i(TAG, "end inflate ");
 		compRecallNum = (EditText) topWindow.findViewById(R.id.recallNum);
 
 		// 设置二次拨号盘不能点击弹出拨号盘

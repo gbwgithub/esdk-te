@@ -19,7 +19,6 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
-import android.util.Log;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Button;
@@ -31,6 +30,7 @@ import com.huawei.esdk.te.data.Constants;
 import com.huawei.esdk.te.data.Constants.CallConstant;
 import com.huawei.esdk.te.util.DeviceUtil;
 import com.huawei.esdk.te.util.LayoutUtil;
+import com.huawei.esdk.te.util.LogUtil;
 import com.huawei.esdk.te.util.MediaUtil;
 import com.huawei.manager.DataManager;
 import com.huawei.te.example.CallControl;
@@ -130,7 +130,6 @@ public class CallComingActivity extends BaseActivity {
 	 */
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
-		Log.d("ggg", "start CallComingActivity");
 		super.onCreate(null);
 		// 设置锁屏之上
 		LayoutUtil.setFrontToLock(this);
@@ -167,7 +166,6 @@ public class CallComingActivity extends BaseActivity {
 		if (Constants.COMING_VIDEO_CALL == incomingType) {
 			this.setContentView(R.layout.call_coming);
 		}
-		Log.d(TAG, "initView...");
 		// 来电姓名
 		incomingNameTextView = (TextView) findViewById(R.id.incoming_name);
 
@@ -181,7 +179,6 @@ public class CallComingActivity extends BaseActivity {
 		rejectBtn = (Button) findViewById(R.id.refuse);
 		callComingImage = (ImageView) findViewById(R.id.img_incoming);
 		callComingBackground = (View) findViewById(R.id.call_coming_background);
-		Log.d(TAG, "initWidget...");
 		// begin added by l00220604 reason:图片动态加载
 		ImageView callComingImageHead = (ImageView) findViewById(R.id.img_incoming_head);
 		if (null != callComingImageHead) {
@@ -256,7 +253,7 @@ public class CallComingActivity extends BaseActivity {
 		incomingNumberTextView.setText(callInNumber);
 		LayoutUtil.setViewEndEllipse(incomingNumberTextView);
 		// incomingTypeTextView.setText(callInType);
-		Log.d(TAG, "initDate...");
+		LogUtil.d(TAG, "initDate...");
 		// 语音接听按钮点击事件
 		accepAudioBtn.setOnClickListener(new OnClickListener() {
 
@@ -279,7 +276,7 @@ public class CallComingActivity extends BaseActivity {
 		rejectBtn.setOnClickListener(new View.OnClickListener() {
 			@Override
 			public void onClick(View v) {
-				Log.d(TAG, "rejectBtn is clicked.");
+				LogUtil.d(TAG, "rejectBtn is clicked.");
 				rejectVoipPhone();
 			}
 		});
@@ -290,14 +287,14 @@ public class CallComingActivity extends BaseActivity {
 		// callRejectTimer = new ThreadTimer(callRejectTask, DELAYTIME,
 		// "rejectcall", ThreadTimer.TimerType.TIMER_ONESHOT);
 		// callRejectTimer.start();
-		Log.d(TAG, "set callRejectTimer");
+		LogUtil.d(TAG, "set callRejectTimer");
 	}
 
 	/**
 	 * voip来电接听后事件
 	 */
 	private void acceptVoipPhone(final boolean isVideo) {
-		Log.d(TAG, "accept...isVideo=" + isVideo);
+		LogUtil.d(TAG, "accept...isVideo=" + isVideo);
 		acceptVideoBtn.setClickable(false);
 		accepAudioBtn.setClickable(false);
 		rejectBtn.setClickable(false);
@@ -310,7 +307,7 @@ public class CallComingActivity extends BaseActivity {
 	 * 来电拒绝事件
 	 */
 	private void rejectVoipPhone() {
-		Log.d(TAG, "rejectVoipPhone()");
+		LogUtil.d(TAG, "rejectVoipPhone()");
 		// 屏幕感光取消
 		DeviceUtil.releaseWakeLock(this);
 
@@ -351,7 +348,7 @@ public class CallComingActivity extends BaseActivity {
 	 * 描述：接听
 	 */
 	private void receiveCall(boolean isVideo) {
-		Log.d(TAG, "receiveCall()");
+		LogUtil.d(TAG, "receiveCall()");
 		// 接听
 		CallControl callControl = CallControl.getInstance();
 		boolean answerRet = false;
@@ -373,11 +370,11 @@ public class CallComingActivity extends BaseActivity {
 		// 当该activity已经在栈顶时，该activity又被启动，则不调用oncreate，直接调onNewIntent
 		// 多路呼叫，收到来电后，又收到一路呼叫，则进行刷新来电界面
 		incomingType = intent.getIntExtra(Constants.COMING_VIEW_TYPE, -1);
-		Log.i(TAG, "onNewIntent() type:" + incomingType);
+		LogUtil.i(TAG, "onNewIntent() type:" + incomingType);
 		incomingNumber = intent.getStringExtra(CallConstant.VOIP_CALLNUMBER);
 		// Begin Modified by z00199735 Reason: 快速呼入挂断后，点击取消导致，呼叫泄露，无法呼入呼出
 		callid = intent.getStringExtra(CallConstant.VOIP_CALLID);
-		Log.i(TAG, "onNewIntent() callId:" + callid);
+		LogUtil.i(TAG, "onNewIntent() callId:" + callid);
 		// End Modified by z00199735 Reason: 快速呼入挂断后，点击取消导致，呼叫泄露，无法呼入呼出
 		// BEGIN Added by z00199735 2014/03/07 Reason: DTS2014030605381
 		// SX20做主叫SIP呼叫TE Mobile时，显示sx20的号码不对
@@ -398,7 +395,7 @@ public class CallComingActivity extends BaseActivity {
 	public void finish() {
 		// 注销广播，停止振玲
 		stopRing();
-		Log.d(TAG, "callComing finish");
+		LogUtil.d(TAG, "callComing finish");
 		cancelCallRejectTask();
 		super.finish();
 		if (null != handler) {
@@ -427,7 +424,7 @@ public class CallComingActivity extends BaseActivity {
 	 * @history 2013-8-27 v1.0.0 wWX183960 create
 	 */
 	private void stopRing() {
-		Log.d(TAG, "Stop Ring.");
+		LogUtil.d(TAG, "Stop Ring.");
 
 		MediaUtil.getIns().cancelVibrate();
 		MediaUtil.getIns().stopPlayer();

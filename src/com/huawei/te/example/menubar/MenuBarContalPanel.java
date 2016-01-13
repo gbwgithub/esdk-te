@@ -675,7 +675,7 @@ public class MenuBarContalPanel implements OnClickListener, com.huawei.te.exampl
 			menuBar.coverTime();
 		} else
 		{
-			Log.i(TAG, "menuBar is null!");
+			LogUtil.i(TAG, "menuBar is null!");
 			return;
 		}
 
@@ -922,7 +922,7 @@ public class MenuBarContalPanel implements OnClickListener, com.huawei.te.exampl
 			break;
 		default:
 			// 挂机按钮结束辅流后，下次音视频通话时长显示不对
-			Log.i(TAG, "no menu mode");
+			LogUtil.i(TAG, "no menu mode");
 			isRun = false;
 			break;
 		}
@@ -964,7 +964,7 @@ public class MenuBarContalPanel implements OnClickListener, com.huawei.te.exampl
 		{
 			int curAudioRoute = audioRouteList.get(0);
 			int resId = 0;
-			Log.i(TAG, "Handset switch -> " + curAudioRoute);
+			LogUtil.i(TAG, "Handset switch -> " + curAudioRoute);
 			switch (curAudioRoute) {
 			// 蓝牙
 			case EarpieceMode.TYPE_BLUETOOTH:
@@ -1033,12 +1033,12 @@ public class MenuBarContalPanel implements OnClickListener, com.huawei.te.exampl
 	private void videoCallMode()
 	{
 		// if (null == cVoip) {
-		// Log.e(TAG, "error: CVoip is null");
+		// LogUtil.e(TAG, "error: CVoip is null");
 		// return;
 		// }
 		if (null == callControl)
 		{
-			Log.e(TAG, "callControl is null");
+			LogUtil.e(TAG, "callControl is null");
 			return;
 		}
 		menuBar.getMenuItems(VideoMenuBar.AUDIO_VIDEO).setEnabled(true);
@@ -1106,7 +1106,7 @@ public class MenuBarContalPanel implements OnClickListener, com.huawei.te.exampl
 		}
 
 		menuBar.setAutoHidden(false);
-		Log.i(TAG, "now videoCallMode");
+		LogUtil.i(TAG, "now videoCallMode");
 	}
 
 	/**
@@ -1157,7 +1157,7 @@ public class MenuBarContalPanel implements OnClickListener, com.huawei.te.exampl
 		closePipImg.getDrawable().setAlpha(HALF_ALPHA);
 		closePip.setEnabled(false);
 		menuBar.setItemLineVisibility(VideoMenuBar.REDIAL_BOARD, View.VISIBLE);
-		Log.i(TAG, "now video--->videoCallingMode");
+		LogUtil.i(TAG, "now video--->videoCallingMode");
 	}
 
 	/**
@@ -1185,7 +1185,7 @@ public class MenuBarContalPanel implements OnClickListener, com.huawei.te.exampl
 			sharePicImg.getDrawable().setAlpha(HALF_ALPHA);
 			sharePicLayout.setEnabled(false);
 		}
-		Log.i(TAG, "pdfShareMode");
+		LogUtil.i(TAG, "pdfShareMode");
 	}
 
 	/**
@@ -1202,7 +1202,7 @@ public class MenuBarContalPanel implements OnClickListener, com.huawei.te.exampl
 		// 文件共享可用
 		menuBar.getMenuItems(VideoMenuBar.SHOW_DATA).setEnabled(true);
 		menuBar.getMenuItemsImg(VideoMenuBar.SHOW_DATA).getDrawable().setAlpha(NOT_ALPHA);
-		Log.i(TAG, "pdfSharedMode()");
+		LogUtil.i(TAG, "pdfSharedMode()");
 	}
 
 	/**
@@ -1216,7 +1216,7 @@ public class MenuBarContalPanel implements OnClickListener, com.huawei.te.exampl
 		menuBar.getMenuItems(VideoMenuBar.SHOW_DATA).setEnabled(false);
 		menuBar.getMenuItemsImg(VideoMenuBar.SHOW_DATA).getDrawable().setAlpha(HALF_ALPHA);
 
-		Log.i(TAG, "bfcpIsEnable()");
+		LogUtil.i(TAG, "bfcpIsEnable()");
 	}
 
 	/**
@@ -1225,12 +1225,12 @@ public class MenuBarContalPanel implements OnClickListener, com.huawei.te.exampl
 	private void audioCallMode()
 	{
 		// if (null == cVoip) {
-		// Log.e(TAG, "error: CVoip is null");
+		// LogUtil.e(TAG, "error: CVoip is null");
 		// return;
 		// }
 		if (null == callControl)
 		{
-			Log.e(TAG, "callControl is null");
+			LogUtil.e(TAG, "callControl is null");
 			return;
 		}
 		menuBar.getMenuItems(VideoMenuBar.AUDIO_VIDEO).setEnabled(true);
@@ -1270,7 +1270,7 @@ public class MenuBarContalPanel implements OnClickListener, com.huawei.te.exampl
 		// }
 
 		menuBar.setAutoHidden(false);
-		Log.i(TAG, "audioCallMode()");
+		LogUtil.i(TAG, "audioCallMode()");
 	}
 
 	/**
@@ -1288,7 +1288,7 @@ public class MenuBarContalPanel implements OnClickListener, com.huawei.te.exampl
 		// if (!ConfigApp.getInstance().isUsePadLayout()) {
 		// menuBar.setItemLineVisibility(VideoMenuBar.REDIAL_BOARD, View.GONE);
 		// }
-		Log.i(TAG, "audioCallingMode()");
+		LogUtil.i(TAG, "audioCallingMode()");
 	}
 
 	@Override
@@ -1344,7 +1344,7 @@ public class MenuBarContalPanel implements OnClickListener, com.huawei.te.exampl
 
 		if (null == callControl)
 		{
-			Log.e(TAG, "error: callControl is null");
+			LogUtil.e(TAG, "error: callControl is null");
 			return;
 		}
 		// 软终端视频通话时，本地与远端视频切换时，软终端死机
@@ -1354,7 +1354,7 @@ public class MenuBarContalPanel implements OnClickListener, com.huawei.te.exampl
 						.getVoipStatus());
 		if (operate)
 		{
-			Log.i(TAG, "last close video click was not readly");
+			LogUtil.i(TAG, "last close video click was not readly");
 			return;
 		}
 
@@ -1372,7 +1372,7 @@ public class MenuBarContalPanel implements OnClickListener, com.huawei.te.exampl
 
 					// 已经关闭则当前操作为开启
 					callControl.localCameraControl(!bHasCloseCamera);
-					Log.i(TAG, "operate camera, isClose: " + !bHasCloseCamera);
+					LogUtil.i(TAG, "operate camera, isClose: " + !bHasCloseCamera);
 
 					// 通知界面操作
 					Message msg = new Message();
@@ -1392,16 +1392,16 @@ public class MenuBarContalPanel implements OnClickListener, com.huawei.te.exampl
 	@Override
 	public void closeMIC(ImageView view)
 	{
-		Log.v(TAG, "closeMIC is clicked()");
+		LogUtil.v(TAG, "closeMIC is clicked()");
 		if (null == callControl)
 		{
-			Log.e(TAG, "error: callControl is null");
+			LogUtil.e(TAG, "error: callControl is null");
 			return;
 		}
 
 		if (isDone)
 		{
-			Log.i(TAG, "other click not readly");
+			LogUtil.i(TAG, "other click not readly");
 			return;
 		}
 		isDone = true;
@@ -1418,7 +1418,7 @@ public class MenuBarContalPanel implements OnClickListener, com.huawei.te.exampl
 			// cVoip.muteAttendee(attendee, TupBool.TUP_FALSE);
 			// }
 			callControl.setLocalMute(true, false);
-			Log.i(TAG, "open local MIC Success");
+			LogUtil.i(TAG, "open local MIC Success");
 			isDone = false;
 		} else
 		{
@@ -1426,7 +1426,7 @@ public class MenuBarContalPanel implements OnClickListener, com.huawei.te.exampl
 			view.setTag(Constants.CLICK);
 
 			callControl.setLocalMute(true, true);
-			Log.i(TAG, "close local MIC Success");
+			LogUtil.i(TAG, "close local MIC Success");
 			isDone = false;
 		}
 	}
@@ -1504,13 +1504,13 @@ public class MenuBarContalPanel implements OnClickListener, com.huawei.te.exampl
 	{
 		if (null == callControl)
 		{
-			Log.e(TAG, "error: callControl is null");
+			LogUtil.e(TAG, "error: callControl is null");
 			return;
 		}
 
 		if (isDone)
 		{
-			Log.i(TAG, "other click not readly");
+			LogUtil.i(TAG, "other click not readly");
 			return;
 		}
 		isDone = true;
@@ -1521,7 +1521,7 @@ public class MenuBarContalPanel implements OnClickListener, com.huawei.te.exampl
 			view.setTag("");
 
 			callControl.oratorMute(false);
-			Log.i(TAG, "open local Speaker");
+			LogUtil.i(TAG, "open local Speaker");
 			isDone = false;
 		} else
 		{
@@ -1529,7 +1529,7 @@ public class MenuBarContalPanel implements OnClickListener, com.huawei.te.exampl
 			view.setTag(Constants.CLICK);
 
 			callControl.oratorMute(true);
-			Log.i(TAG, "close local Speaker");
+			LogUtil.i(TAG, "close local Speaker");
 			isDone = false;
 		}
 	}
@@ -1540,7 +1540,7 @@ public class MenuBarContalPanel implements OnClickListener, com.huawei.te.exampl
 	public void onAudioRouteChange()
 	{
 		refreshAudioRouteItem();
-		Log.i(TAG, "onAudioRouteChange refreshAudioRouteItem");
+		LogUtil.i(TAG, "onAudioRouteChange refreshAudioRouteItem");
 	}
 
 	/**
@@ -1571,13 +1571,13 @@ public class MenuBarContalPanel implements OnClickListener, com.huawei.te.exampl
 	{
 		if (null == callControl)
 		{
-			Log.e(TAG, "error: callControl is null");
+			LogUtil.e(TAG, "error: callControl is null");
 			return;
 		}
 
 		if (isDone)
 		{
-			Log.i(TAG, "other click not readly");
+			LogUtil.i(TAG, "other click not readly");
 			return;
 		}
 		isDone = true;
@@ -1586,14 +1586,14 @@ public class MenuBarContalPanel implements OnClickListener, com.huawei.te.exampl
 		// 如果是扬声器，则切换到听筒模式（蓝牙，耳机，听筒），但不知道是什么听筒模式，等待刷新
 		if (EarpieceMode.TYPE_LOUD_SPEAKER == audioRouteList.get(0))
 		{
-			Log.i(TAG, "click change to telreceiver");
+			LogUtil.i(TAG, "click change to telreceiver");
 		}
 		// 如果是听筒模式，则切到扬声器
 		else
 		{
 			// 如果是蓝牙，设为扬声器
 			view.setImageResource(blueToothRes[0][1]);
-			Log.i(TAG, "click change to loudspeaker");
+			LogUtil.i(TAG, "click change to loudspeaker");
 		}
 
 		// operPool.execute(new Runnable()
@@ -1602,7 +1602,7 @@ public class MenuBarContalPanel implements OnClickListener, com.huawei.te.exampl
 		// public void run()
 		// {
 		// CallService.getInstance().changeAudioRoute();
-		// Log.i(TAG, "blue click");
+		// LogUtil.i(TAG, "blue click");
 		// isDone = false;
 		// }
 		// });
@@ -1610,7 +1610,7 @@ public class MenuBarContalPanel implements OnClickListener, com.huawei.te.exampl
 		// 试试看改为在主线程中执行会不会有问题
 
 		CallService.getInstance().changeAudioRoute();
-		Log.i(TAG, "blue click");
+		LogUtil.i(TAG, "blue click");
 		isDone = false;
 
 		refreshAudioRouteItem();
@@ -1635,7 +1635,7 @@ public class MenuBarContalPanel implements OnClickListener, com.huawei.te.exampl
 		if (VideoHandler.getIns().getCameraCapacty(VideoHandler.BACK_CAMERA) == VideoHandler.CAMERA_SCARCE_CAPACITY)
 		{
 			showToast(R.string.device_performance_warn);
-			Log.w(TAG, "this phone has no ability to switch camera");
+			LogUtil.w(TAG, "this phone has no ability to switch camera");
 			return;
 		}
 
@@ -1645,7 +1645,7 @@ public class MenuBarContalPanel implements OnClickListener, com.huawei.te.exampl
 				|| (CallStatus.STATUS_VIDEOING != CallService.getInstance().getVoipStatus() && CallStatus.STATUS_VIDEOINIT != CallService.getInstance()
 						.getVoipStatus()))
 		{
-			Log.i(TAG, "other click not readly or camera is closed");
+			LogUtil.i(TAG, "other click not readly or camera is closed");
 			return;
 		}
 
@@ -1660,7 +1660,7 @@ public class MenuBarContalPanel implements OnClickListener, com.huawei.te.exampl
 					boolean result = CallService.getInstance().switchCamera();
 					if (result)
 					{
-						Log.i(TAG, "switch local camera Success");
+						LogUtil.i(TAG, "switch local camera Success");
 					}
 					isDone = false;
 				}
@@ -1679,12 +1679,12 @@ public class MenuBarContalPanel implements OnClickListener, com.huawei.te.exampl
 	{
 		if (null == callControl)
 		{
-			Log.e(TAG, "error: callControl is null");
+			LogUtil.e(TAG, "error: callControl is null");
 		}
 
 		if (isDone)
 		{
-			Log.i(TAG, "other click not readly");
+			LogUtil.i(TAG, "other click not readly");
 			return;
 		}
 		isDone = true;
@@ -1704,7 +1704,7 @@ public class MenuBarContalPanel implements OnClickListener, com.huawei.te.exampl
 					synchronized (MENULOCK)
 					{
 						callControl.upgradeVideo();
-						Log.i(TAG, "upgradevideo");
+						LogUtil.i(TAG, "upgradevideo");
 						isDone = false;
 					}
 				}
@@ -1726,7 +1726,7 @@ public class MenuBarContalPanel implements OnClickListener, com.huawei.te.exampl
 						{
 							return;
 						}
-						Log.i(TAG, "video -- > audio");
+						LogUtil.i(TAG, "video -- > audio");
 					}
 				}
 			});
@@ -1789,7 +1789,7 @@ public class MenuBarContalPanel implements OnClickListener, com.huawei.te.exampl
 		// && CallStatus.STATUS_VIDEOINIT !=
 		// CallService.getInstance().getVoipStatus()))
 		// {
-		// Log.i(TAG, "not in video mode");
+		// LogUtil.i(TAG, "not in video mode");
 		// return;
 		// }
 		// Intent intent = new Intent(rootView.getContext(),
@@ -1805,7 +1805,7 @@ public class MenuBarContalPanel implements OnClickListener, com.huawei.te.exampl
 		// && CallStatus.STATUS_VIDEOINIT !=
 		// CallService.getInstance().getVoipStatus()))
 		// {
-		// Log.i(TAG, "not in video mode");
+		// LogUtil.i(TAG, "not in video mode");
 		// return;
 		// }
 		// Intent intent = new Intent(rootView.getContext(),
@@ -1831,7 +1831,7 @@ public class MenuBarContalPanel implements OnClickListener, com.huawei.te.exampl
 	@Override
 	public void endVideoCall()
 	{
-		Log.i(TAG, "endVideoCall send end call request.");
+		LogUtil.i(TAG, "endVideoCall send end call request.");
 		CallActivity.getInstance().getCallFragment().sendHandlerMessage(MsgCallFragment.MSG_CALL_END_REQUEST, null);
 	}
 
@@ -1841,7 +1841,7 @@ public class MenuBarContalPanel implements OnClickListener, com.huawei.te.exampl
 	// {
 	// synchronized (MENULOCK)
 	// {
-	// Log.i(TAG, "endVideoCall send end call request.");
+	// LogUtil.i(TAG, "endVideoCall send end call request.");
 	// CallActivity.getInstance().getCallFragment().sendHandlerMessage(MsgCallFragment.MSG_CALL_END_REQUEST,
 	// null);
 	// }
@@ -1891,7 +1891,7 @@ public class MenuBarContalPanel implements OnClickListener, com.huawei.te.exampl
 	{
 		if (null == callControl)
 		{
-			Log.e(TAG, "error: callControl is null");
+			LogUtil.e(TAG, "error: callControl is null");
 			return;
 		}
 
@@ -1914,7 +1914,7 @@ public class MenuBarContalPanel implements OnClickListener, com.huawei.te.exampl
 	{
 		if (null == callControl)
 		{
-			Log.e(TAG, "error: callControl is null");
+			LogUtil.e(TAG, "error: callControl is null");
 			return;
 		}
 
@@ -2083,7 +2083,7 @@ public class MenuBarContalPanel implements OnClickListener, com.huawei.te.exampl
 
 		menuBar.setMenuItemVisible(VideoMenuBar.BLUETOOTH, View.GONE);
 		closeAllPopWindow();
-		Log.i(TAG, "reset menu data");
+		LogUtil.i(TAG, "reset menu data");
 	}
 
 	/**
@@ -2124,7 +2124,7 @@ public class MenuBarContalPanel implements OnClickListener, com.huawei.te.exampl
 				// 已经关闭，则操作为打开
 				refreshMenuItemLocalCamera(isClose);
 
-				Log.i(TAG, "handle refresh UI operate camera.");
+				LogUtil.i(TAG, "handle refresh UI operate camera.");
 			}
 		}
 
@@ -2132,13 +2132,13 @@ public class MenuBarContalPanel implements OnClickListener, com.huawei.te.exampl
 
 	private void refreshMenuItemLocalCamera(boolean bIsClose)
 	{
-		Log.d(TAG, "refreshMenuItemLocalCamera enter: " + bIsClose);
+		LogUtil.d(TAG, "refreshMenuItemLocalCamera enter: " + bIsClose);
 
 		ImageView view = (ImageView) moreView.findViewById(R.id.close_camera_img);
 		// 刷新文字
 		TextView closeCameraTxt = (TextView) moreView.findViewById(R.id.close_camera_txt);
 
-		Log.i(TAG, "refreshMenuItemLocalCamera bIsClose: " + bIsClose);
+		LogUtil.i(TAG, "refreshMenuItemLocalCamera bIsClose: " + bIsClose);
 
 		// 摄像头关闭状态则需要disable 切换摄像头
 		switchCamera.setEnabled(!bIsClose);
@@ -2157,7 +2157,7 @@ public class MenuBarContalPanel implements OnClickListener, com.huawei.te.exampl
 			closeCameraTxt.setText(R.string.open_camera);
 		}
 
-		Log.d(TAG, "refreshMenuItemLocalCamera leave.");
+		LogUtil.d(TAG, "refreshMenuItemLocalCamera leave.");
 
 	}
 

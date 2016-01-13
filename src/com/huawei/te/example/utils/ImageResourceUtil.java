@@ -22,7 +22,8 @@ import android.content.Context;
 import android.content.res.Resources.NotFoundException;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
-import android.util.Log;
+
+import com.huawei.esdk.te.util.LogUtil;
 
 public class ImageResourceUtil
 {
@@ -52,7 +53,7 @@ public class ImageResourceUtil
         }
         catch (NotFoundException e)
         {
-            Log.e(TAG, "Progress get an NotFoundException");
+            LogUtil.e(TAG, "Progress get an NotFoundException");
         }
         finally
         {
@@ -78,7 +79,7 @@ public class ImageResourceUtil
         }
         catch (IOException e)
         {
-            Log.e(TAG, "Progress get an IOException");
+            LogUtil.e(TAG, "Progress get an IOException");
         }
     }
 }

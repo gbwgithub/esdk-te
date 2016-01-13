@@ -24,7 +24,6 @@ import android.graphics.Color;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.SurfaceView;
 import android.view.View;
@@ -283,7 +282,7 @@ public class CallFragment extends Fragment implements OnClickListener
 	{
 		if (null != handler)
 		{
-			Log.d(TAG, "the handler has init.");
+			LogUtil.d(TAG, "the handler has init.");
 			return;
 		}
 		handler = new Handler()
@@ -291,7 +290,7 @@ public class CallFragment extends Fragment implements OnClickListener
 			@Override
 			public void dispatchMessage(Message msg)
 			{
-				Log.d(TAG, "what:" + msg.what);
+				LogUtil.d(TAG, "what:" + msg.what);
 				handlerMessageNotity(msg);
 				handlerMessageView(msg);
 				handlerMessageCall(msg);
@@ -305,7 +304,7 @@ public class CallFragment extends Fragment implements OnClickListener
 	{
 		if (null != menuItemServer)
 		{
-			Log.d(TAG, "the initMenuItemServer has init.");
+			LogUtil.d(TAG, "the initMenuItemServer has init.");
 			return;
 		}
 		menuItemServer = new MenuItemServer()
@@ -374,7 +373,7 @@ public class CallFragment extends Fragment implements OnClickListener
 	{
 		if (handler == null)
 		{
-			Log.d(TAG, "sendHandlerMessage() handler is null");
+			LogUtil.d(TAG, "sendHandlerMessage() handler is null");
 			return;
 		}
 		Message msg = handler.obtainMessage(what, object);
@@ -401,7 +400,7 @@ public class CallFragment extends Fragment implements OnClickListener
 		// showToast(R.string.add_video_time_out);
 		// break;
 		// case MsgCallFragment.MSG_DATA_DECODE_SUCCESS:
-		// Log.i(TAG, "data decode success UI receive");
+		// LogUtil.i(TAG, "data decode success UI receive");
 		// isRecvDataDecode = true;
 		// addBFCPRender();
 		// break;
@@ -418,7 +417,7 @@ public class CallFragment extends Fragment implements OnClickListener
 			break;
 		// // 会控可用
 		// case MsgCallFragment.MSG_NOTIFY_CONF_CONTROL_ENABLE:
-		// Log.i(TAG, "enable ConfControl");
+		// LogUtil.i(TAG, "enable ConfControl");
 		// if (null != menuBarPanel) {
 		// menuBarPanel.setShowConfListEnable(true);
 		// }
@@ -448,13 +447,13 @@ public class CallFragment extends Fragment implements OnClickListener
 	{
 		if (msg.obj instanceof String)
 		{
-			Log.d(TAG, "handlerMessageView receives:" + msg.what);
+			LogUtil.d(TAG, "handlerMessageView receives:" + msg.what);
 		}
 		switch (msg.what) {
 		case MsgCallFragment.MSG_SHOW_AUDIOVIEW:
 			if (!(msg.obj instanceof String))
 			{
-				Log.i(TAG, "msg.obj is not instanceof String");
+				LogUtil.i(TAG, "msg.obj is not instanceof String");
 				return;
 			}
 			showCallingLayout((String) msg.obj, false);
@@ -462,7 +461,7 @@ public class CallFragment extends Fragment implements OnClickListener
 		case MsgCallFragment.MSG_SHOW_VIDEOVIEW:
 			if (!(msg.obj instanceof String))
 			{
-				Log.i(TAG, "msg.obj is not instanceof String");
+				LogUtil.i(TAG, "msg.obj is not instanceof String");
 				return;
 			}
 			showCallingLayout((String) msg.obj, true);
@@ -488,13 +487,13 @@ public class CallFragment extends Fragment implements OnClickListener
 	{
 		if (msg.obj instanceof String)
 		{
-			Log.d(TAG, "handlerMessageCall receives:" + msg.what);
+			LogUtil.d(TAG, "handlerMessageCall receives:" + msg.what);
 		}
 		switch (msg.what) {
 		case MsgCallFragment.MSG_DIALCALL_AUDIO:
 			if (!(msg.obj instanceof String))
 			{
-				Log.i(TAG, "msg.obj is not instanceof String");
+				LogUtil.i(TAG, "msg.obj is not instanceof String");
 				return;
 			}
 			dialCall((String) msg.obj, false);
@@ -508,7 +507,7 @@ public class CallFragment extends Fragment implements OnClickListener
 			break;
 		case MsgCallFragment.MSG_CALL_UPDATE_UI:
 			// 处理会话保持情况
-			Log.i(TAG, "MsgCallFragment.MSG_CALL_UPDATE_UI");
+			LogUtil.i(TAG, "MsgCallFragment.MSG_CALL_UPDATE_UI");
 			if (isSessionHold)
 			{
 				isSessionHold = false;
@@ -522,16 +521,16 @@ public class CallFragment extends Fragment implements OnClickListener
 			updateCallLayout();
 			break;
 		case MsgCallFragment.MSG_CALL_MODIFY_UI:
-			Log.d(TAG, "MsgCallFragment.MSG_CALL_MODIFY_UI");
+			LogUtil.d(TAG, "MsgCallFragment.MSG_CALL_MODIFY_UI");
 			ModifyNoticeType modifyType = (ModifyNoticeType) msg.obj;
 			voipCallModify(modifyType);
 			break;
 		// start by c00349133 reason: 会话保持时，通信界面显示“通话被保持”
 		case MsgCallFragment.MSG_SHOW_SESSION_HOLD:
-			Log.i(TAG, "MsgCallFragment.MSG_SHOW_SESSION_HOLD");
+			LogUtil.i(TAG, "MsgCallFragment.MSG_SHOW_SESSION_HOLD");
 			isSessionHold = true;
 			// boolean isVideo = CallService.getInstance().isVideoCall();
-			// Log.i(TAG, "MsgCallFragment.MSG_SHOW_SESSION_HOLD" + isVideo);
+			// LogUtil.i(TAG, "MsgCallFragment.MSG_SHOW_SESSION_HOLD" + isVideo);
 			// if (isVideo) {
 			// videocallTipView.setText(getString(R.string.session_holding));
 			// if (isDocSharing) {
@@ -545,7 +544,7 @@ public class CallFragment extends Fragment implements OnClickListener
 
 		// 来电界面销毁
 		case MsgCallFragment.MSG_NOTIFY_CALLCOMING_DESTORY:
-			Log.i(TAG, "MsgCallFragment.MSG_NOTIFY_CALLCOMING_DESTORY");
+			LogUtil.i(TAG, "MsgCallFragment.MSG_NOTIFY_CALLCOMING_DESTORY");
 			// setScrean针对手机屏幕做特殊处理
 			// CallService.getInstance().isVideoCall());
 			// HomeActivity.isDestoryedCallActivity = true;
@@ -579,7 +578,7 @@ public class CallFragment extends Fragment implements OnClickListener
 			break;
 		// 视频通话中，TE30关闭本地视频，软终端显示对端残留的最后一帧图像
 		case MsgCallFragment.MSG_REMOTE_VIDEO_UPDATE:
-			Log.i(TAG, "MSG_REMOTE_VIDEO_UPDATE" + isSessionHold);
+			LogUtil.i(TAG, "MSG_REMOTE_VIDEO_UPDATE" + isSessionHold);
 			if (isSessionHold)
 			{
 				if (CallService.getInstance().isVideoCall())
@@ -601,7 +600,7 @@ public class CallFragment extends Fragment implements OnClickListener
 			// Hold功能尚未添加，此处暂留
 			if (null != msg.obj && null != VideoHandler.getIns().getRemoteCallView())
 			{
-				Log.i(TAG, "callFragment recevie remote video update close:[" + msg.obj + ']');
+				LogUtil.i(TAG, "callFragment recevie remote video update close:[" + msg.obj + ']');
 				cleanRemoteFrame((Boolean) msg.obj);
 			}
 			break;
@@ -624,7 +623,7 @@ public class CallFragment extends Fragment implements OnClickListener
 		final SurfaceView remoteVV = VideoHandler.getIns().getRemoteCallView();
 		if (null == remoteVV)
 		{
-			Log.i(TAG, "remote view is null; return;");
+			LogUtil.i(TAG, "remote view is null; return;");
 			return;
 		}
 		synchronized (RENDER_CHANGE_LOCK)
@@ -640,7 +639,7 @@ public class CallFragment extends Fragment implements OnClickListener
 				// end modify by cwx176935 reason: DTS2014061607963
 				// 与VCT点对点视频通话，VCT开启本地视频，软终端一侧有残留帧
 			}
-			Log.i(TAG, "now remote has close [" + isClean + ']');
+			LogUtil.i(TAG, "now remote has close [" + isClean + ']');
 		}
 	}
 
@@ -667,7 +666,7 @@ public class CallFragment extends Fragment implements OnClickListener
 	{
 		if (StringUtil.isStringEmpty(callNumber))
 		{
-			Log.i(TAG, "empty CallNumber return!!!");
+			LogUtil.i(TAG, "empty CallNumber return!!!");
 			return;
 		}
 
@@ -759,7 +758,7 @@ public class CallFragment extends Fragment implements OnClickListener
 	public void updateLayout(int voipState, String callNumber, boolean isVideoCall, String tipTxt)
 	{
 
-		Log.d(TAG, "updateLayout()");
+		LogUtil.d(TAG, "updateLayout()");
 
 		// 更新界面的时候重置标志位为需要点击挂断时显示对话框
 		if (null != menuBarPanel)
@@ -767,7 +766,7 @@ public class CallFragment extends Fragment implements OnClickListener
 			menuBarPanel.setNeedShow(true);
 		} else
 		{
-			Log.d(TAG, "menuBarPanel is null");
+			LogUtil.d(TAG, "menuBarPanel is null");
 		}
 
 		// 设置是否视频通话
@@ -781,7 +780,7 @@ public class CallFragment extends Fragment implements OnClickListener
 				CallActivity.getInstance().startService(new Intent(CallActivity.getInstance(), LocalHideRenderServer.class));
 			} else
 			{
-				Log.e(TAG, " --- CallActivity instance is null ,start LocalHideRenderServer failed!");
+				LogUtil.e(TAG, " --- CallActivity instance is null ,start LocalHideRenderServer failed!");
 			}
 		}
 
@@ -794,7 +793,7 @@ public class CallFragment extends Fragment implements OnClickListener
 		// 更新界面到挂断
 		if (CallStatus.STATUS_CLOSE == voipState)
 		{
-			Log.i(TAG, "end hangup");
+			LogUtil.i(TAG, "end hangup");
 			return;
 		}
 
@@ -805,7 +804,7 @@ public class CallFragment extends Fragment implements OnClickListener
 
 		if (null == menuBarPanel)
 		{
-			Log.d(TAG, "menuBarPanel is null , create it.");
+			LogUtil.d(TAG, "menuBarPanel is null , create it.");
 			menuBarPanel = new MenuBarContalPanel(rootView, menuItemServer);
 		}
 		menuBarPanel.setRemoteNumber(callNumber);
@@ -818,28 +817,28 @@ public class CallFragment extends Fragment implements OnClickListener
 	private void updateByState(String callNumber, int voipState, boolean isVideoCall)
 	{
 
-		Log.d(TAG, "updateByState() voipStateis:" + voipState);
+		LogUtil.d(TAG, "updateByState() voipStateis:" + voipState);
 
 		if (CallStatus.STATUS_CALLING == voipState)
 		{
 			showCallLayout(callNumber, isVideoCall, tipTxt);
 			// HomeActivity.sendHandlerMessage(Constants.MSG_SELF_CHANGE_STATE,
 			// PersonalContact.BUSY);
-			Log.i(TAG, "to talking state is video call =>" + isVideoCall);
+			LogUtil.i(TAG, "to talking state is video call =>" + isVideoCall);
 			return;
 		}
 		// 通话状态 语音通话 视频通话
 		if (CallStatus.STATUS_TALKING == voipState || CallStatus.STATUS_VIDEOING == voipState)
 		{
 			showChatLayout(callNumber, isVideoCall, tipTxt);
-			Log.i(TAG, "to chat state is video chat =>" + isVideoCall);
+			LogUtil.i(TAG, "to chat state is video chat =>" + isVideoCall);
 		}
 	}
 
 	public void onCallClosed()
 	{
-		Log.i(TAG, "onCallClosed enter.");
-		Log.i(TAG, "onCallClosed destroyUtilActivity.");
+		LogUtil.i(TAG, "onCallClosed enter.");
+		LogUtil.i(TAG, "onCallClosed destroyUtilActivity.");
 		destroyUtilActivity();
 
 		resetRender();
@@ -852,30 +851,30 @@ public class CallFragment extends Fragment implements OnClickListener
 		// // 小窗口相关 返回初始状态 显示关闭本地视频按钮 本地视频区域 不显示开启本地视频按钮
 		localVideoLayout.setVisibility(View.VISIBLE);
 		//
-		Log.i(TAG, "onCallClosed resetData.");
+		LogUtil.i(TAG, "onCallClosed resetData.");
 		resetData();
 
 		// callModifyLogic = null;
 
 		if (null != LocalHideRenderServer.getInstance())
 		{
-			Log.i(TAG, "onCallClosed destroy LocalHideRenderServer.");
+			LogUtil.i(TAG, "onCallClosed destroy LocalHideRenderServer.");
 			// LocalHideRenderServer第二次Destroy的时候可能有问题，所以修改上边代码为直接调用onDestroy试试
 			// 直接调用onDestroy可以解决问题，可能是Server定义的问题吧
 			LocalHideRenderServer.getInstance().onDestroy();
 		}
-		// Log.i(TAG, "onCallClosed sendHandlerMessage set state online.");
+		// LogUtil.i(TAG, "onCallClosed sendHandlerMessage set state online.");
 		// HomeActivity.sendHandlerMessage(Constant.MSG_SELF_CHANGE_STATE,
 		// PersonalContact.ON_LINE);
 
-		Log.i(TAG, "onCallClosed sendHandlerMessage back to home.");
+		LogUtil.i(TAG, "onCallClosed sendHandlerMessage back to home.");
 		if (null != CallActivity.getInstance())
 		{
 			CallActivity.getInstance().sendHandlerMessage(Constants.MSG_CALL_CLOSE_BACK_TO_HOME, null);
 		}
 		// ActivityStackManager.INSTANCE.whenCallEndShowLastActivity();
 		// // 如果后台运行或屏幕暗掉，提示对端已经挂断
-		// Log.i(TAG, "onCallClosed lightScreen.");
+		// LogUtil.i(TAG, "onCallClosed lightScreen.");
 		// lightScreen(DeviceUtil.LIGHT_TIME_SHORT);
 		// pad视频呼出，对端无响应，本端“挂机”与“取消”按钮无响应
 		// 对方已经挂断的情况下不需要显示dialog
@@ -884,7 +883,7 @@ public class CallFragment extends Fragment implements OnClickListener
 			menuBarPanel.setNeedShow(false);
 		}
 
-		Log.i(TAG, "onCallClosed leave.");
+		LogUtil.i(TAG, "onCallClosed leave.");
 	}
 
 	/**
@@ -1013,7 +1012,7 @@ public class CallFragment extends Fragment implements OnClickListener
 	 */
 	private void showAudioChat(String callNumber, String tiptxt)
 	{
-		Log.i(TAG, "enter showAudioChat");
+		LogUtil.i(TAG, "enter showAudioChat");
 
 		// audioCallImg.setVisibility(View.GONE);
 
@@ -1052,7 +1051,7 @@ public class CallFragment extends Fragment implements OnClickListener
 	 */
 	private void showVideoChat(String callNumber, String tiptxt)
 	{
-		Log.e(TAG, "showVideoChat()");
+		LogUtil.e(TAG, "showVideoChat()");
 		// 显示本地视频区域 关闭本地视频按钮 视频通话区域
 		localVideoLayout.setVisibility(View.VISIBLE);
 		menuBarPanel.setPipTips(true);
@@ -1066,7 +1065,7 @@ public class CallFragment extends Fragment implements OnClickListener
 		// 只有通话建立 才去addView
 		if (CallService.getInstance().getVoipStatus() == CallStatus.STATUS_VIDEOING)
 		{
-			Log.i(TAG, "STATUS_VIDEOING addVideoView");
+			LogUtil.i(TAG, "STATUS_VIDEOING addVideoView");
 			addVideoView();
 		}
 	}
@@ -1096,7 +1095,7 @@ public class CallFragment extends Fragment implements OnClickListener
 	 */
 	private void showCallLayout(String callNumber, boolean isVideoCall, String tiptxt)
 	{
-		Log.d(TAG, "showCallLayout()");
+		LogUtil.d(TAG, "showCallLayout()");
 		// 视频呼叫中
 		if (isVideoCall)
 		{
@@ -1150,7 +1149,7 @@ public class CallFragment extends Fragment implements OnClickListener
 	{
 		if (null == menuBarPanel)
 		{
-			Log.i(TAG, "menuBarPanel is   null  return");
+			LogUtil.i(TAG, "menuBarPanel is   null  return");
 			return;
 		}
 		menuBarPanel.changeMode(mode);
@@ -1168,7 +1167,7 @@ public class CallFragment extends Fragment implements OnClickListener
 		{
 			callModifyLogic = new VoipCallModifyLogic();
 		}
-		Log.i(TAG, "voipCallModify modifytype:" + modifyType);
+		LogUtil.i(TAG, "voipCallModify modifytype:" + modifyType);
 		switch (modifyType) {
 		case VoiceToVideo:
 			if (callModifyLogic.isShowing())
@@ -1223,7 +1222,7 @@ public class CallFragment extends Fragment implements OnClickListener
 	 */
 	private void updateCallLayout()
 	{
-		Log.d(TAG, "updateCallLayout()");
+		LogUtil.d(TAG, "updateCallLayout()");
 		// 开启采集点的服务
 		if (null == LocalHideRenderServer.getInstance())
 		{
@@ -1232,7 +1231,7 @@ public class CallFragment extends Fragment implements OnClickListener
 				CallActivity.getInstance().startService(new Intent(CallActivity.getInstance(), LocalHideRenderServer.class));
 			} else
 			{
-				Log.e(TAG, " --- CallActivity instance is null ,start LocalHideRenderServer failed!");
+				LogUtil.e(TAG, " --- CallActivity instance is null ,start LocalHideRenderServer failed!");
 			}
 		}
 
@@ -1254,7 +1253,7 @@ public class CallFragment extends Fragment implements OnClickListener
 		// cancelCallTask();
 		int voipStatus = CallService.getInstance().getVoipStatus();
 		// 音频1 视频9
-		Log.d(TAG, "voipStatus is:" + voipStatus);
+		LogUtil.d(TAG, "voipStatus is:" + voipStatus);
 		String callNumber = CallService.getInstance().getCallNumber();
 		// 呼叫中刷新，用于呼叫转移
 		boolean isVideo = CallService.getInstance().isVideoCall();
@@ -1310,7 +1309,7 @@ public class CallFragment extends Fragment implements OnClickListener
 			}
 			break;
 		case CallStatus.STATUS_CALLING:// 目前只有呼转进入
-			Log.i(TAG, "CallStatus.STATUS_CALLING:");
+			LogUtil.i(TAG, "CallStatus.STATUS_CALLING:");
 			updateLayout(CallStatus.STATUS_CALLING, callNumber, isVideo, tipTxt);
 			CallActivity.getInstance().sendHandlerMessage(CallConstant.SHOW_CALL_LAYOUT, null);
 			break;
@@ -1389,7 +1388,7 @@ public class CallFragment extends Fragment implements OnClickListener
 			// 改变菜单栏模式
 			menuBarPanel.changeMode(Mode.PDF_IS_SHARED);
 
-			Log.i(TAG, "menuBarPanel is not null");
+			LogUtil.i(TAG, "menuBarPanel is not null");
 			// menuBarPanel.removeLinkedView(topMenuLayout);
 			// menuBarPanel.addLink(mobileVideoLayout);
 
@@ -1485,7 +1484,7 @@ public class CallFragment extends Fragment implements OnClickListener
 				// start 会话保持阶段显示“通话被保持”
 				if (isSessionHold)
 				{
-					Log.i(TAG, "isSessionHold =" + isSessionHold);
+					LogUtil.i(TAG, "isSessionHold =" + isSessionHold);
 					// videocallTipView.setText(getString(R.string.session_holding));
 					menuBarPanel.changeMode(Mode.SESSION_HOLD);
 				} else
@@ -1585,7 +1584,7 @@ public class CallFragment extends Fragment implements OnClickListener
 	public void onDestroy()
 	{
 
-		Log.d(TAG, "onDestroy start!~");
+		LogUtil.d(TAG, "onDestroy start!~");
 
 		// if (null != timer) {
 		// timer = null;
@@ -1596,7 +1595,7 @@ public class CallFragment extends Fragment implements OnClickListener
 		if (null != LocalHideRenderServer.getInstance())
 		{
 			// ConfigApp.getInstance().setKillPro(true);
-			Log.e(TAG, "onDestroy start!  LocalHideRenderServer onDestroy~~~~~~~~~~~~~~~~~~~~~~~~~");
+			LogUtil.e(TAG, "onDestroy start!  LocalHideRenderServer onDestroy~~~~~~~~~~~~~~~~~~~~~~~~~");
 			LocalHideRenderServer.getInstance().onDestroy();
 		}
 		// 退出安卓客户端，然后在设置中把语言改为英文，客户端会自动登录
@@ -1620,14 +1619,14 @@ public class CallFragment extends Fragment implements OnClickListener
 			@Override
 			public void onClick(View v)
 			{
-				Log.d(TAG, "rootView is clicked");
+				LogUtil.d(TAG, "rootView is clicked");
 				// 点击显示菜单栏
 				if (null == menuBarPanel)
 				{
 					return;
 				}
 				menuBarPanel.showAndGone();
-				Log.i(TAG, "show menuBar");
+				LogUtil.i(TAG, "show menuBar");
 			}
 		});
 

@@ -98,7 +98,7 @@ public class CallActivity extends BaseActivity
 	@Override
 	protected void onCreate(Bundle savedInstanceState)
 	{
-		Log.i(TAG, "CallActivity onCreate");
+		LogUtil.i(TAG, "CallActivity onCreate");
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_call);
 		initComponent();
@@ -139,7 +139,7 @@ public class CallActivity extends BaseActivity
 
 	private void registerBroadcast()
 	{
-		Log.d(TAG, "registerBroadcast enter.");
+		LogUtil.d(TAG, "registerBroadcast enter.");
 		// 注册界面刷新
 		if (regReceiver == null)
 		{
@@ -151,7 +151,7 @@ public class CallActivity extends BaseActivity
 			regReceiver = new RegReceiver();
 			registerReceiver(regReceiver, iFilter);
 		}
-		Log.d(TAG, "registerBroadcast leave.");
+		LogUtil.d(TAG, "registerBroadcast leave.");
 	}
 
 	/**
@@ -277,7 +277,7 @@ public class CallActivity extends BaseActivity
 			transation.commitAllowingStateLoss();
 		} catch (IllegalStateException e)
 		{
-			Log.d(TAG, "IllegalStateException error.");
+			LogUtil.d(TAG, "IllegalStateException error.");
 		}
 	}
 
@@ -289,7 +289,7 @@ public class CallActivity extends BaseActivity
 			@Override
 			public void handleMessage(Message msg)
 			{
-				Log.d(TAG, "what:" + msg.what);
+				LogUtil.d(TAG, "what:" + msg.what);
 				parallelHandleMessageOne(msg);
 				parallelHandleMessageTwo(msg);
 				// parallelHandleMessageThree(msg);
@@ -514,9 +514,9 @@ public class CallActivity extends BaseActivity
 			// Intent it = new Intent(Intent.ACTION_VIEW, uri);
 			// it.setFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP);
 			// startActivity(it);
-			// Log.i(TAG, "try to give some Feedback");
+			// LogUtil.i(TAG, "try to give some Feedback");
 			// } catch (ActivityNotFoundException e) {
-			// Log.e(TAG, "no browser error");
+			// LogUtil.e(TAG, "no browser error");
 			// showToastMsg(HomeActivity.this.getString(R.string.no_browser));
 			// }
 			break;
@@ -685,7 +685,7 @@ public class CallActivity extends BaseActivity
 			@Override
 			public void onClick(DialogInterface dialog, int which)
 			{
-				Log.i(TAG, "logout~~");
+				LogUtil.i(TAG, "logout~~");
 				CallService.getInstance().forceCloseCall();
 				logoutProcess();
 				dialog.dismiss();
@@ -747,7 +747,7 @@ public class CallActivity extends BaseActivity
 	 */
 	private void removeCallComingActivity()
 	{
-		Log.d(TAG, "removeCallComingActivity");
+		LogUtil.d(TAG, "removeCallComingActivity");
 		// 不显示CallFragment的部分
 		callAreaLayout.setVisibility(View.GONE);
 		controlsAreaLayout.setVisibility(View.VISIBLE);
@@ -763,7 +763,7 @@ public class CallActivity extends BaseActivity
 	 */
 	public void showCallLayout()
 	{
-		Log.d(TAG, "showCallLayout()");
+		LogUtil.d(TAG, "showCallLayout()");
 		// 设置呼叫界面可见
 		callAreaLayout.setVisibility(View.VISIBLE);
 		controlsAreaLayout.setVisibility(View.GONE);
@@ -809,7 +809,7 @@ public class CallActivity extends BaseActivity
 	 */
 	public synchronized void backToWelcome()
 	{
-		Log.d(TAG, "backToWelcome() ");
+		LogUtil.d(TAG, "backToWelcome() ");
 		// dialFragment.reset();
 		// 欢迎界面可见
 		// welcomeLayout.setVisibility(View.VISIBLE);
@@ -894,7 +894,7 @@ public class CallActivity extends BaseActivity
 	 */
 	private void handleRequestError(final String errorType)
 	{
-		Log.w(TAG, "RequestError  errorType = " + errorType);
+		LogUtil.w(TAG, "RequestError  errorType = " + errorType);
 		int errorCode = 0;
 		// 目前三种类型，鉴权失败，超时，服务器错误（作为服务器连接失败处理）
 		if (errorType.equals(Resource.LOGIN_ACCOUNT_ERROR))
@@ -944,12 +944,12 @@ public class CallActivity extends BaseActivity
 	 */
 	public void sendHandlerMessage(int what, Object object)
 	{
-		Log.i(TAG, "sendHandlerMessage exec ");
-		Log.d(TAG, "handler->" + handler);
-		Log.d(TAG, "what->" + what + "; object->" + object);
+		LogUtil.i(TAG, "sendHandlerMessage exec ");
+		LogUtil.d(TAG, "handler->" + handler);
+		LogUtil.d(TAG, "what->" + what + "; object->" + object);
 		if (handler == null)
 		{
-			Log.d(TAG, "sendHandlerMessage() handler is null");
+			LogUtil.d(TAG, "sendHandlerMessage() handler is null");
 			return;
 		}
 		Message msg = handler.obtainMessage(what, object);
@@ -1000,7 +1000,7 @@ public class CallActivity extends BaseActivity
 	{
 		if (null == instance.ins)
 		{
-			Log.e(TAG, "CallActivity is null.");
+			LogUtil.e(TAG, "CallActivity is null.");
 			return;
 		}
 		instance.ins.sendHandlerMessage(what, object);
@@ -1100,7 +1100,7 @@ public class CallActivity extends BaseActivity
 
 	public void setVideoMode(View view)
 	{
-		Log.d(TAG, "Last mode -> " + videoMode);
+		LogUtil.d(TAG, "Last mode -> " + videoMode);
 		if (CallService.getInstance().setVideoMode((++videoMode) % 2))
 		{
 			Toast.makeText(CallActivity.this, "已设置" + (Constants.VideoMode.VIDEO_PROCESS_MODE == videoMode % 2 ? "流畅优先" : "画质优先"), Toast.LENGTH_LONG)

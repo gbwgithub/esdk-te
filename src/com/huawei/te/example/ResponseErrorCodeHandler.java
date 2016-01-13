@@ -16,10 +16,10 @@
 package com.huawei.te.example;
 
 import android.app.Activity;
-import android.util.Log;
 
 import com.huawei.common.Resource;
 import com.huawei.common.ResponseCodeHandler.ResponseCode;
+import com.huawei.esdk.te.util.LogUtil;
 import com.huawei.te.example.activity.BaseActivity;
 import com.huawei.te.example.activity.LoginActivity;
 import com.huawei.utils.StringUtil;
@@ -177,10 +177,10 @@ public final class ResponseErrorCodeHandler
 	{
 		if (baseActivity == null || errorCode == null)
 		{
-			Log.e(TAG, "Activity is null or errorCode is null");
+			LogUtil.e(TAG, "Activity is null or errorCode is null");
 			return;
 		}
-		Log.d(TAG, "errorCode:" + errorCode + ",desc:" + desc);
+		LogUtil.d(TAG, "errorCode:" + errorCode + ",desc:" + desc);
 		handleErrorCaseOnepart(showError, errorCode, desc, baseActivity, needESpaceApp);
 		// handleErrorCaseTwopart(showError, errorCode, desc, baseActivity,
 		// needESpaceApp);

@@ -17,6 +17,8 @@ package com.huawei.te.example.activity;
 
 import java.util.Stack;
 
+import com.huawei.esdk.te.util.LogUtil;
+
 import android.app.Activity;
 import android.content.Intent;
 import android.util.Log;
@@ -66,7 +68,7 @@ public final class ActivityStackManager
 	{
 		if (activity != null)
 		{
-			Log.d(TAG, "ActivityTask  push :" + activity.toString());
+			LogUtil.d(TAG, "ActivityTask  push :" + activity.toString());
 			activityStack.push(activity);
 		}
 	}
@@ -83,7 +85,7 @@ public final class ActivityStackManager
 			temp = activityStack.pop();
 			if (temp != null)
 			{
-				Log.i(TAG, "finishAllViewInTask() activity : " + temp.toString());
+				LogUtil.i(TAG, "finishAllViewInTask() activity : " + temp.toString());
 				temp.clearData(); // 清空数据
 				temp.finish(); // 销毁页面
 			}
@@ -95,7 +97,7 @@ public final class ActivityStackManager
 	 */
 	public void loginOut()
 	{
-		Log.i(TAG, "loginOut() activity enter size:" + activityStack.size());
+		LogUtil.i(TAG, "loginOut() activity enter size:" + activityStack.size());
 		BaseActivity inAc = null;
 		BaseActivity temp = null;
 		int size = activityStack.size();
@@ -106,11 +108,11 @@ public final class ActivityStackManager
 			{
 				if ((temp instanceof LoginActivity))
 				{
-					Log.i(TAG, "loginOut()  activity : " + temp.toString());
+					LogUtil.i(TAG, "loginOut()  activity : " + temp.toString());
 					inAc = temp;
 				} else
 				{
-					Log.i(TAG, "loginOut() activity : " + temp.toString());
+					LogUtil.i(TAG, "loginOut() activity : " + temp.toString());
 					temp.clearData(); // 清空数据
 					temp.finish();// 销毁页面
 					temp = null;
@@ -121,7 +123,7 @@ public final class ActivityStackManager
 		{
 			activityStack.push(inAc);
 		}
-		Log.i(TAG, "loginOut() activity leave ");
+		LogUtil.i(TAG, "loginOut() activity leave ");
 	}
 
 	/**
@@ -157,7 +159,7 @@ public final class ActivityStackManager
 		if (curAc != null)
 		{
 			boolean reg = activityStack.removeElement(curAc);
-			Log.d(TAG, "ActivityTask  remove :" + curAc.toString() + " , result = " + reg);
+			LogUtil.d(TAG, "ActivityTask  remove :" + curAc.toString() + " , result = " + reg);
 			return reg;
 		}
 		return false;
@@ -165,7 +167,7 @@ public final class ActivityStackManager
 
 	public void stackTrace()
 	{
-		Log.i(TAG, "stackTrace() activityStack:" + activityStack.toString());
+		LogUtil.i(TAG, "stackTrace() activityStack:" + activityStack.toString());
 	}
 
 	/**
@@ -177,7 +179,7 @@ public final class ActivityStackManager
 		{
 			return;
 		}
-		Log.i(TAG, "show last activity:" + lastShowActivity);
+		LogUtil.i(TAG, "show last activity:" + lastShowActivity);
 		// 将堆栈里的所有lastActivity popup出来只保存一个
 		Intent intent = lastShowActivity.getIntent();
 		intent.addFlags(Intent.FLAG_ACTIVITY_BROUGHT_TO_FRONT);

@@ -38,6 +38,7 @@ import com.huawei.esdk.te.TESDK;
 import com.huawei.esdk.te.TESDK.LoginParameter;
 import com.huawei.esdk.te.call.CallService;
 import com.huawei.esdk.te.data.Constants;
+import com.huawei.esdk.te.util.LogUtil;
 import com.huawei.te.example.CallControl;
 import com.huawei.te.example.R;
 import com.huawei.te.example.ResponseErrorCodeHandler;
@@ -156,7 +157,7 @@ public class LoginActivity extends BaseActivity
 	@Override
 	protected void onCreate(Bundle savedInstanceState)
 	{
-		Log.d(TAG, "onCreate()");
+		LogUtil.d(TAG, "onCreate()");
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_login);
 		initView();
@@ -197,7 +198,7 @@ public class LoginActivity extends BaseActivity
 	// 保存日志
 	public void saveLog(View v)
 	{
-		Log.i(TAG, "save Fault Report.");
+		LogUtil.i(TAG, "save Fault Report.");
 		FileUtil.getIns().sendTEMobileLog(this, FileUtil.LOG_FILE_TYPE);
 	}
 
@@ -240,12 +241,12 @@ public class LoginActivity extends BaseActivity
 		info.setServerIP(serverIP);
 		info.setServerPort(serverPort);
 		info.setSipuri(sipURI);
-		Log.d(TAG, "info.setSipuri -> " + sipURI);
+		LogUtil.d(TAG, "info.setSipuri -> " + sipURI);
 		boolean isAnonymous = false;
 		// 匿名呼叫自动使用UDP传输协议 -- TLS TCP UDP协议登录时记录设置端口
 		info.setProtocolType(protocolType);
 		// Log传输协议
-		Log.i(TAG, "ProtocolType is " + info.getProtocolType());
+		LogUtil.i(TAG, "ProtocolType is " + info.getProtocolType());
 		// 设置心跳
 		info.setSupportSipSessionTimer(true);
 		// 设置bfcpState
@@ -277,7 +278,7 @@ public class LoginActivity extends BaseActivity
 	@Override
 	protected void onDestroy()
 	{
-		Log.d(TAG, "onDestroy()");
+		LogUtil.d(TAG, "onDestroy()");
 		super.onDestroy();
 		unRegister();
 		instance = null;
@@ -305,7 +306,7 @@ public class LoginActivity extends BaseActivity
 			if (intent != null)
 			{
 				removeStickyBroadcast(intent);
-				Log.i(TAG, "[BROADCAST_ACTION]" + "|action = " + intent.getAction() + Constants.CHARACTER_MARK.VERTICAL_MARK);
+				LogUtil.i(TAG, "[BROADCAST_ACTION]" + "|action = " + intent.getAction() + Constants.CHARACTER_MARK.VERTICAL_MARK);
 
 				handlerBroadcastEvent(intent);
 			}
@@ -324,7 +325,7 @@ public class LoginActivity extends BaseActivity
 				unregisterReceiver(mReceiver);
 			} catch (UnsupportedOperationException e)
 			{
-				Log.e(TAG, e.getMessage());
+				LogUtil.e(TAG, e.getMessage());
 			}
 			mReceiver = null;
 		}
@@ -335,7 +336,7 @@ public class LoginActivity extends BaseActivity
 	 */
 	private void onLoginResponse(final Intent intent)
 	{
-		Log.d(TAG, "onLoginResponse() result -> " + intent.getIntExtra(Resource.SERVICE_RESPONSE_RESULT, Resource.REQUEST_FAIL));
+		LogUtil.d(TAG, "onLoginResponse() result -> " + intent.getIntExtra(Resource.SERVICE_RESPONSE_RESULT, Resource.REQUEST_FAIL));
 		int result = intent.getIntExtra(Resource.SERVICE_RESPONSE_RESULT, Resource.REQUEST_FAIL);
 		if (result == Resource.REQUEST_OK)
 		{
@@ -347,7 +348,7 @@ public class LoginActivity extends BaseActivity
 				onLoginResp();
 			} else
 			{
-				Log.e(TAG, "callService is null !");
+				LogUtil.e(TAG, "callService is null !");
 			}
 		}
 	}
@@ -357,7 +358,7 @@ public class LoginActivity extends BaseActivity
 	 */
 	private void onLoginResp()
 	{
-		Log.d(TAG, "loginResp");
+		LogUtil.d(TAG, "loginResp");
 
 		new Thread(new Runnable()
 		{
@@ -366,7 +367,7 @@ public class LoginActivity extends BaseActivity
 			{
 				synchronized (TESDK.getInstance().getSynLock())
 				{
-					Log.i(TAG, "Login Success.");
+					LogUtil.i(TAG, "Login Success.");
 					Intent intent = new Intent();
 					intent.setClass(LoginActivity.this, CallActivity.class);
 					intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
@@ -401,7 +402,7 @@ public class LoginActivity extends BaseActivity
 								// isCancelLogin = false;
 							} catch (Exception e)
 							{
-								Log.e(TAG, "connect server error.");
+								LogUtil.e(TAG, "connect server error.");
 							}
 						}
 					}
@@ -415,7 +416,7 @@ public class LoginActivity extends BaseActivity
 			// 登陆错误提示 9.10
 			String loginErrorType = intent.getStringExtra(Resource.SERVICE_ERROR_DATA);
 			int laveCount = intent.getIntExtra(Resource.SERVICE_ERRORLOGIN_LAVECOUNT, 0);
-			Log.i(TAG, "login error,loginErrorType:" + loginErrorType + ",laveCount:" + laveCount);
+			LogUtil.i(TAG, "login error,loginErrorType:" + loginErrorType + ",laveCount:" + laveCount);
 			if (null != loginErrorType && !StringUtil.isStringEmpty(loginErrorType))
 			{
 				handleRequestError(loginErrorType);
@@ -431,7 +432,7 @@ public class LoginActivity extends BaseActivity
 	 */
 	private void handleRequestError(final String errorType)
 	{
-		Log.w(TAG, "RequestError  errorType = " + errorType);
+		LogUtil.w(TAG, "RequestError  errorType = " + errorType);
 		// isLoading = false;
 		// sendHandlerMessage(LOGINACTIVITY_MSG.ON_BACK_TO_LOGINVIEW, null);
 //		TESDK.getInstance().stopSDKService();
@@ -470,7 +471,7 @@ public class LoginActivity extends BaseActivity
 
 	private void handleResponseError(final ResponseCode errorCode, final String info)
 	{
-		Log.w(TAG, "ResponseError  code = " + errorCode + Constants.CHARACTER_MARK.VERTICAL_MARK + info + Constants.CHARACTER_MARK.VERTICAL_MARK);
+		LogUtil.w(TAG, "ResponseError  code = " + errorCode + Constants.CHARACTER_MARK.VERTICAL_MARK + info + Constants.CHARACTER_MARK.VERTICAL_MARK);
 		// isLoading = false;
 		// sendHandlerMessage(LOGINACTIVITY_MSG.ON_BACK_TO_LOGINVIEW, null);
 //		TESDK.getInstance().stopSDKService();
@@ -500,20 +501,20 @@ public class LoginActivity extends BaseActivity
 	{
 		if (intent != null)
 		{
-			Log.e(TAG, "handlerBroadcastEvent:" + intent.getAction());
+			LogUtil.d(TAG, "handlerBroadcastEvent:" + intent.getAction());
 			String action = intent.getAction();
 
 			if (CustomBroadcastConst.ACTION_LOGIN_RESPONSE.equals(action))
 			{
-				Log.e(TAG, "login response");
+				LogUtil.d(TAG, "login response");
 				onLoginResponse(intent);
 			} else if (CustomBroadcastConst.ACTION_CONNECT_TO_SERVER.equals(action))
 			{
-				Log.e(TAG, "connect to server");
+				LogUtil.d(TAG, "connect to server");
 				onConnectToServer(intent);
 			} else if (Constants.BROADCAST_PATH.ACTION_HOMEACTIVITY_SHOW.equals(action))
 			{
-				Log.e(TAG, "home activity show");
+				LogUtil.d(TAG, "home activity show");
 				// 收到主界面显示广播之后关闭登陆界面
 				finish();
 			}
