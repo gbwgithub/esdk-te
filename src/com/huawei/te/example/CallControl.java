@@ -15,9 +15,6 @@
 
 package com.huawei.te.example;
 
-import java.util.List;
-
-import object.StreamInfo;
 import android.content.Intent;
 
 import com.huawei.application.BaseApp;
@@ -38,15 +35,23 @@ import com.huawei.te.example.activity.CallComingActivity;
 import com.huawei.te.example.activity.CallFragment;
 import com.huawei.utils.StringUtil;
 
+import java.util.List;
+
+import object.StreamInfo;
+
 public class CallControl implements CallNotification
 {
 
 	private static final String TAG = CallControl.class.getSimpleName();
 
-	/** 语音通话添加视频（被叫4112） **/
+	/**
+	 * 语音通话添加视频（被叫4112）
+	 **/
 	private static final String VIDEOADD = "add";
 
-	/** 语音通话添加视频（主叫4113） **/
+	/**
+	 * 语音通话添加视频（主叫4113）
+	 **/
 	private static final String VIDEOMOD = "mod";
 
 	private static CallControl instance;
@@ -80,8 +85,8 @@ public class CallControl implements CallNotification
 	private String reasonText = null;
 
 	// 音视频切换时状态通知，用于界面控制和刷新
+
 	/**
-	 * 
 	 * 呼叫变更通知类型（用于通知界面展示）
 	 */
 	public enum ModifyNoticeType
@@ -90,15 +95,15 @@ public class CallControl implements CallNotification
 		 * 默认类型
 		 */
 		defaultType, /**
-		 * 语音转视频
-		 */
-		VoiceToVideo, /**
-		 * 视频转语音
-		 */
-		VideoToVoice, /**
-		 * 变更请求失败
-		 */
-		ModifyRequestFalied,
+	 * 语音转视频
+	 */
+	VoiceToVideo, /**
+	 * 视频转语音
+	 */
+	VideoToVoice, /**
+	 * 变更请求失败
+	 */
+	ModifyRequestFalied,
 		/**
 		 * 对方取消升级视频操作
 		 */
@@ -117,9 +122,8 @@ public class CallControl implements CallNotification
 
 	/**
 	 * 初始化参数
-	 * 
-	 * @param service
-	 *            服务代理
+	 *
+	 * @param service 服务代理
 	 */
 	private CallControl()
 	{
@@ -145,9 +149,8 @@ public class CallControl implements CallNotification
 
 	/**
 	 * 通知通话界面刷新
-	 * 
-	 * @param answer
-	 *            是否接听 为True时候，这个参数用于TEMobile返回HomeActivity，即返CallActivity，暂时不需要
+	 *
+	 * @param answer 是否接听 为True时候，这个参数用于TEMobile返回HomeActivity，即返CallActivity，暂时不需要
 	 */
 	public void notifyCallViewUpdate(boolean answer)
 	{
@@ -190,9 +193,8 @@ public class CallControl implements CallNotification
 
 	/**
 	 * 通话挂断通知 4105
-	 * 
-	 * @param callsession
-	 *            会话对象
+	 *
+	 * @param callsession 会话对象
 	 */
 	private void processCallNtfClosed(Call currentCall)
 	{
@@ -289,9 +291,8 @@ public class CallControl implements CallNotification
 
 	/**
 	 * 会话变更 4113
-	 * 
-	 * @param mCallSession
-	 *            会话
+	 *
+	 * @param mCallSession 会话
 	 */
 	private void processCallNtfModified(final Call currentCall)
 	{
@@ -389,11 +390,9 @@ public class CallControl implements CallNotification
 
 	/**
 	 * 协商结果处理 将BFCP重协商结果上报界面层
-	 * 
-	 * @param callid
-	 *            呼叫唯一标识
-	 * @param ConsultRet
-	 *            协商结果/重协商结果
+	 *
+	 * @param callid     呼叫唯一标识
+	 * @param ConsultRet 协商结果/重协商结果
 	 */
 	private void processBFCPConsultRet(String callid, boolean isBfcpEnabled)
 	{
@@ -416,9 +415,8 @@ public class CallControl implements CallNotification
 
 	/**
 	 * 对端关闭视频通知
-	 * 
-	 * @param isRemoteVideoClose
-	 *            true 关闭
+	 *
+	 * @param isRemoteVideoClose true 关闭
 	 */
 	private void notifyCallActivityUpdateRemoteVideo(boolean isRemoteVideoClose)
 	{
@@ -427,9 +425,8 @@ public class CallControl implements CallNotification
 
 	/**
 	 * 来电通知 4102
-	 * 
-	 * @param callsession
-	 *            会话对象
+	 *
+	 * @param callsession 会话对象
 	 */
 	private void processCallNtfComing(Call currentCall)
 	{
@@ -457,9 +454,8 @@ public class CallControl implements CallNotification
 
 	/**
 	 * BFCP接收开始
-	 * 
-	 * @param callid
-	 *            呼叫唯一标识
+	 *
+	 * @param callid 呼叫唯一标识
 	 */
 	public void processBFCPAccptedStart(String callid)
 	{
@@ -468,9 +464,8 @@ public class CallControl implements CallNotification
 
 	/**
 	 * BFCP接收开始
-	 * 
-	 * @param callid
-	 *            呼叫唯一标识
+	 *
+	 * @param callid 呼叫唯一标识
 	 */
 	public void processBFCPStoped(String callid)
 	{
@@ -483,6 +478,14 @@ public class CallControl implements CallNotification
 		// notice the GUI side the bfcp is stoped
 		LogUtil.i(TAG, " BFCP is stoped,callid=" + callid);
 		notifyPDFViewUpdate(BFCPStatus.BFCP_END);
+	}
+
+	/**
+	 * 获取当前通话媒体信息
+	 */
+	public StreamInfo getMediaInfo()
+	{
+		return CallService.getInstance().getMediaInfo();
 	}
 
 	/**
@@ -505,13 +508,10 @@ public class CallControl implements CallNotification
 
 	/**
 	 * 发起呼叫
-	 * 
-	 * @param fromPhone
-	 *            呼叫号码
-	 * @param domain
-	 *            域，暂时无用，可传空
-	 * @param isVideoCall
-	 *            是否视频通话
+	 *
+	 * @param fromPhone   呼叫号码
+	 * @param domain      域，暂时无用，可传空
+	 * @param isVideoCall 是否视频通话
 	 * @return CallErrorCode 成功："0" 失败：CallErrorCode.isFail(callCodeString)为true
 	 */
 	public synchronized String dialCall(String fromPhone, String domain, boolean isVideoCall)
@@ -525,15 +525,13 @@ public class CallControl implements CallNotification
 		{
 			this.callID = CallService.getInstance().getCurrentCallID();
 		}
-
 		return callCodeString;
 	}
 
 	/**
 	 * 二次拨号
-	 * 
-	 * @param code
-	 *            号码
+	 *
+	 * @param code 号码
 	 */
 	public boolean sendDTMF(String code)
 	{
@@ -542,11 +540,9 @@ public class CallControl implements CallNotification
 
 	/**
 	 * 本地麦克风静音
-	 * 
-	 * @param isRefer
-	 *            是否会议中转移 true: 会议中转移， false：非会议中转移，对设备原来的静音状态取反。
-	 * @param isMute
-	 *            是否静音 true: 静音， false：取消静音
+	 *
+	 * @param isRefer 是否会议中转移 true: 会议中转移， false：非会议中转移，对设备原来的静音状态取反。
+	 * @param isMute  是否静音 true: 静音， false：取消静音
 	 */
 	public boolean setLocalMute(boolean isRefer, boolean isMute)
 	{
@@ -563,11 +559,9 @@ public class CallControl implements CallNotification
 
 	/**
 	 * 接听呼叫，接听一个呼叫，包括音、视频呼叫，返回接听是否成功
-	 * 
-	 * @param callid
-	 *            接听会话的唯一标识callid
-	 * @param isNeedAnswerVideo
-	 *            是否需要接入视频， 普通通话传入false
+	 *
+	 * @param callid            接听会话的唯一标识callid
+	 * @param isNeedAnswerVideo 是否需要接入视频， 普通通话传入false
 	 * @return true表示成功，false表示失败
 	 */
 	public boolean callAnswer(String callid, boolean isVideo)
@@ -594,9 +588,8 @@ public class CallControl implements CallNotification
 
 	/**
 	 * 拒绝来电呼叫
-	 * 
-	 * @param callid
-	 *            来电的callid
+	 *
+	 * @param callid 来电的callid
 	 * @return 执行拒绝呼叫结果， true 为成功
 	 */
 	public boolean rejectCall(String callid)
@@ -608,7 +601,7 @@ public class CallControl implements CallNotification
 
 	/**
 	 * 挂断呼叫
-	 * 
+	 *
 	 * @return 执行是否完成
 	 */
 	public synchronized void closeCall()
@@ -638,7 +631,7 @@ public class CallControl implements CallNotification
 
 	/**
 	 * 视频通话中关闭视频 对方响应 4113 Param.E_CALL_ID.FAST_CALL_NTF_SESSION_MODIFIED
-	 * 
+	 *
 	 * @return 执行结果 true 执行成功 false 执行失败
 	 */
 	public boolean closeVideo()
@@ -654,9 +647,6 @@ public class CallControl implements CallNotification
 
 	/**
 	 * 同意视频升级
-	 * 
-	 * @param caps
-	 *            视频参数
 	 * @return 执行结果 true 为执行成功 false 执行失败
 	 */
 	public boolean agreeUpgradeVideo()
@@ -672,7 +662,7 @@ public class CallControl implements CallNotification
 
 	/**
 	 * 拒绝视频升级
-	 * 
+	 *
 	 * @return true / false 执行结果 true 执行成功 false 执行失败
 	 */
 	public boolean disAgreeUpgradeVideo()
@@ -682,9 +672,8 @@ public class CallControl implements CallNotification
 
 	/**
 	 * 音频通话过程中请求升级到视频通话
-	 * 
-	 * @param caps
-	 *            视频参数
+	 *
+	 * @param caps 视频参数
 	 * @return 执行结果 true 执行成功 false 执行失败
 	 */
 	public boolean upgradeVideo()
@@ -707,20 +696,10 @@ public class CallControl implements CallNotification
 	}
 
 	/**
-	 * 获取当前通话媒体信息
-	 */
-	public StreamInfo getMediaInfo()
-	{
-		return CallService.getInstance().getMediaInfo();
-	}
-
-	/**
-	 * 
-	 * 关闭本地摄像头
-	 * 
+	 * 控制本地摄像头开关
+	 *
+	 * @param isCloseAction true表示关闭本地摄像头操作，false表示打开操作
 	 * @return 执行完成
-	 * @param isCloseAction
-	 *            true表示关闭本地摄像头操作，false表示打开操作
 	 */
 	public boolean localCameraControl(boolean isCloseAction)
 	{
@@ -742,9 +721,8 @@ public class CallControl implements CallNotification
 
 	/**
 	 * 设置挂断reason提示文本
-	 * 
-	 * @param reason
-	 *            挂断reason
+	 *
+	 * @param reason 挂断reason
 	 */
 	private String setCloseReasonText(String reason, Call currentCall)
 	{
@@ -796,9 +774,8 @@ public class CallControl implements CallNotification
 
 	/**
 	 * voip呼叫区域检查
-	 * 
-	 * @param callSession
-	 *            CallSession对象
+	 *
+	 * @param callSession CallSession对象
 	 * @return reason-header字段 有：true 无：false
 	 */
 	private boolean checkHasHeader(Call currentCall)
@@ -925,8 +902,8 @@ public class CallControl implements CallNotification
 		processCallNtfModified(currentCall);
 	}
 
-	/**
-	 * 对端降音频结果通知
+	/** 
+	 * 视频协商结果通知,码流的收发状态：只收、只发、或者收发
 	 */
 	@Override
 	public void onSessionModified(Call currentCall)

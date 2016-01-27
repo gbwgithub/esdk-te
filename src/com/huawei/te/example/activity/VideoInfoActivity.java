@@ -15,12 +15,6 @@
 
 package com.huawei.te.example.activity;
 
-import java.util.Timer;
-import java.util.TimerTask;
-
-import object.AudioStreamInfo;
-import object.StreamInfo;
-import object.VideoStreamInfo;
 import android.os.Bundle;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -39,7 +33,14 @@ import com.huawei.te.example.R;
 import com.huawei.te.example.call.IMediaNetInfoListener;
 import com.huawei.utils.StringUtil;
 import com.huawei.voip.data.MediaNetInfo;
+
+import java.util.Timer;
+import java.util.TimerTask;
+
 import common.TransportType;
+import object.AudioStreamInfo;
+import object.StreamInfo;
+import object.VideoStreamInfo;
 
 public class VideoInfoActivity extends BaseActivity implements IMediaNetInfoListener
 {
@@ -706,6 +707,9 @@ public class VideoInfoActivity extends BaseActivity implements IMediaNetInfoList
 
 		// audio
 		AudioStreamInfo audioInfo = mediaInfo.getAudioStreamInfo();
+		int sendBitRate = audioInfo.getSendBitRate();
+		int recvBitRate = audioInfo.getRecvBitRate();
+		LogUtil.e(TAG,"sendBitRate -> " + sendBitRate + "  recvBitRate -> " + recvBitRate );
 		audioCodeString = audioInfo.getDecodeProtocol();
 		// begin 上层处理 PCMU 和PCMA 编码
 		if (PCMU.equalsIgnoreCase(audioCodeString))

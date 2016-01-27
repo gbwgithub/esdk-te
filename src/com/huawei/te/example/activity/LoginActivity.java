@@ -21,7 +21,6 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Button;
@@ -103,6 +102,15 @@ public class LoginActivity extends BaseActivity
 	private static final String PASSWORD = "Huawei@123";
 	private static final String SIPURI = "01058888@172.22.8.4";
 	private static final String LICENSESERVER = "172.22.9.22";
+
+	// 进入思科虚拟会议室-VMR
+	//城云环境 - 关闭license验证
+//	private static final String SERVER = "tp.onecc.me";
+//	private static final String PORT = "5061";
+//	private static final String ACCOUNT = "crj.cci";
+//	private static final String PASSWORD = "123456";
+//	private static final String SIPURI = "crj.cci@onecc.me";
+//	private static final String LICENSESERVER = "172.22.9.22";
 
 	// //产品环境
 	// private static final String SERVER = "172.22.8.4";
@@ -426,9 +434,8 @@ public class LoginActivity extends BaseActivity
 
 	/**
 	 * 此方法用于登陆错误 弹窗展示
-	 * 
-	 * @param errorType
-	 *            登陆错误类型
+	 *
+	 * @param errorType 登陆错误类型
 	 */
 	private void handleRequestError(final String errorType)
 	{
@@ -537,7 +544,7 @@ public class LoginActivity extends BaseActivity
 	}
 
 	public void showAlertDialog(String title, String msg, String firstBtnInfo, DialogInterface.OnClickListener firstBtnListener, String secondBtnInfo,
-			DialogInterface.OnClickListener secondBtnListener, DialogInterface.OnDismissListener dismissListener)
+	                            DialogInterface.OnClickListener secondBtnListener, DialogInterface.OnDismissListener dismissListener)
 	{
 		if (null != instance)
 		{

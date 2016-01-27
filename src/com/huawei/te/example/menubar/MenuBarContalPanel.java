@@ -1719,7 +1719,6 @@ public class MenuBarContalPanel implements OnClickListener, com.huawei.te.exampl
 				{
 					synchronized (MENULOCK)
 					{
-						// boolean result = cVoip.closeVideo();
 						boolean result = callControl.closeVideo();
 						isDone = false;
 						if (!result)

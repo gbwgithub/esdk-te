@@ -1086,7 +1086,7 @@ public class CallFragment extends Fragment implements OnClickListener
 	private static final Object RENDER_CHANGE_LOCK = new Object();
 
 	/**
-	 * 更新呼叫中界面显示 （视频呼叫 语音呼叫）
+	 * 更新为呼叫中界面 （视频呼叫 语音呼叫）
 	 * 
 	 * @param isVideoCall
 	 *            是否是视频通话
