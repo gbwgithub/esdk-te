@@ -1,24 +1,18 @@
-/*
- *    Copyright 2015 Huawei Technologies Co., Ltd. All rights reserved.
- *    eSDK is licensed under the Apache License, Version 2.0 (the "License");
- *    you may not use this file except in compliance with the License.
- *    You may obtain a copy of the License at
- *
- *        http://www.apache.org/licenses/LICENSE-2.0
- *
- *    Unless required by applicable law or agreed to in writing, software
- *    distributed under the License is distributed on an "AS IS" BASIS,
- *    WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- *    See the License for the specific language governing permissions and
- *    limitations under the License.
- */
 
+buildscript {
+    repositories {
+        jcenter()
+//        maven{
+//            url "../../../../../tools/gradleTool/m2repository"
+//        }
+    }
+    dependencies {
+        classpath 'com.android.tools.build:gradle:1.5.0'
+    }
+}
 
-
-
-
-
-apply plugin: 'com.android.application'
+//apply plugin: 'com.android.application'
+apply plugin: 'android'
 
 dependencies {
     compile fileTree(include: '*.jar', dir: 'libs')
@@ -29,6 +23,38 @@ android {
     compileSdkVersion 19
     buildToolsVersion '22.0.1'
 
+	lintOptions{
+        abortOnError false
+        checkReleaseBuilds false
+    }
+
+    compileOptions {
+        encoding "UTF-8"
+        sourceCompatibility JavaVersion.VERSION_1_6
+        targetCompatibility JavaVersion.VERSION_1_6
+    }
+
+    signingConfigs {
+        myConfig{
+            storeFile file("keystore/te_demo.keystore")
+            storePassword "123456"
+            keyAlias "te_demo.keystore"
+            keyPassword "123456"
+        }
+    }
+
+    buildTypes {
+        release {
+            signingConfig  signingConfigs.myConfig
+            proguardFile 'proguard-android.txt'
+        }
+    }
+	
+    dexOptions {
+        incremental true
+        javaMaxHeapSize "1g"
+    }
+
     sourceSets {
         main {
             manifest.srcFile 'AndroidManifest.xml'
@@ -38,6 +64,8 @@ android {
             renderscript.srcDirs = ['src']
             res.srcDirs = ['res']
             assets.srcDirs = ['assets']
+
+            jniLibs.srcDirs = ['libs']
         }
 
         // Move the tests to tests/java, tests/res, etc...
@@ -52,4 +80,99 @@ android {
         debug.setRoot('build-types/debug')
         release.setRoot('build-types/release')
     }
+}
+
+
+defaultTasks 'clear', 'copySDK', 'zipSDK', 'cleanSDK', 'copyDemo', 'zipDemo', 'cleanDemo', 'copyJAR','copyAPK', 'copyLibs'
+
+
+task clear(type : Delete){
+    delete fileTree(dir:'.',include:['*.zip'])
+
+    delete new File('build/outputs/product')
+    delete new File('build/sdk')
+    delete new File('build/demo')
+}
+
+task copySDK(type:Copy){
+    from("${project(':TESDK').projectDir}")
+    into('build/sdk')
+
+    include('libs/**/*')
+    include('res/**/*')
+    include('src/**/*')
+    include('AndroidManifest.xml')
+    include('*.gradle')
+    include('*.properties')
+}
+
+task zipSDK(type:Zip){
+    println "*** zipSDK ***"
+    baseName = 'eSDK_TP_TEMobile_Android'
+    destinationDir = new File("build/outputs/product")
+    from('build/sdk')
+
+    include('libs/**/*')
+    include('src/**/*')
+    include('res/**/*')
+    include('*.properties')
+    include('AndroidManifest.xml')
+    include('*.gradle')
+}
+
+task cleanSDK(type:Delete){
+    println "*** cleanSDK ***"
+    delete new File('build/sdk')
+}
+
+task copyDemo(type:Copy){
+    println "*** copyDemo ***"
+    from('.')
+    into('build/demo')
+
+    include('libs/**/*')
+    include('src/**/*')
+    include('res/**/*')
+    include('*.properties')
+    include('AndroidManifest.xml')
+    include('*.gradle')
+}
+
+task zipDemo(type:Zip){
+    println "*** zipDemo ***"
+    baseName = 'eSDK_TP_TEMobile_Demo_Android'
+    destinationDir = new File("build/outputs/product")
+    from('build/demo')
+
+    include('libs/**/*')
+    include('src/**/*')
+    include('res/**/*')
+    include('*.properties')
+    include('AndroidManifest.xml')
+    include('*.gradle')
+}
+
+task cleanDemo(type:Delete){
+    println "*** cleanDemo ***"
+    delete new File('build/demo')
+}
+
+task copyJAR(type:Copy){
+    from("${project(':TESDK').projectDir}/build/libs")
+    into('build/outputs/product')
+    include('*.jar')
+    rename '(.*)TESDK(.*).jar','TEMobile.jar'
+}
+
+task copyAPK(type:Copy){
+    from('build/outputs/apk')
+    into('build/outputs/product')
+    include('*-release-*.apk')
+    rename '(.*)-release-(.*).apk','eSDK_TP_TEMobile_Demo_Android.apk'
+}
+
+task copyLibs(type:Copy){
+    from("${project(':TESDK').projectDir}")
+    into('build/outputs/product')
+    include('libs/**/*')
 }
