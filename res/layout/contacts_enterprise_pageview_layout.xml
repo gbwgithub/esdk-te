@@ -1,0 +1,148 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="fill_parent"
+    android:layout_height="match_parent"
+    android:background="#00FFFFFF"
+    android:focusable="true"
+    android:focusableInTouchMode="true"
+    android:orientation="vertical" >
+
+        <RelativeLayout
+	        android:layout_alignParentTop="true"
+	        android:id="@+id/enterpriseSearchInputView"
+	        android:layout_width="match_parent"
+	        android:background="#d1d1d1" 
+            android:layout_height="42.67dp"
+            android:layout_centerVertical="true"
+            android:addStatesFromChildren="true"
+            android:gravity="center_vertical" >
+
+            <EditText
+                android:id="@+id/searchInputTxt"
+	            android:layout_marginLeft="5.88dp"
+	            android:layout_marginRight="5.88dp"
+                android:layout_width="fill_parent"
+                android:layout_height="31dp"
+                android:focusable="false"
+                android:layout_centerVertical="true"
+                android:background="@drawable/te_contact_search_inputbox"
+                android:hint="@string/search"
+                android:imeOptions="actionNone"
+                android:maxLength="100"
+                android:paddingLeft="32dp"
+                android:paddingRight="26dp"
+                android:singleLine="true"
+                android:textColor="#999999"
+                android:textCursorDrawable="@drawable/tp_cursor"
+                android:textSize="13.33sp" >
+            </EditText>
+            <ImageView
+                android:id="@+id/searchImgView"
+                android:layout_width="20dp"
+                android:layout_height="20dp"
+                android:layout_centerVertical="true"
+                android:layout_marginLeft="12.67dp"
+                android:scaleType="fitCenter" />            
+			<RelativeLayout 
+			    android:layout_width="40dp"
+			    android:layout_height="fill_parent"
+                android:layout_alignParentRight="true"
+                android:layout_centerVertical="true"
+                android:id="@+id/searchClearBtn"
+                android:layout_marginRight="5.88dp"
+			    android:visibility="invisible">
+            <ImageButton
+                android:layout_width="22dp"
+                android:layout_height="22dp"
+                android:clickable="false"
+                android:layout_centerInParent="true"                
+                android:background="@drawable/te_ic_cross_clear_normal"/>
+			</RelativeLayout>
+        </RelativeLayout>
+    
+      <com.huawei.app.view.PullDownExpandListView
+            android:layout_below="@id/enterpriseSearchInputView"
+            android:id="@+id/contactsEnterpriseView"
+            android:layout_width="fill_parent"
+            android:layout_height="match_parent"
+            android:cacheColorHint="@drawable/translucent"
+            android:divider="@null"
+            android:fadingEdgeLength="0dp"
+            android:focusable="true"
+            android:groupIndicator="@null"
+            android:indicatorLeft="10dp"
+            android:indicatorRight="23.33dp"
+            android:listSelector="#00FFFFFF" />
+        <com.huawei.app.view.CodeSearchView
+                android:id="@+id/code_view"
+                android:layout_width="10dp"
+                android:layout_below="@id/enterpriseSearchInputView"
+                android:layout_height="fill_parent"
+                android:layout_alignParentRight="true"
+                android:layout_marginRight="3.33dp"
+                android:background="#00FFFFFF"
+                />
+
+    <LinearLayout
+        android:id="@+id/contactEnterpriseLoadingLayout"
+        android:layout_below="@id/enterpriseSearchInputView"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:gravity="center"
+        android:layout_alignParentLeft="true"
+        android:layout_centerVertical="true"
+        android:orientation="vertical" >
+
+        <ProgressBar
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal" />
+
+        <TextView
+            style="@style/text_style_20_black_dp"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:text="@string/loading_contact" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/contactsEnterpriseTipLayout"
+        android:layout_below="@id/enterpriseSearchInputView"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_centerHorizontal="true"
+        android:layout_centerInParent="true"
+        android:gravity="center"
+        android:orientation="vertical"
+        android:visibility="gone" >
+
+        <ImageView
+            android:id="@+id/no_contacts_img"
+            android:layout_width="85dp"
+            android:layout_height="85dp"
+            android:layout_gravity="center"
+            android:scaleType="fitCenter"
+            android:src="@drawable/tp_bg_no_contacts" />
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="16dp"
+            android:gravity="center"
+            android:text="@string/no_contacts"
+            android:textColor="#c0c0c0"
+            android:textSize="40px" />
+    </LinearLayout>
+	            <TextView
+                android:id="@+id/code_show"
+                android:textSize="50dp"
+                android:layout_width="100dp"
+                android:layout_height="100dp"
+                android:layout_centerInParent="true"
+                android:layout_marginLeft="88.89dp"
+                android:background="@drawable/tp_mobile_contact_search_bg"
+                android:gravity="center"
+                android:textColor="#ff000000"
+                android:visibility="gone" />
+</RelativeLayout>

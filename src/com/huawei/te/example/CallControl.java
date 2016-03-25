@@ -122,8 +122,6 @@ public class CallControl implements CallNotification
 
 	/**
 	 * 初始化参数
-	 *
-	 * @param service 服务代理
 	 */
 	private CallControl()
 	{
@@ -194,7 +192,7 @@ public class CallControl implements CallNotification
 	/**
 	 * 通话挂断通知 4105
 	 *
-	 * @param callsession 会话对象
+	 * @param currentCall 会话对象
 	 */
 	private void processCallNtfClosed(Call currentCall)
 	{
@@ -292,7 +290,7 @@ public class CallControl implements CallNotification
 	/**
 	 * 会话变更 4113
 	 *
-	 * @param mCallSession 会话
+	 * @param currentCall 会话
 	 */
 	private void processCallNtfModified(final Call currentCall)
 	{
@@ -392,7 +390,7 @@ public class CallControl implements CallNotification
 	 * 协商结果处理 将BFCP重协商结果上报界面层
 	 *
 	 * @param callid     呼叫唯一标识
-	 * @param ConsultRet 协商结果/重协商结果
+	 * @param isBfcpEnabled 协商结果/重协商结果
 	 */
 	private void processBFCPConsultRet(String callid, boolean isBfcpEnabled)
 	{
@@ -426,7 +424,7 @@ public class CallControl implements CallNotification
 	/**
 	 * 来电通知 4102
 	 *
-	 * @param callsession 会话对象
+	 * @param currentCall 会话对象
 	 */
 	private void processCallNtfComing(Call currentCall)
 	{
@@ -517,6 +515,7 @@ public class CallControl implements CallNotification
 	public synchronized String dialCall(String fromPhone, String domain, boolean isVideoCall)
 	{
 		setCallStatus(isVideoCall ? CallStatus.STATUS_VIDEOINIT : CallStatus.STATUS_CALLING);
+		LogUtil.d(TAG, "dialCall setCallStatus -> " + getCallStatus());
 		String callCodeString = CallService.getInstance().dialCall(fromPhone, domain, isVideoCall);
 		if ((StringUtil.isStringEmpty(callCodeString) || CallErrorCode.isFail(callCodeString)))
 		{
@@ -908,6 +907,7 @@ public class CallControl implements CallNotification
 	@Override
 	public void onSessionModified(Call currentCall)
 	{
+		
 		if (null == currentCall.getValue())
 		{
 			LogUtil.e(TAG, "onSessionModified(),but the sessionbean is null.");

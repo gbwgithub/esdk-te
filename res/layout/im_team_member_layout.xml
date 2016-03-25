@@ -1,0 +1,136 @@
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_gravity="center_vertical"
+    android:background="#00FFFFFF"
+    android:orientation="vertical" >
+
+    <TextView
+        android:id="@+id/tx_code_name"
+        android:layout_width="fill_parent"
+        android:layout_height="21.333dp"
+        android:layout_gravity="left|center_vertical"
+        android:background="#F7F7F7"
+        android:gravity="left|center_vertical"
+        android:paddingLeft="8dp"
+        android:textColor="#333333"
+        android:text=""
+        android:textSize="12dp"
+        android:textStyle="bold" 
+        />
+
+        <LinearLayout
+            android:id="@+id/upLayout"
+            android:layout_width="match_parent"
+            android:layout_height="36.66dp"
+            android:layout_centerInParent="true"
+            android:layout_gravity="center_vertical"
+            android:background="@drawable/te_contact_list_background"
+            android:gravity="center_vertical"
+            android:orientation="horizontal">
+            <ImageView
+                    android:id="@+id/conf_contact_select_view"
+	                android:layout_marginLeft="12dp"
+	                android:visibility="gone"
+	                android:layout_centerVertical="true"
+                    android:layout_width="17.33dp"
+                    android:layout_height="17.33dp" >
+            </ImageView>
+            <!-- 头像状态布局 -->
+			<RelativeLayout 
+			    android:layout_width="32dp"
+                android:layout_height="32dp"
+                android:layout_marginLeft="12dp">
+            <ImageView
+                android:id="@+id/contactPhoto"
+                android:layout_width="32dp"
+                android:layout_height="32dp"
+                android:scaleType="fitCenter" 
+                android:src="@drawable/te_phone_user_default_head_116_116"/>
+                <ImageView
+                    android:id="@+id/contact_state"
+                    android:layout_width="9.34dp"
+                    android:layout_height="9.34dp"
+                    android:layout_gravity="center"
+                    android:layout_alignParentRight="true"
+                    android:layout_alignParentBottom="true"
+                    android:src="@drawable/te_mobile_home_state_offline" />
+			</RelativeLayout>
+            <!-- 姓名签名布局 -->
+
+            <LinearLayout
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:gravity="center_vertical"
+                android:layout_marginLeft="10dp"
+                android:orientation="vertical" >
+
+
+                <TextView
+                    android:id="@+id/nameTxtView"
+                    android:layout_width="fill_parent"
+                    android:layout_height="wrap_content"
+                    android:ellipsize="none"
+                    android:text=""
+                    android:singleLine="true"
+                    android:gravity="center_vertical|left"
+                    android:textColor="@color/black"
+                    android:textSize="11.34dp"/>
+            </LinearLayout>
+
+            <!-- 右侧快捷按钮 -->
+			<LinearLayout 
+			    android:id="@+id/callShortcutImgView"
+			    android:layout_width="20dp"
+			    android:layout_height="fill_parent"
+			    android:gravity="center"
+                android:layout_marginRight="12dp"
+                android:layout_marginLeft="12dp"
+			    >
+			    <com.huawei.te.example.view.ListItemImageView
+	                android:layout_width="20dp"
+	                android:layout_height="fill_parent"
+	                android:layout_marginLeft="12dp"
+	                android:layout_marginRight="12dp"
+	                android:duplicateParentState="true"
+	                android:src="@drawable/tp_ic_callshortcut"
+	                android:layout_gravity="center"
+	                android:scaleType="fitCenter" />
+			</LinearLayout>
+            
+            <!-- 增加视频快捷图标 -->
+
+			<ImageView 
+			    android:id="@+id/ver_line"
+			    android:layout_width="0.67dp"
+			    android:layout_height="53.33dp"
+			    android:background="@drawable/te_contact_horizontal_line"/>
+			<LinearLayout 
+			    android:id="@+id/videoShotcutImgView"
+			    android:layout_width="20dp"
+			    android:layout_height="fill_parent"
+			    android:gravity="center"
+			    android:layout_marginRight="12dp"
+	            android:layout_marginLeft="12dp"
+			    >
+	            <com.huawei.te.exampl.view.ListItemImageView
+	                android:layout_width="20dp"
+	                android:layout_height="fill_parent"
+	                android:layout_marginRight="12dp"
+	                android:layout_marginLeft="12dp"
+	                android:duplicateParentState="true"
+	                android:src="@drawable/tp_ic_videocallshortcut"
+	                android:layout_gravity="center"
+	                android:scaleType="fitCenter" />
+            </LinearLayout>
+            <!-- end added by cwx176935 2013/8/13 reason： 增加视频快捷图标 -->
+        </LinearLayout>
+    <ImageView
+        android:id="@+id/contact_list_line"
+        android:layout_width="fill_parent"
+        android:layout_height="1px"
+        android:layout_marginLeft="6.67dp"
+        android:background="@drawable/tp_contact_line" 
+        />
+</LinearLayout>

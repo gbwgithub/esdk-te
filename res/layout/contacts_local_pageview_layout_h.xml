@@ -1,0 +1,134 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+                android:layout_width="fill_parent"
+                android:layout_height="match_parent"
+                android:background="#00FFFFFF"
+                android:orientation="vertical">
+
+    <RelativeLayout
+        android:id="@+id/searchInputView"
+        android:layout_width="match_parent"
+        android:layout_height="28.78dp"
+        android:layout_alignParentTop="true"
+        android:layout_centerVertical="true"
+        android:background="#d1d1d1"
+        android:gravity="center_vertical">
+
+
+        <EditText
+            android:id="@+id/searchInputTxt"
+            android:layout_width="fill_parent"
+            android:layout_height="22.50dp"
+            android:layout_centerVertical="true"
+            android:layout_marginLeft="2.94dp"
+            android:layout_marginRight="2.94dp"
+            android:background="@drawable/te_contact_search_inputbox"
+            android:focusable="false"
+            android:hint="@string/search"
+            android:imeOptions="actionNone"
+            android:maxLength="100"
+            android:paddingLeft="20dp"
+            android:paddingRight="13dp"
+            android:singleLine="true"
+            android:textColor="#999999"
+            android:textCursorDrawable="@drawable/tp_cursor"
+            android:textSize="10sp">
+        </EditText>
+
+        <ImageView
+            android:id="@+id/searchImgView"
+            android:layout_width="14dp"
+            android:layout_height="14dp"
+            android:layout_centerVertical="true"
+            android:layout_marginLeft="7.78dp"
+            android:scaleType="fitCenter"/>
+
+        <ImageButton
+            android:id="@+id/searchClearBtn"
+            android:layout_width="11dp"
+            android:layout_height="11dp"
+            android:layout_alignParentRight="true"
+            android:layout_centerVertical="true"
+            android:layout_marginRight="5.61dp"
+            android:background="@drawable/te_ic_cross_clear_normal"
+            android:paddingRight="2.67dp"
+            android:visibility="invisible"/>
+    </RelativeLayout>
+
+    <TextView
+        android:id="@+id/tip_view"
+        android:layout_width="fill_parent"
+        android:layout_height="27.5dp"
+        android:layout_below="@id/searchInputView"
+        android:background="@drawable/tip_bg_color"
+        android:gravity="center"
+        android:text="@string/nowifitip"
+        android:textColor="@color/black"
+        android:textSize="10sp"
+        android:visibility="gone"/>
+
+    <com.huawei.te.example.view.PullDownExpandListView
+        android:id="@+id/contactsExpListView"
+        android:layout_width="fill_parent"
+        android:layout_height="match_parent"
+        android:layout_below="@id/tip_view"
+        android:cacheColorHint="@drawable/translucent"
+        android:divider="@null"
+        android:fadingEdgeLength="0dp"
+        android:focusable="true"
+        android:groupIndicator="@null"
+        android:indicatorLeft="5dp"
+        android:indicatorRight="11.66dp"
+        android:listSelector="#00FFFFFF"/>
+
+    <LinearLayout
+        android:id="@+id/contactLoadingLayout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentLeft="true"
+        android:layout_centerVertical="true"
+        android:orientation="vertical">
+
+        <ProgressBar
+            android:layout_width="25dp"
+            android:layout_height="25dp"
+            android:layout_gravity="center_horizontal"/>
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:text="@string/loading_contact"
+            android:textColor="#000000"
+            android:textSize="10sp"
+            />
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/contactsTipLayout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_centerVertical="true"
+        android:gravity="center_vertical"
+        android:orientation="vertical"
+        android:visibility="gone">
+
+        <ImageView
+            android:id="@+id/no_contacts_img"
+            android:layout_width="42.50dp"
+            android:layout_height="42.50dp"
+            android:layout_gravity="center"
+            android:scaleType="fitCenter"
+            android:src="@drawable/tp_bg_no_contacts"/>
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="8dp"
+            android:gravity="center"
+            android:text="@string/no_contacts"
+            android:textColor="#c0c0c0"
+            android:textSize="15sp"/>
+    </LinearLayout>
+
+</RelativeLayout>

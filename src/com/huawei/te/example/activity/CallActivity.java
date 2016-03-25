@@ -27,7 +27,6 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
 import android.text.InputType;
-import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -52,6 +51,7 @@ import com.huawei.manager.DataManager;
 import com.huawei.te.example.CallControl;
 import com.huawei.te.example.R;
 import com.huawei.te.example.ResponseErrorCodeHandler;
+import com.huawei.te.example.TEDemoApp;
 import com.huawei.utils.StringUtil;
 
 public class CallActivity extends BaseActivity
@@ -82,13 +82,14 @@ public class CallActivity extends BaseActivity
 	private Button audioCallBtn;
 	private Button videoCallBtn;
 	private Button exitBtn;
+	private Button contactsBtn;
 	private EditText callNumEt;
 
 	/**
 	 * 控件区域layout
 	 */
 	private RelativeLayout controlsAreaLayout;
-	
+
 	/**
 	 * 通话区域layout
 	 */
@@ -96,11 +97,22 @@ public class CallActivity extends BaseActivity
 	private CallFragment callFragment;
 
 	@Override
+	protected void onDestroy()
+	{
+		LogUtil.i(TAG, "CallActivity onDestroy");
+		super.onDestroy();
+	}
+
+	@Override
 	protected void onCreate(Bundle savedInstanceState)
 	{
 		LogUtil.i(TAG, "CallActivity onCreate");
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_call);
+
+		//初始化DataManager
+		DataManager.getIns().init(this, Constants.isAnonymousAccount() ? Constants.ANONYMOUS_ACCOUNT : TEDemoApp.getTENumber());
+
 		initComponent();
 		initHandler();
 		registerBroadcast();
@@ -114,11 +126,10 @@ public class CallActivity extends BaseActivity
 		super.onStop();
 
 		// 视频通话中锁屏的处理，已经迁移到SDK中执行了
-
-		// if (null != LocalHideRenderServer.getInstance())
-		// {
-		// LocalHideRenderServer.getInstance().doInBackground();
-		// }
+//		 if (null != LocalHideRenderServer.getInstance())
+//		 {
+//		 LocalHideRenderServer.getInstance().doInBackground();
+//		 }
 	}
 
 	@Override
@@ -184,6 +195,8 @@ public class CallActivity extends BaseActivity
 		videoCallBtn = (Button) findViewById(R.id.btn_video_call);
 		// 注销Button
 		exitBtn = (Button) findViewById(R.id.btn_logout);
+		//联系人Button
+		contactsBtn = (Button) findViewById(R.id.btn_contacts);
 
 		audioCallBtn.setOnClickListener(new View.OnClickListener()
 		{
@@ -215,6 +228,7 @@ public class CallActivity extends BaseActivity
 				}
 			}
 		});
+
 		videoCallBtn.setOnClickListener(new View.OnClickListener()
 		{
 			@Override
@@ -252,6 +266,16 @@ public class CallActivity extends BaseActivity
 			public void onClick(View v)
 			{
 				logoutApp();
+			}
+		});
+
+		contactsBtn.setOnClickListener(new View.OnClickListener()
+		{
+			@Override
+			public void onClick(View v)
+			{
+				//可以考虑动态加载一个fragment，用来显示联系人界面，而不是重新启动一个Activity.
+				//新加载的Fragment提供关闭按钮来隐藏
 			}
 		});
 	}
@@ -304,233 +328,242 @@ public class CallActivity extends BaseActivity
 
 	private void parallelHandleMessageOne(Message msg)
 	{
-		switch (msg.what) {
-		case MSG_FOR_HOMEACTIVITY.MSG_LOGOUT_AND_REGISTE:
-			// setSelfStatus(SelfSettingWindow.AWAY);
-			// serviceProxy.getCallManager().unRegister();
-			// EspaceApp.getIns().setOnlineStatus(Constant.STATUS_OFFLINE);
-			// doLogin();
-			break;
-		case Constants.MSG_SELF_CHANGE_STATE:
-			// if (null == msg.obj)
-			// {
-			// return;
-			// }
-			// // 只有通话抛此消息，建立通话是busy，结束通话：恢复到上次设置的状态
-			// setSelfFieldStatus((Byte) msg.obj == PersonalContact.BUSY ?
-			// PersonalContact.BUSY :
-			// ConfigAccount.getIns().getLoginAccount().getStatus());
-			break;
-		// begin added by pwx178217 reason：点击打开关于页签，锁屏后解锁关于页面关闭
-		// 呼叫对端超时 关于界面关闭
-		case Constants.DISMISS_ABOUT:
-			// if (null == homeAboutLayout)
-			// {
-			// break;
-			// }
-			// showAbout = false;
-			// homeAboutLayout.setVisibility(View.GONE);
-			// if (null != shadView)
-			// {
-			// shadView.setVisibility(View.GONE);
-			// }
-			// clearTmpLicenceHtml();
-			break;
-		// end added by pwx178217 reason：点击打开关于页签，锁屏后解锁关于页面关闭
-		case MSG_FOR_HOMEACTIVITY.BROADCAST_EVENT:
-			Intent intent = (Intent) msg.obj;
-			handlerBroadcastEvent(intent);
-			break;
-		// begin added by pwx178217 2013/8/24 reason：添加全屏 退出全屏操作
-		case Constants.MSG_FULL_SCREEN:
-			// showFullScreen();
-			break;
-		default:
-			break;
+		switch (msg.what)
+		{
+			case MSG_FOR_HOMEACTIVITY.MSG_LOGOUT:
+				logoutProcess();
+				break;
+
+			case MSG_FOR_HOMEACTIVITY.MSG_LOGOUT_AND_REGISTE:
+				// setSelfStatus(SelfSettingWindow.AWAY);
+//				 serviceProxy.getCallManager().unRegister();
+//				 EspaceApp.getIns().setOnlineStatus(Constant.STATUS_OFFLINE);
+//				 doLogin();
+				break;
+			case Constants.MSG_SELF_CHANGE_STATE:
+				// if (null == msg.obj)
+				// {
+				// return;
+				// }
+				// // 只有通话抛此消息，建立通话是busy，结束通话：恢复到上次设置的状态
+				// setSelfFieldStatus((Byte) msg.obj == PersonalContact.BUSY ?
+				// PersonalContact.BUSY :
+				// ConfigAccount.getIns().getLoginAccount().getStatus());
+				break;
+			// begin added by pwx178217 reason：点击打开关于页签，锁屏后解锁关于页面关闭
+			// 呼叫对端超时 关于界面关闭
+			case Constants.DISMISS_ABOUT:
+				// if (null == homeAboutLayout)
+				// {
+				// break;
+				// }
+				// showAbout = false;
+				// homeAboutLayout.setVisibility(View.GONE);
+				// if (null != shadView)
+				// {
+				// shadView.setVisibility(View.GONE);
+				// }
+				// clearTmpLicenceHtml();
+				break;
+			// end added by pwx178217 reason：点击打开关于页签，锁屏后解锁关于页面关闭
+			case MSG_FOR_HOMEACTIVITY.BROADCAST_EVENT:
+				Intent intent = (Intent) msg.obj;
+				handlerBroadcastEvent(intent);
+				break;
+			// begin added by pwx178217 2013/8/24 reason：添加全屏 退出全屏操作
+			case Constants.MSG_FULL_SCREEN:
+				// showFullScreen();
+				break;
+			default:
+				break;
 		}
 	}
 
 	private void parallelHandleMessageTwo(Message msg)
 	{
-		switch (msg.what) {
-		case Constants.MSG_PART_SCREEN:
-			// exitFullScreen();
-			// // 取消全屏时显示联系人界面
-			// // showContactsFragment();
-			break;
-		case Constants.MSG_CALL_CLOSE_BACK_TO_HOME:
-			// 收到挂断消息
-			closeCallBackToHome();
-			break;
+		switch (msg.what)
+		{
+			case Constants.MSG_PART_SCREEN:
+				// exitFullScreen();
+				// // 取消全屏时显示联系人界面
+				// // showContactsFragment();
+				break;
+			case Constants.MSG_CALL_CLOSE_BACK_TO_HOME:
+				// 收到挂断消息
+				closeCallBackToHome();
+				break;
 
-		// 视频按钮可用
-		case Constants.MSG_ENABLE_PREVIEWBTN:
-			// setPreviewBtnUserable();
-			break;
+			// 视频按钮可用
+			case Constants.MSG_ENABLE_PREVIEWBTN:
+				// setPreviewBtnUserable();
+				break;
 
-		case Constants.MSG_SHOW_CHATVIEW:
-			// LogUI.d("[UC_UI] MSG_SHOW_CHATVIEW");
-			// showChatView(msg);
-			break;
-		case Constants.MSG_INCOMING_INVITE:
-			// // 防止界面还存在
-			// removeCallComingActivity();
-			// showCallInComingActivity((Intent) msg.obj);
-			// ConfigApp.getInstance().setDestoryedCallActivity(false);
-			// // isDestoryedCallActivity = false;
-			break;
-		case Constants.ADCONFIRMATION:
-			// if (!(msg.obj instanceof Boolean)) {
-			// LogUI.e("msg.obj not instanceof Boolean");
-			// return;
-			// }
-			// if (null != settingFragment) {
-			// settingFragment.setPassItemVisible((Boolean) msg.obj);
-			// }
-			break;
-		default:
-			break;
+			case Constants.MSG_SHOW_CHATVIEW:
+				// LogUI.d("[UC_UI] MSG_SHOW_CHATVIEW");
+				// showChatView(msg);
+				break;
+			case Constants.MSG_INCOMING_INVITE:
+				// // 防止界面还存在
+				// removeCallComingActivity();
+				// showCallInComingActivity((Intent) msg.obj);
+				// ConfigApp.getInstance().setDestoryedCallActivity(false);
+				// // isDestoryedCallActivity = false;
+				break;
+			case Constants.ADCONFIRMATION:
+				// if (!(msg.obj instanceof Boolean)) {
+				// LogUI.e("msg.obj not instanceof Boolean");
+				// return;
+				// }
+				// if (null != settingFragment) {
+				// settingFragment.setPassItemVisible((Boolean) msg.obj);
+				// }
+				break;
+			default:
+				break;
 		}
 	}
 
 	private void parallelHandleMessageFour(Message msg)
 	{
-		switch (msg.what) {
-		case MSG_FOR_HOMEACTIVITY.SET_SELF_SYSTEM_SETTING:
-			// startSettingActivity(-1);
-			break;
-		case MSG_FOR_HOMEACTIVITY.SET_SELF_DISMISS:
-			// dismissShadView();
-			// end modified by pwx178217 2013/8/15 reason：取消遮罩层
-			break;
-		case Constants.CONTACT_EXPORT_OPERATE:
-			// contactExport(msg.obj.toString(), fileTitleString);
-			break;
-		case Constants.CONTACT_IMPORT_OPERATE:
-			// contactImport(msg.obj.toString(), fileTitleString);
-			break;
-		// 以后都由此转处理界面类的通知
-		case CallConstant.VOIP_UPDATE_SINGLE:
-			// 通知界面网络信号变更
-			// VoiceQualityLevel level = (VoiceQualityLevel) msg.obj;
-			// callFragment.updateSignal(level);
-			break;
-		case Constants.MSG_NOTIFY_FRAMESIZE_RESET:
-			// callFragment.reloadLocalHideView();
-			break;
-		// end add by l00208218 9.04 通知重新设置分辨率后刷新视频窗口
-		case CallConstant.VOIP_CALL_HANG_UP:
-			// 关闭弹出对话框
-			// HomeActivity.this.dismissAlertDialog();
-			Toast.makeText(CallActivity.this, ((String) msg.obj), Toast.LENGTH_LONG).show();
-			break;
-		case Constants.CONTACT_DOC_SHARE:
-			// ActivityStackManager.INSTANCE.getImgFileListActivityAndRemove();
-			// showPdfview(msg.obj);
-			break;
-		default:
-			break;
+		switch (msg.what)
+		{
+			case MSG_FOR_HOMEACTIVITY.SET_SELF_SYSTEM_SETTING:
+				// startSettingActivity(-1);
+				break;
+			case MSG_FOR_HOMEACTIVITY.SET_SELF_DISMISS:
+				// dismissShadView();
+				// end modified by pwx178217 2013/8/15 reason：取消遮罩层
+				break;
+			case Constants.CONTACT_EXPORT_OPERATE:
+				// contactExport(msg.obj.toString(), fileTitleString);
+				break;
+			case Constants.CONTACT_IMPORT_OPERATE:
+				// contactImport(msg.obj.toString(), fileTitleString);
+				break;
+			// 以后都由此转处理界面类的通知
+			case CallConstant.VOIP_UPDATE_SINGLE:
+				// 通知界面网络信号变更
+				// VoiceQualityLevel level = (VoiceQualityLevel) msg.obj;
+				// callFragment.updateSignal(level);
+				break;
+			case Constants.MSG_NOTIFY_FRAMESIZE_RESET:
+				// callFragment.reloadLocalHideView();
+				break;
+			// end add by l00208218 9.04 通知重新设置分辨率后刷新视频窗口
+			case CallConstant.VOIP_CALL_HANG_UP:
+				// 关闭弹出对话框
+				// HomeActivity.this.dismissAlertDialog();
+				Toast.makeText(CallActivity.this, ((String) msg.obj), Toast.LENGTH_LONG).show();
+				break;
+			case Constants.CONTACT_DOC_SHARE:
+				// ActivityStackManager.INSTANCE.getImgFileListActivityAndRemove();
+				// showPdfview(msg.obj);
+				break;
+			default:
+				break;
 		}
 	}
 
 	private void parallelHandleMessageFive(Message msg)
 	{
-		switch (msg.what) {
-		case Constants.REQUEST_GOTO_SHOW_CALLRECORD:
-			// refreshNavigation();
-			// doCallRecField(callRecField);
-			break;
-		case CallConstant.VOIP_CALL_RECORD:
-			// callFragment.recodeImg((Boolean) msg.obj);
-			break;
-		case CallConstant.VOIP_PDF_UPDATE_UI:
-			updatePDFView((String) msg.obj);
-			break;
-		case Constants.RESULT_UNREAD_MISSCALL_COUNT:
-			// 显示未读未接来电
-			// refreshUnreadMissCallCount((Integer) msg.obj);
-			break;
-		case CallConstant.SLIENT_VOICE:
-			break;
-		case Constants.MSG_NEED_SET_GRAY:
-			// setGrayEnable(false);
-			break;
-		case Constants.MSG_NO_NEED_SET_GRAY:
-			// setGrayEnable(true);
-			break;
-		// case ENTERPRISE_BOOK_TYPE.LDAP:
-		// case ENTERPRISE_BOOK_TYPE.FTPS:
-		// contactsFragment.notifyContactsFragmentChange((Boolean) msg.obj);
-		// confFragment.notifyConferenceFragmentChange((Boolean) msg.obj);
-		// break;
-		default:
-			break;
+		switch (msg.what)
+		{
+			case Constants.REQUEST_GOTO_SHOW_CALLRECORD:
+				// refreshNavigation();
+				// doCallRecField(callRecField);
+				break;
+			case CallConstant.VOIP_CALL_RECORD:
+				// callFragment.recodeImg((Boolean) msg.obj);
+				break;
+			case CallConstant.VOIP_PDF_UPDATE_UI:
+				updatePDFView((String) msg.obj);
+				break;
+			case Constants.RESULT_UNREAD_MISSCALL_COUNT:
+				// 显示未读未接来电
+				// refreshUnreadMissCallCount((Integer) msg.obj);
+				break;
+			case CallConstant.SLIENT_VOICE:
+				break;
+			case Constants.MSG_NEED_SET_GRAY:
+				// setGrayEnable(false);
+				break;
+			case Constants.MSG_NO_NEED_SET_GRAY:
+				// setGrayEnable(true);
+				break;
+			// case ENTERPRISE_BOOK_TYPE.LDAP:
+			// case ENTERPRISE_BOOK_TYPE.FTPS:
+			// contactsFragment.notifyContactsFragmentChange((Boolean) msg.obj);
+			// confFragment.notifyConferenceFragmentChange((Boolean) msg.obj);
+			// break;
+			default:
+				break;
 		}
 	}
 
 	private void parallelHandleMessageSix(Message msg)
 	{
-		switch (msg.what) {
-		// 将呼叫的逻辑移到callfragment里
-		case CallConstant.SHOW_CALL_LAYOUT:
-			// 显示呼出界面
-			showCallLayout();
-			break;
-		case CallConstant.CLOSE_CAMERA:
-			// 关闭本地视频预览
-			closeLocalCamera();
-			break;
-		// 将呼叫的逻辑移到callfragment里
-		case Constants.BACK_TO_MAIN_VIEW:
-			// if (!ConfigApp.getInstance().isUsePadLayout()) {
-			// showScreenWithTitle();
-			// }
-			// CallService.getInstance().setMainView(true);
-			// if (homeLeft.isShown()) {
-			// homeTipButton.setText((String) msg.obj);
-			// return;
-			// }
-			// setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
-			// homeLeft.setVisibility(View.VISIBLE);
-			// callAreaLayout.setVisibility(View.GONE);
-			// homeTipButton.setVisibility(View.VISIBLE);
-			// homeTipButton.setText((String) msg.obj);
-			// break;
-			// 添加用户反馈功能
-		case Constants.USER_FEEDBACK:
-			// try {
-			// // 用户反馈
-			// String httpUri = "http://" +
-			// ConfigApp.getInstance().getServerIp() +
-			// ":8081/limesurvey/index.php/1/lang-zh-Hans";
-			// // 非中文
-			// if
-			// (!ConfigApp.LANGUAGE_CN.equals(ConfigApp.getInstance().getCurLanguage()))
-			// {
-			// httpUri = "http://" + ConfigApp.getInstance().getServerIp() +
-			// ":8081/limesurvey/index.php/1/lang-en";
-			// }
-			// Uri uri = Uri.parse(httpUri);
-			// Intent it = new Intent(Intent.ACTION_VIEW, uri);
-			// it.setFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP);
-			// startActivity(it);
-			// LogUtil.i(TAG, "try to give some Feedback");
-			// } catch (ActivityNotFoundException e) {
-			// LogUtil.e(TAG, "no browser error");
-			// showToastMsg(HomeActivity.this.getString(R.string.no_browser));
-			// }
-			break;
-		case MSG_FOR_HOMEACTIVITY.MSG_NOTIFY_CALLCLOSE:
-			removeCallComingActivity();
-			// 由SettingActivity设置StatusHandler，但是没有写SettingActivity，所以这里没有设置当前状态的~
-			// setSelfFieldStatus(ConfigAccount.getIns().getLoginAccount().getStatus());
-			break;
-		case Constants.MSG_ONREVTERMINATE:
-			// showToastMsg(getString(R.string.module_error_1login));
-			// setSelfStatus(SelfSettingWindow.AWAY);
-			break;
-		default:
-			break;
+		switch (msg.what)
+		{
+			// 将呼叫的逻辑移到callfragment里
+			case CallConstant.SHOW_CALL_LAYOUT:
+				// 显示呼出界面
+				showCallLayout();
+				break;
+			case CallConstant.CLOSE_CAMERA:
+				// 关闭本地视频预览
+				closeLocalCamera();
+				break;
+			// 将呼叫的逻辑移到callfragment里
+			case Constants.BACK_TO_MAIN_VIEW:
+				// if (!ConfigApp.getInstance().isUsePadLayout()) {
+				// showScreenWithTitle();
+				// }
+				// CallService.getInstance().setMainView(true);
+				// if (homeLeft.isShown()) {
+				// homeTipButton.setText((String) msg.obj);
+				// return;
+				// }
+				// setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
+				// homeLeft.setVisibility(View.VISIBLE);
+				// callAreaLayout.setVisibility(View.GONE);
+				// homeTipButton.setVisibility(View.VISIBLE);
+				// homeTipButton.setText((String) msg.obj);
+				// break;
+				// 添加用户反馈功能
+			case Constants.USER_FEEDBACK:
+				// try {
+				// // 用户反馈
+				// String httpUri = "http://" +
+				// ConfigApp.getInstance().getServerIp() +
+				// ":8081/limesurvey/index.php/1/lang-zh-Hans";
+				// // 非中文
+				// if
+				// (!ConfigApp.LANGUAGE_CN.equals(ConfigApp.getInstance().getCurLanguage()))
+				// {
+				// httpUri = "http://" + ConfigApp.getInstance().getServerIp() +
+				// ":8081/limesurvey/index.php/1/lang-en";
+				// }
+				// Uri uri = Uri.parse(httpUri);
+				// Intent it = new Intent(Intent.ACTION_VIEW, uri);
+				// it.setFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP);
+				// startActivity(it);
+				// LogUtil.i(TAG, "try to give some Feedback");
+				// } catch (ActivityNotFoundException e) {
+				// LogUtil.e(TAG, "no browser error");
+				// showToastMsg(HomeActivity.this.getString(R.string.no_browser));
+				// }
+				break;
+			case MSG_FOR_HOMEACTIVITY.MSG_NOTIFY_CALLCLOSE:
+				removeCallComingActivity();
+				// 由SettingActivity设置StatusHandler，但是没有写SettingActivity，所以这里没有设置当前状态的~
+				// setSelfFieldStatus(ConfigAccount.getIns().getLoginAccount().getStatus());
+				break;
+			case Constants.MSG_ONREVTERMINATE:
+				// showToastMsg(getString(R.string.module_error_1login));
+				// setSelfStatus(SelfSettingWindow.AWAY);
+				break;
+			default:
+				break;
 		}
 	}
 
@@ -722,20 +755,13 @@ public class CallActivity extends BaseActivity
 
 	/**
 	 * 回到登录页面，并清理账号相关的数据
-	 * 
-	 * @param context
-	 *            context对象， 用于处理 -6 被踢的 弹窗口
-	 * @param errorCode
-	 *            错误码 , 如果 == 0 不做提示处理
-	 * @param desc
-	 *            svn被踢描述由客户端提供，-6/-9时传null
 	 */
 	public void backToLogin()
 	{
 		ActivityStackManager.INSTANCE.loginOut();
 		// setAutoReLogin(false);
 		// 回到登录界面时去初始化Datamanager
-		DataManager.getIns().uninit();
+//		DataManager.getIns().uninit();
 		// Intent intent = new Intent(this, LoginActivity.class);
 		// intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
 		// intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK);
@@ -767,7 +793,7 @@ public class CallActivity extends BaseActivity
 		// 设置呼叫界面可见
 		callAreaLayout.setVisibility(View.VISIBLE);
 		controlsAreaLayout.setVisibility(View.GONE);
-		
+
 		// //设置本地视频 欢迎界面 不可见
 		// welcomeLayout.setVisibility(View.GONE);
 		// confEnterLayout.setVisibility(View.GONE);
@@ -870,27 +896,25 @@ public class CallActivity extends BaseActivity
 			} else if (CustomBroadcastConst.ACTION_REFRESHLICENSEFAILED_NOTIFY.equals(action))
 			{
 				Toast.makeText(CallActivity.this, "license保活失败,请重新注册license", Toast.LENGTH_LONG).show();
-				new Handler().postDelayed(new Runnable()
-				{
-					@Override
-					public void run()
-					{
-						CallService.getInstance().forceCloseCall();
-						logoutProcess();
-					}
-				}, 1500);
+//				new Handler().postDelayed(new Runnable()
+//				{
+//					@Override
+//					public void run()
+//					{
+//						CallService.getInstance().forceCloseCall();
+//						logoutProcess();
+//					}
+//				}, 1500);
 			}
 		}
 	}
 
 	/**
-	 * 
 	 * 此方法用于登陆错误 弹窗展示
-	 * 
-	 * @param errorType
-	 *            登陆错误类型
-	 * @since 1.1
+	 *
+	 * @param errorType 登陆错误类型
 	 * @history 2013-9-10 v1.0.0 l00211010 create
+	 * @since 1.1
 	 */
 	private void handleRequestError(final String errorType)
 	{
@@ -1075,11 +1099,17 @@ public class CallActivity extends BaseActivity
 						{
 							Toast.makeText(CallActivity.this, "呼叫带宽设置为：512 Kbit/s", Toast.LENGTH_LONG).show();
 						}
-					} else
+					} else if (longBandwidth <= 768)
 					{
 						if (CallService.getInstance().setBandwidth(768))
 						{
 							Toast.makeText(CallActivity.this, "呼叫带宽设置为：768 Kbit/s", Toast.LENGTH_LONG).show();
+						}
+					} else if (longBandwidth > 768)
+					{
+						if (CallService.getInstance().setBandwidth(1024))
+						{
+							Toast.makeText(CallActivity.this, "呼叫带宽设置为：1024 Kbit/s", Toast.LENGTH_LONG).show();
 						}
 					}
 				}

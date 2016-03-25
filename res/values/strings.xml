@@ -199,8 +199,8 @@
     <string name="video_calling">Video call...</string>
     <string name="session_holding">Session Holding…</string>
     <string name="switch_camera">Switch Camera</string>
-	<string name="local_doc">local_doc</string>
-	<string name="camera_Img">camera_Img</string>
+    <string name="local_doc">local_doc</string>
+    <string name="camera_Img">camera_Img</string>
 
     <!-- contact -->
     <string name="contact_num_to_long">Number too long</string>
@@ -411,7 +411,7 @@
     <string name="cannot_connect_server">cannot connect to server.</string>
     <string name="network_notavailable">network not available,please try again later.</string>
 
-	<string name="conference">Conference</string>
+    <string name="conference">Conference</string>
     <string name="create_conference">Create a meeting</string>
     <string name="choose_conference">Add attendee</string>
     <string name="create_conference_select">Select from the list of contacts to join the conference</string>
@@ -446,5 +446,6 @@
 
     <string name="watch_conf_fail">Watch attendee failed</string>
     <string name="watch_conf_success">Watch attendee success</string>
+    <string name="title_activity_contacts">ContactsActivity</string>
 
 </resources>

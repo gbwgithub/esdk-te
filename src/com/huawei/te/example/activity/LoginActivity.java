@@ -41,6 +41,7 @@ import com.huawei.esdk.te.util.LogUtil;
 import com.huawei.te.example.CallControl;
 import com.huawei.te.example.R;
 import com.huawei.te.example.ResponseErrorCodeHandler;
+import com.huawei.te.example.TEDemoApp;
 import com.huawei.te.example.utils.FileUtil;
 import com.huawei.utils.StringUtil;
 
@@ -100,7 +101,7 @@ public class LoginActivity extends BaseActivity
 	private static final String PORT = "5061";
 	private static final String ACCOUNT = "01058888";
 	private static final String PASSWORD = "Huawei@123";
-	private static final String SIPURI = "01058888@172.22.8.4";
+	private static final String SIPURI = "";
 	private static final String LICENSESERVER = "172.22.9.22";
 
 	// 进入思科虚拟会议室-VMR
@@ -223,8 +224,8 @@ public class LoginActivity extends BaseActivity
 		if (sipURI.equals("") && !serverIP.equals("") && !account.equals(""))
 		{
 			// 暂时用于测试，在没有填写sipUri的时候自动生成sipUri
-			edSipURI.setText(account + "@" + serverIP);
-			return;
+			// edSipURI.setText(account + "@" + serverIP);
+			sipURI = account + "@" + serverIP;
 		}
 		licenseServer = edLicenseServer.getText().toString().trim();
 		if (null == serverIP || serverIP.equals(""))
@@ -353,7 +354,7 @@ public class LoginActivity extends BaseActivity
 			if (null != callService)
 			{
 				CallControl.getInstance();
-				onLoginResp();
+				onLoginRespOK();
 			} else
 			{
 				LogUtil.e(TAG, "callService is null !");
@@ -364,7 +365,7 @@ public class LoginActivity extends BaseActivity
 	/**
 	 * 登录操作
 	 */
-	private void onLoginResp()
+	private void onLoginRespOK()
 	{
 		LogUtil.d(TAG, "loginResp");
 
@@ -376,6 +377,10 @@ public class LoginActivity extends BaseActivity
 				synchronized (TESDK.getInstance().getSynLock())
 				{
 					LogUtil.i(TAG, "Login Success.");
+
+					//登录成功后，存储号码
+					TEDemoApp.setTENumber(eSpaceNumber);
+					
 					Intent intent = new Intent();
 					intent.setClass(LoginActivity.this, CallActivity.class);
 					intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
@@ -428,6 +433,33 @@ public class LoginActivity extends BaseActivity
 			if (null != loginErrorType && !StringUtil.isStringEmpty(loginErrorType))
 			{
 				handleRequestError(loginErrorType);
+			}
+		}
+	}
+
+	/**
+	 * 异步处理 广播事件
+	 */
+	private void handlerBroadcastEvent(final Intent intent)
+	{
+		if (intent != null)
+		{
+			LogUtil.d(TAG, "handlerBroadcastEvent:" + intent.getAction());
+			String action = intent.getAction();
+
+			if (CustomBroadcastConst.ACTION_LOGIN_RESPONSE.equals(action))
+			{
+				LogUtil.d(TAG, "login response");
+				onLoginResponse(intent);
+			} else if (CustomBroadcastConst.ACTION_CONNECT_TO_SERVER.equals(action))
+			{
+				LogUtil.d(TAG, "connect to server");
+				onConnectToServer(intent);
+			} else if (Constants.BROADCAST_PATH.ACTION_HOMEACTIVITY_SHOW.equals(action))
+			{
+				LogUtil.d(TAG, "home activity show");
+				// 收到主界面显示广播之后关闭登陆界面
+				finish();
 			}
 		}
 	}
@@ -500,33 +532,6 @@ public class LoginActivity extends BaseActivity
 			}
 		}
 	};
-
-	/**
-	 * 异步处理 广播事件
-	 */
-	private void handlerBroadcastEvent(final Intent intent)
-	{
-		if (intent != null)
-		{
-			LogUtil.d(TAG, "handlerBroadcastEvent:" + intent.getAction());
-			String action = intent.getAction();
-
-			if (CustomBroadcastConst.ACTION_LOGIN_RESPONSE.equals(action))
-			{
-				LogUtil.d(TAG, "login response");
-				onLoginResponse(intent);
-			} else if (CustomBroadcastConst.ACTION_CONNECT_TO_SERVER.equals(action))
-			{
-				LogUtil.d(TAG, "connect to server");
-				onConnectToServer(intent);
-			} else if (Constants.BROADCAST_PATH.ACTION_HOMEACTIVITY_SHOW.equals(action))
-			{
-				LogUtil.d(TAG, "home activity show");
-				// 收到主界面显示广播之后关闭登陆界面
-				finish();
-			}
-		}
-	}
 
 	protected void showLoginMore()
 	{

@@ -15,13 +15,12 @@
 
 package com.huawei.te.example.activity;
 
-import java.util.Stack;
+import android.app.Activity;
+import android.content.Intent;
 
 import com.huawei.esdk.te.util.LogUtil;
 
-import android.app.Activity;
-import android.content.Intent;
-import android.util.Log;
+import java.util.Stack;
 
 /**
  * 类描述：界面管理堆栈
@@ -197,7 +196,7 @@ public final class ActivityStackManager
 
 	/**
 	 * 结束通话后 下次要显示的Activity
-	 * 
+	 *
 	 * @return
 	 */
 	public BaseActivity getLastShowActivity()

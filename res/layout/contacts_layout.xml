@@ -1,0 +1,352 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout android:id="@+id/contactsLayout"
+              xmlns:android="http://schemas.android.com/apk/res/android"
+              android:layout_width="match_parent"
+              android:layout_height="match_parent"
+              android:background="#00000000"
+              android:focusable="true"
+              android:focusableInTouchMode="true"
+              android:orientation="vertical">
+
+    <!-- Tab标题控件 -->
+    <RelativeLayout
+        android:id="@+id/tabTitle"
+        android:layout_width="match_parent"
+        android:layout_height="46.67dp"
+        android:layout_gravity="center|center_horizontal"
+        android:background="@color/te_home_bottom_text_focus"
+        android:orientation="horizontal">
+
+        <TextView
+            android:id="@+id/tabTitleTxt"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_centerInParent="true"
+            android:layout_marginLeft="16.67dp"
+            android:gravity="center_vertical|center_horizontal"
+            android:text="@string/label_all_contacts"
+            android:textColor="#ffffff"
+            android:textSize="20sp">
+        </TextView>
+
+        <LinearLayout
+            android:id="@+id/labelSwitch"
+            android:layout_width="50dp"
+            android:layout_height="match_parent"
+            android:layout_alignParentRight="true"
+            android:layout_marginRight="13dp"
+            android:gravity="right">
+
+            <ImageView
+                android:id="@+id/contact_more"
+                android:layout_width="33dp"
+                android:layout_height="33dp"
+                android:layout_gravity="center"
+                android:background="@drawable/te_phone_contacts_set"
+                android:duplicateParentState="true"
+                android:scaleType="fitCenter"/>
+        </LinearLayout>
+    </RelativeLayout>
+
+    <!-- 选择联系人界面共用这块布局 -->
+    <!-- 联系人  列表 -->
+
+    <RelativeLayout
+        android:id="@+id/contactsRelLayout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/tabTitle"
+        android:background="#00000000">
+
+        <RelativeLayout
+            android:id="@+id/chooseContacttitlelayout"
+            android:layout_width="match_parent"
+            android:layout_height="40dp"
+            android:background="@drawable/tp_dialview_title_bg"
+            android:visibility="gone">
+
+            <Button
+                android:id="@+id/backBtn"
+                android:layout_width="54dp"
+                android:layout_height="27.33dp"
+                android:layout_alignParentLeft="true"
+                android:layout_centerVertical="true"
+                android:layout_marginLeft="6.67dp"
+                android:background="@drawable/tp_contact_list_contact_button"
+                android:text="@string/back"
+                android:textColor="@color/black"
+                android:textSize="12sp"
+                android:visibility="gone"/>
+
+            <TextView
+                android:id="@+id/choosecontacttitletxt"
+                style="@style/text_style_20px_14"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:layout_centerInParent="true"
+                android:gravity="center_vertical"
+                android:paddingLeft="13.33dp"
+                android:text="@string/add_to_contact"
+                android:textColor="@color/black"/>
+        </RelativeLayout>
+
+        <!-- 联系人列表 -->
+
+        <RelativeLayout
+            android:id="@+id/contacts_list_contain"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="#00000000">
+
+            <LinearLayout
+                android:id="@+id/recenttablayout"
+                android:layout_width="match_parent"
+                android:layout_height="47.33dp"
+                android:layout_alignParentTop="true"
+                android:gravity="center"
+                android:paddingTop="0.67dp">
+
+                <TextView
+                    android:id="@+id/tab_local_contact"
+                    style="@style/text_style_20px_14"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1"
+                    android:background="@drawable/te_fragment_tag_bg_focus"
+                    android:gravity="center|center_vertical"
+                    android:text="@string/local_contacts"
+                    android:textColor="#000000"/>
+
+                <TextView
+                    android:id="@+id/tab_enterprise_contact"
+                    style="@style/text_style_20px_14"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_gravity="center"
+                    android:layout_weight="1"
+                    android:background="@drawable/te_fragment_tag_bg_normal"
+                    android:gravity="center|center_vertical"
+                    android:text="@string/enterprise_contacts"
+                    android:textColor="#000000"/>
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/network_disconnect"
+                android:layout_width="match_parent"
+                android:layout_height="45dp"
+                android:layout_below="@id/recenttablayout"
+                android:background="#FFECEC"
+                android:orientation="horizontal"
+                >
+
+                <ImageView
+                    android:layout_width="40dp"
+                    android:layout_height="40dp"
+                    android:layout_gravity="center"
+                    android:layout_marginLeft="5dp"
+                    android:layout_marginRight="5dp"
+                    android:src="@drawable/te_contacts_network_disconnect"/>
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:gravity="center_vertical"
+                    android:text="@string/cannot_connect_server"
+                    android:textColor="#666666"
+                    android:textSize="14sp"/>
+            </LinearLayout>
+        </RelativeLayout>
+
+        <!-- 搜索列表 -->
+
+        <RelativeLayout
+            android:id="@+id/search_contacts_input"
+            android:layout_width="match_parent"
+            android:layout_height="42.67dp"
+            android:layout_alignParentTop="true"
+            android:addStatesFromChildren="true"
+            android:background="#d1d1d1"
+            android:gravity="center_vertical"
+            >
+
+            <EditText
+                android:id="@+id/searchInputTxt"
+                android:layout_width="match_parent"
+                android:layout_height="31dp"
+                android:layout_centerVertical="true"
+                android:layout_marginLeft="5.88dp"
+                android:layout_marginRight="35.88dp"
+                android:background="@drawable/te_contact_search_inputbox"
+                android:hint="@string/search"
+                android:imeOptions="actionNone"
+                android:maxLength="100"
+                android:paddingLeft="32dp"
+                android:paddingRight="26dp"
+                android:singleLine="true"
+                android:textColor="#999999"
+                android:textCursorDrawable="@drawable/tp_cursor"
+                android:textSize="13.33sp">
+            </EditText>
+
+            <TextView
+                android:id="@+id/search_contacts_cancel"
+                android:layout_width="35.88dp"
+                android:layout_height="match_parent"
+                android:layout_alignParentRight="true"
+                android:gravity="center"
+                android:text="@string/cancel"
+                android:textColor="#000000"
+                android:textSize="12sp"/>
+
+            <ImageView
+                android:id="@+id/searchImgView"
+                android:layout_width="20dp"
+                android:layout_height="20dp"
+                android:layout_centerVertical="true"
+                android:layout_marginLeft="12.67dp"
+                android:background="@drawable/te_input_search_btn"
+                android:scaleType="fitCenter"/>
+
+            <RelativeLayout
+                android:id="@+id/searchClearBtn"
+                android:layout_width="40dp"
+                android:layout_height="match_parent"
+                android:layout_alignParentRight="true"
+                android:layout_centerVertical="true"
+                android:layout_marginRight="35.88dp"
+                android:visibility="invisible">
+
+                <ImageButton
+                    android:layout_width="22dp"
+                    android:layout_height="22dp"
+                    android:layout_centerInParent="true"
+                    android:background="@drawable/te_ic_cross_clear_normal"
+                    android:clickable="false"/>
+            </RelativeLayout>
+        </RelativeLayout>
+
+        <com.huawei.te.example.view.PullDownExpandListView
+            android:id="@+id/search_contacts_list"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_below="@id/search_contacts_input"
+            android:cacheColorHint="@drawable/translucent"
+            android:divider="@null"
+            android:fadingEdgeLength="0dp"
+            android:focusable="true"
+            android:groupIndicator="@null"
+            android:indicatorLeft="5dp"
+            android:indicatorRight="11.66dp"
+            android:listSelector="#00FFFFFF"
+            android:visibility="gone"/>
+    </RelativeLayout>
+    <!-- end added -->
+
+    <android.support.v4.view.ViewPager
+        android:id="@+id/contact_viewpager"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"/>
+    <!-- //end added by cwx176935 2013/8/13 reason： 添加快速定位视图 -->
+
+
+    <!-- 以下是为了计算长度 -->
+
+    <LinearLayout
+        android:id="@+id/num_layout"
+        android:layout_width="match_parent"
+        android:layout_height="40dp"
+        android:layout_centerHorizontal="true"
+        android:orientation="horizontal">
+
+        <TextView
+            android:layout_width="93.33dp"
+            android:layout_height="match_parent"
+            android:layout_marginLeft="16dp"
+            android:layout_weight="1"
+            android:gravity="left|center_vertical"
+            android:text="@string/input_num1"
+            android:textColor="#666666"
+            android:textSize="14.67sp"/>
+
+        <TextView
+            android:id="@+id/et_text_length"
+            android:layout_width="226.67dp"
+            android:layout_height="match_parent"
+            android:layout_marginRight="16dp"
+            android:layout_weight="2"
+            android:background="#00000000"
+            android:gravity="center_vertical"
+            android:singleLine="true"
+            android:textColor="#000000"
+            android:textSize="14.67sp"/>
+    </LinearLayout>
+
+    <!-- 计算姓名行长度 -->
+
+    <LinearLayout
+        android:id="@+id/upLayout"
+        android:layout_width="match_parent"
+        android:layout_height="58.67dp"
+        android:layout_centerInParent="true"
+        android:layout_gravity="center_vertical"
+        android:background="@drawable/te_contact_list_background"
+        android:orientation="horizontal">
+
+        <!-- 头像状态布局 -->
+
+        <ImageView
+            android:layout_width="58.67dp"
+            android:layout_height="match_parent"
+            android:scaleType="fitCenter"/>
+        <!-- 姓名签名布局 -->
+
+        <LinearLayout
+            android:layout_width="0dip"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:gravity="center_vertical"
+            android:orientation="horizontal">
+
+            <ImageView
+                android:layout_width="16dp"
+                android:layout_height="16dp"
+                android:layout_gravity="center"
+                android:layout_marginLeft="10.67dp"
+                android:layout_marginRight="8dp"/>
+
+            <TextView
+                android:id="@+id/nameTxtView_show"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:ellipsize="none"
+                android:gravity="center_vertical|left"
+                android:singleLine="true"
+                android:text=""
+                android:textColor="#333333"
+                android:textSize="16sp"/>
+        </LinearLayout>
+        <!-- 右侧快捷按钮 -->
+
+        <com.huawei.te.example.view.ListItemImageView
+            android:layout_width="21.33dp"
+            android:layout_height="match_parent"
+            android:layout_gravity="center"
+            android:layout_marginLeft="12dp"
+            android:layout_marginRight="12dp"
+            android:focusable="false"
+            android:scaleType="fitCenter"/>
+        <!-- begin add by cwx176935 2013/8/13 reason： 增加视频快捷图标 -->
+
+        <com.huawei.te.example.view.ListItemImageView
+            android:layout_width="21.33dp"
+            android:layout_height="match_parent"
+            android:layout_gravity="center"
+            android:layout_marginLeft="12dp"
+            android:layout_marginRight="12dp"
+            android:focusable="false"
+            android:scaleType="fitCenter"/>
+        <!-- end added by cwx176935 2013/8/13 reason： 增加视频快捷图标 -->
+    </LinearLayout>
+    <!-- 计算长度结束 -->
+
+</LinearLayout><!-- end added -->

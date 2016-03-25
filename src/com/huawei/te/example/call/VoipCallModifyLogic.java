@@ -15,10 +15,6 @@
 
 package com.huawei.te.example.call;
 
-import java.util.Timer;
-import java.util.TimerTask;
-import java.util.concurrent.Executors;
-
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.DialogInterface.OnClickListener;
@@ -31,6 +27,10 @@ import com.huawei.esdk.te.util.LogUtil;
 import com.huawei.te.example.CallControl;
 import com.huawei.te.example.R;
 import com.huawei.te.example.activity.CallActivity;
+
+import java.util.Timer;
+import java.util.TimerTask;
+import java.util.concurrent.Executors;
 
 /**
  * 通话状态改变控制类
@@ -161,8 +161,9 @@ public class VoipCallModifyLogic
 				builder.setMessage(callActivity.getString(R.string.ntf_upgrade_videocall));
 				builder.setPositiveButton(callActivity.getString(R.string.accept), ok);
 				builder.setNegativeButton(callActivity.getString(R.string.refuse), cancel);
-				builder.setOnDismissListener(dismiss);
+//				builder.setOnDismissListener(dismiss);
 				dialog = builder.create();
+				dialog.setOnDismissListener(dismiss);
 				dialog.show();
 
 				startDisDiaTimer();
@@ -264,9 +265,6 @@ public class VoipCallModifyLogic
 
 	/**
 	 * 描述：开始自动取消提示框计时器
-	 * 
-	 * @param dialogRender
-	 *            ：提示框
 	 */
 	private void startDisDiaTimer()
 	{

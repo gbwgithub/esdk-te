@@ -39,12 +39,14 @@ import com.huawei.te.example.R;
 /**
  * 类名称：CallComingActivity.java 类描述：语音或会议来电
  */
-public class CallComingActivity extends BaseActivity {
+public class CallComingActivity extends BaseActivity
+{
 	private static final String TAG = CallComingActivity.class.getSimpleName();
 
 	private static CallComingActivity instance;
 
-	public static CallComingActivity getInstance() {
+	public static CallComingActivity getInstance()
+	{
 		return instance;
 	}
 
@@ -129,7 +131,8 @@ public class CallComingActivity extends BaseActivity {
 	 * activity初始化
 	 */
 	@Override
-	protected void onCreate(Bundle savedInstanceState) {
+	protected void onCreate(Bundle savedInstanceState)
+	{
 		super.onCreate(null);
 		// 设置锁屏之上
 		LayoutUtil.setFrontToLock(this);
@@ -159,11 +162,14 @@ public class CallComingActivity extends BaseActivity {
 	/**
 	 * 初始化控件
 	 */
-	private void initComp() {
-		if (Constants.COMING_CALL == incomingType) {
+	private void initComp()
+	{
+		if (Constants.COMING_CALL == incomingType)
+		{
 			this.setContentView(R.layout.audio_callcoming);
 		}
-		if (Constants.COMING_VIDEO_CALL == incomingType) {
+		if (Constants.COMING_VIDEO_CALL == incomingType)
+		{
 			this.setContentView(R.layout.call_coming);
 		}
 		// 来电姓名
@@ -181,7 +187,8 @@ public class CallComingActivity extends BaseActivity {
 		callComingBackground = (View) findViewById(R.id.call_coming_background);
 		// begin added by l00220604 reason:图片动态加载
 		ImageView callComingImageHead = (ImageView) findViewById(R.id.img_incoming_head);
-		if (null != callComingImageHead) {
+		if (null != callComingImageHead)
+		{
 			// if (!ConfigApp.getInstance().isUsePadLayout()) {
 			// callComingImageHead.setImageDrawable(getResources().getDrawable(R.drawable.te_phone_call_head_photo));
 			// //
@@ -199,12 +206,14 @@ public class CallComingActivity extends BaseActivity {
 	/**
 	 * 方法描述：初始化Voip来电界面 void 备注：
 	 */
-	private void initCallComing() {
+	private void initCallComing()
+	{
 		String callInName = null;
 		// String callInType = null;
 		String callInNumber = null;
 
-		if (Constants.COMING_VIDEO_CALL != incomingType && Constants.COMING_CALL != incomingType) {
+		if (Constants.COMING_VIDEO_CALL != incomingType && Constants.COMING_CALL != incomingType)
+		{
 			return;
 		}
 		// if (!ConfigApp.getInstance().isUsePadLayout()) {
@@ -220,22 +229,26 @@ public class CallComingActivity extends BaseActivity {
 		// }
 		// 来电显示中，包含两个部分：来电名和来电号码
 		// 如果是陌生人,来电名直接显示号码
-		if (null == incomingContact) {
+		if (null == incomingContact)
+		{
 			// SX20做主叫SIP呼叫TE Mobile时，显示sx20的号码不对.
 			// 陌生人，匿称和号码不同时，显示匿称和号码
-			if (!incomingDisplayname.equals(incomingNumber)) {
+			if (!incomingDisplayname.equals(incomingNumber))
+			{
 				callInName = incomingDisplayname;
 				callInNumber = incomingNumber;
 			}
 			// 匿称和号码相同时，只需要显示号码
-			else {
+			else
+			{
 				callInName = incomingNumber;
 				callInNumber = "";
 			}
 			// SX20做主叫SIP呼叫TE Mobile时，显示sx20的号码不对
 		}
 		// 如果是联系人，则显示联系人名和来电号码
-		else {
+		else
+		{
 			callInName = incomingContact.getName();
 			callInNumber = incomingNumber;
 		}
@@ -255,27 +268,33 @@ public class CallComingActivity extends BaseActivity {
 		// incomingTypeTextView.setText(callInType);
 		LogUtil.d(TAG, "initDate...");
 		// 语音接听按钮点击事件
-		accepAudioBtn.setOnClickListener(new OnClickListener() {
+		accepAudioBtn.setOnClickListener(new OnClickListener()
+		{
 
 			@Override
-			public void onClick(View v) {
+			public void onClick(View v)
+			{
 				// 语音接听时，将视频呼叫设置为false
 				acceptVoipPhone(false);
 			}
 		});
 
 		// 视频接听按钮事件
-		acceptVideoBtn.setOnClickListener(new View.OnClickListener() {
+		acceptVideoBtn.setOnClickListener(new View.OnClickListener()
+		{
 			@Override
-			public void onClick(View v) {
+			public void onClick(View v)
+			{
 				acceptVoipPhone(true);
 			}
 		});
 
 		// 拒绝按钮事件
-		rejectBtn.setOnClickListener(new View.OnClickListener() {
+		rejectBtn.setOnClickListener(new View.OnClickListener()
+		{
 			@Override
-			public void onClick(View v) {
+			public void onClick(View v)
+			{
 				LogUtil.d(TAG, "rejectBtn is clicked.");
 				rejectVoipPhone();
 			}
@@ -293,7 +312,8 @@ public class CallComingActivity extends BaseActivity {
 	/**
 	 * voip来电接听后事件
 	 */
-	private void acceptVoipPhone(final boolean isVideo) {
+	private void acceptVoipPhone(final boolean isVideo)
+	{
 		LogUtil.d(TAG, "accept...isVideo=" + isVideo);
 		acceptVideoBtn.setClickable(false);
 		accepAudioBtn.setClickable(false);
@@ -306,7 +326,8 @@ public class CallComingActivity extends BaseActivity {
 	/**
 	 * 来电拒绝事件
 	 */
-	private void rejectVoipPhone() {
+	private void rejectVoipPhone()
+	{
 		LogUtil.d(TAG, "rejectVoipPhone()");
 		// 屏幕感光取消
 		DeviceUtil.releaseWakeLock(this);
@@ -321,23 +342,28 @@ public class CallComingActivity extends BaseActivity {
 		// @Override
 		// public boolean doInBackground() {
 		CallControl callColtrol = CallControl.getInstance();
-		if (null != callColtrol) {
+		if (null != callColtrol)
+		{
 			callColtrol.rejectCall(callid);
 		}
 		// return true;
 		// }
 		// });
 		// android中相关的view和控件不是线程安全的，我们必须单独做处理
-		new Thread() {
-			public void run() {
+		new Thread()
+		{
+			public void run()
+			{
 				handler.post(runnableUi);
 			}
 		}.start();
 	}
 
-	private Runnable runnableUi = new Runnable() {
+	private Runnable runnableUi = new Runnable()
+	{
 		@Override
-		public void run() {
+		public void run()
+		{
 			// 销毁界面
 			finish();
 		}
@@ -347,26 +373,31 @@ public class CallComingActivity extends BaseActivity {
 	/**
 	 * 描述：接听
 	 */
-	private void receiveCall(boolean isVideo) {
+	private void receiveCall(boolean isVideo)
+	{
 		LogUtil.d(TAG, "receiveCall()");
 		// 接听
 		CallControl callControl = CallControl.getInstance();
 		boolean answerRet = false;
-		if (callControl != null) {
-			if (null == Looper.myLooper()) {
+		if (callControl != null)
+		{
+			if (null == Looper.myLooper())
+			{
 				Looper.prepare();
 			}
 
 			answerRet = callControl.callAnswer(callid, isVideo);
 
 			// 防止接听同时对端取消
-			if (!answerRet) {
+			if (!answerRet)
+			{
 			}
 		}
 	}
 
 	@Override
-	protected void onNewIntent(Intent intent) {
+	protected void onNewIntent(Intent intent)
+	{
 		// 当该activity已经在栈顶时，该activity又被启动，则不调用oncreate，直接调onNewIntent
 		// 多路呼叫，收到来电后，又收到一路呼叫，则进行刷新来电界面
 		incomingType = intent.getIntExtra(Constants.COMING_VIEW_TYPE, -1);
@@ -382,7 +413,8 @@ public class CallComingActivity extends BaseActivity {
 		// END Added by z00199735 2014/03/07 Reason: DTS2014030605381
 		// SX20做主叫SIP呼叫TE Mobile时，显示sx20的号码不对
 		incomingContact = DataManager.getIns().getContactByNumber(incomingNumber);
-		if (incomingType == Constants.COMING_CALL) {
+		if (incomingType == Constants.COMING_CALL)
+		{
 			return;
 		}
 		super.onNewIntent(intent);
@@ -392,19 +424,22 @@ public class CallComingActivity extends BaseActivity {
 	 * 销毁页面
 	 */
 	@Override
-	public void finish() {
+	public void finish()
+	{
 		// 注销广播，停止振玲
 		stopRing();
 		LogUtil.d(TAG, "callComing finish");
 		cancelCallRejectTask();
 		super.finish();
-		if (null != handler) {
+		if (null != handler)
+		{
 			handler.removeMessages(0);
 		}
 	}
 
 	@Override
-	protected void onDestroy() {
+	protected void onDestroy()
+	{
 		super.onDestroy();
 		CallActivity.getInstance().getCallFragment().sendHandlerMessage(Constants.MsgCallFragment.MSG_NOTIFY_CALLCOMING_DESTORY, null);
 		instance = null;
@@ -413,17 +448,20 @@ public class CallComingActivity extends BaseActivity {
 	/**
 	 * 清空 Activity初始化的数据
 	 */
-	public void clearData() {
+	public void clearData()
+	{
 	}
 
 	// 采用在堆栈中直接finish后，不再需要广播
+
 	/**
 	 * 停止铃音，振动
-	 * 
-	 * @since 1.1
+	 *
 	 * @history 2013-8-27 v1.0.0 wWX183960 create
+	 * @since 1.1
 	 */
-	private void stopRing() {
+	private void stopRing()
+	{
 		LogUtil.d(TAG, "Stop Ring.");
 
 		MediaUtil.getIns().cancelVibrate();
@@ -433,7 +471,8 @@ public class CallComingActivity extends BaseActivity {
 	/**
 	 * 铃声，振动
 	 */
-	private void startRing() {
+	private void startRing()
+	{
 		// 铃声控制使用新的接口
 		// 铃声
 		MediaUtil.getIns().playCallComingRing();
@@ -442,16 +481,19 @@ public class CallComingActivity extends BaseActivity {
 	/**
 	 * 来电后设置回退键不可点击
 	 */
-	public void onBackPressed() {
+	public void onBackPressed()
+	{
 
 	}
 
 	/**
 	 * 新建呼叫超时拒绝任务 ,没用这个任务目前
 	 */
-	private final Runnable callRejectTask = new Runnable() {
+	private final Runnable callRejectTask = new Runnable()
+	{
 		@Override
-		public void run() {
+		public void run()
+		{
 			cancelCallRejectTask();
 			// 和硬终端对接时超时后发出拒绝通话操作，防止来电窗口不消失
 			rejectVoipPhone();
@@ -461,8 +503,10 @@ public class CallComingActivity extends BaseActivity {
 	/**
 	 * 重置callRejectTimer 终止callRejectTask
 	 */
-	public void cancelCallRejectTask() {
-		if (null != handler) {
+	public void cancelCallRejectTask()
+	{
+		if (null != handler)
+		{
 			handler.removeCallbacks(callRejectTask);
 		}
 	}

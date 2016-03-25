@@ -1,0 +1,411 @@
+<?xml version="1.0" encoding="utf-8"?>
+<merge xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <RelativeLayout
+        android:id="@+id/new_contact"
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent"
+        android:layout_centerHorizontal="true"
+        android:layout_gravity="center"
+        android:background="@color/white"
+        android:clickable="true"
+        android:orientation="vertical"
+        android:visibility="visible"
+        >
+
+        <RelativeLayout
+            android:id="@+id/add_contact_local_layout"
+            android:layout_width="fill_parent"
+            android:layout_height="70.67dp"
+            android:layout_alignParentBottom="true"
+            android:layout_gravity="center_horizontal|bottom"
+            android:background="#ffffff"
+            android:gravity="center"
+            android:orientation="vertical"
+            >
+
+            <Button
+                android:id="@+id/add_contact_local"
+                android:layout_width="fill_parent"
+                android:layout_height="52dp"
+                android:layout_centerHorizontal="true"
+                android:layout_centerVertical="true"
+                android:layout_gravity="center"
+                android:layout_marginBottom="6.33dp"
+                android:layout_marginLeft="15dp"
+                android:layout_marginRight="15dp"
+                android:layout_marginTop="6.33dp"
+                android:background="@drawable/new_contact_bg"
+                android:text="@string/add_to_contacts"
+                android:textColor="@color/te_home_bottom_text_focus"
+                android:textSize="20sp"/>
+
+            <Button
+                android:id="@+id/deleteContactBtn"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:layout_alignTop="@+id/add_contact_local"
+                android:layout_centerHorizontal="true"
+                android:layout_marginLeft="20dp"
+                android:layout_marginRight="20dp"
+                android:layout_weight="1"
+                android:background="@drawable/te_mobile_logout_btn"
+                android:text="@string/deletefriend"
+                android:textColor="#ffffff"
+                android:textSize="16sp"/>
+
+        </RelativeLayout>
+
+        <LinearLayout
+            android:id="@+id/new_contact1"
+            android:layout_width="fill_parent"
+            android:layout_height="fill_parent"
+            android:layout_above="@id/add_contact_local_layout"
+            android:layout_centerHorizontal="true"
+            android:layout_gravity="center"
+            android:orientation="vertical"
+            >
+
+            <!-- 头部按钮 -->
+
+            <RelativeLayout
+                android:id="@+id/create_bottom"
+                android:layout_width="fill_parent"
+                android:layout_height="46.67dp"
+                android:background="@color/te_home_bottom_text_focus">
+
+                <LinearLayout
+                    android:id="@+id/btn_detail_back"
+                    android:layout_width="wrap_content"
+                    android:layout_height="46.67dp"
+                    android:background="@color/te_home_bottom_text_focus"
+                    android:gravity="center_vertical">
+
+                    <ImageView
+                        android:layout_width="33dp"
+                        android:layout_height="33dp"
+                        android:layout_marginLeft="13dp"
+                        android:background="@drawable/te_btn_back_bg"
+                        android:duplicateParentState="true"
+                        android:gravity="center_vertical"/>
+                </LinearLayout>
+
+                <TextView
+                    android:id="@+id/new_contact_title"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerInParent="true"
+                    android:gravity="center"
+                    android:text="@string/contact_detail"
+                    android:textColor="#ffffff"
+                    android:textSize="20sp"/>
+
+                <LinearLayout
+                    android:id="@+id/btn_detail_edit"
+                    android:layout_width="wrap_content"
+                    android:layout_height="46.67dp"
+                    android:layout_alignParentRight="true"
+                    android:layout_marginRight="13dp"
+                    android:background="@color/te_home_bottom_text_focus"
+                    android:gravity="center_vertical"
+                    >
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="match_parent"
+                        android:layout_marginLeft="8dp"
+                        android:duplicateParentState="true"
+                        android:gravity="center_vertical"
+                        android:text="@string/edit"
+                        android:textColor="@color/te_contact_add_btn"
+                        android:textSize="20sp"/>
+                </LinearLayout>
+            </RelativeLayout>
+            <!-- end 头部按钮 -->
+            <!-- 头部 -->
+            <RelativeLayout
+                android:id="@+id/contact_head"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:layout_marginBottom="15dp"
+                android:gravity="center">
+
+                <LinearLayout
+                    android:id="@+id/nameLayout"
+                    android:layout_width="fill_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="12dp"
+                    android:layout_marginTop="20dp"
+                    android:gravity="center">
+
+                    <RelativeLayout
+                        android:layout_width="140dp"
+                        android:layout_height="140dp"
+                        >
+
+                        <ImageView
+                            android:id="@+id/contactDetailPhotoImgView"
+                            android:layout_width="140dp"
+                            android:layout_height="140dp"
+                            android:background="@drawable/te_phone_user_default_head_rim_200_200"/>
+
+                        <ImageView
+                            android:id="@+id/contacts_state_img"
+                            android:layout_width="20dp"
+                            android:layout_height="20dp"
+                            android:layout_alignParentBottom="true"
+                            android:layout_alignParentRight="true"
+                            android:layout_marginBottom="6dp"
+                            android:layout_marginRight="6dp"
+                            android:background="@drawable/te_mobile_home_state_online"
+                            />
+                    </RelativeLayout>
+                </LinearLayout>
+
+                <TextView
+                    android:id="@+id/contact_name"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@id/nameLayout"
+                    android:layout_centerHorizontal="true"
+                    android:gravity="center"
+                    android:paddingLeft="20dp"
+                    android:paddingRight="20dp"
+                    android:textColor="#333333"
+                    android:textSize="20sp"/>
+            </RelativeLayout>
+            <!-- end头部 -->
+
+            <ScrollView
+                android:id="@+id/contact_scrollview"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:layout_marginTop="15dp"
+                >
+
+                <LinearLayout
+                    android:id="@+id/mid_detail"
+                    android:layout_width="fill_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_horizontal"
+                    android:orientation="vertical"
+                    android:paddingLeft="20dp"
+                    android:paddingRight="20dp">
+
+                    <View
+                        android:layout_width="fill_parent"
+                        android:layout_height="2px"
+                        android:background="@drawable/tp_contact_detail_line"/>
+
+                    <RelativeLayout
+                        android:layout_width="fill_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginBottom="8dp"
+                        android:layout_marginTop="8dp"
+                        android:layout_weight="1">
+
+                        <TextView
+                            android:id="@+id/contact_detail_num_txt"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_alignParentLeft="true"
+                            android:layout_centerVertical="true"
+                            android:text="@string/input_num1"
+                            android:textColor="#999999"
+                            android:textSize="14.67sp"
+                            />
+
+                        <com.huawei.te.example.view.ListItemImageView
+                            android:id="@+id/callShortcutImgView"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_centerVertical="true"
+                            android:layout_marginRight="4dp"
+                            android:layout_toLeftOf="@+id/videoShotcutImgView"
+                            android:focusable="false"
+                            android:scaleType="fitCenter"
+                            android:src="@drawable/te_contact_detail_callaudio"/>
+                        
+                        <TextView
+                            android:id="@+id/contact_detail_num"
+                            android:layout_width="fill_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_centerVertical="true"
+                            android:layout_marginLeft="80dp"
+                            android:layout_toLeftOf="@id/callShortcutImgView"
+                            android:ellipsize="end"
+                            android:maxLines="2"
+                            android:textColor="#333333"
+                            android:textSize="17sp"
+                            />
+
+                        <!-- 右侧快捷按钮 -->
+                        <com.huawei.te.example.view.ListItemImageView
+                            android:id="@+id/videoShotcutImgView"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_alignParentRight="true"
+                            android:layout_centerVertical="true"
+                            android:layout_marginRight="12.5dp"
+                            android:focusable="false"
+                            android:scaleType="fitCenter"
+                            android:src="@drawable/te_contact_detail_callcamera"/>
+                    </RelativeLayout>
+
+                    <View
+                        android:layout_width="fill_parent"
+                        android:layout_height="3px"
+                        android:background="@drawable/tp_contact_detail_line"/>
+
+                    <RelativeLayout
+                        android:layout_width="fill_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginBottom="8dp"
+                        android:layout_marginTop="8dp"
+                        android:layout_weight="1"
+
+                        >
+
+                        <TextView
+                            android:id="@+id/contact_detail_mobilephone_txt"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_alignParentLeft="true"
+                            android:layout_centerVertical="true"
+                            android:text="@string/input_mobilePhone"
+                            android:textColor="#999999"
+                            android:textSize="14.67sp"
+                            />
+
+                        <TextView
+                            android:id="@+id/contact_detail_mobilephone"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_centerVertical="true"
+                            android:layout_marginLeft="80dp"
+                            android:textColor="#333333"
+                            android:textSize="17sp"/>
+                    </RelativeLayout>
+
+                    <View
+                        android:layout_width="fill_parent"
+                        android:layout_height="2px"
+                        android:background="@drawable/tp_contact_detail_line"/>
+
+                    <RelativeLayout
+                        android:layout_width="fill_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginBottom="8dp"
+                        android:layout_marginTop="8dp"
+                        android:layout_weight="1"
+
+                        >
+
+                        <TextView
+                            android:id="@+id/contact_detail_officephone_txt"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_alignParentLeft="true"
+                            android:layout_centerVertical="true"
+                            android:text="@string/input_officePhone"
+                            android:textColor="#999999"
+                            android:textSize="14.67sp"
+                            />
+
+                        <TextView
+                            android:id="@+id/contact_detail_officephone"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_centerVertical="true"
+                            android:layout_marginLeft="80dp"
+                            android:textColor="#333333"
+                            android:textSize="17sp"/>
+                    </RelativeLayout>
+
+                    <View
+                        android:layout_width="fill_parent"
+                        android:layout_height="2px"
+                        android:background="@drawable/tp_contact_detail_line"/>
+
+                    <RelativeLayout
+                        android:layout_width="fill_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginBottom="8dp"
+                        android:layout_marginTop="8dp"
+                        android:layout_weight="1"
+
+                        >
+
+                        <TextView
+                            android:id="@+id/contact_detail_email_txt"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_alignParentLeft="true"
+                            android:layout_centerVertical="true"
+                            android:text="@string/input_email"
+                            android:textColor="#999999"
+                            android:textSize="14.67sp"
+                            />
+
+                        <TextView
+                            android:id="@+id/contact_detail_email"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_centerVertical="true"
+                            android:layout_marginLeft="80dp"
+                            android:textColor="#333333"
+                            android:textSize="17sp"/>
+                    </RelativeLayout>
+
+                    <View
+                        android:layout_width="fill_parent"
+                        android:layout_height="2px"
+                        android:background="@drawable/tp_contact_detail_line"/>
+
+                    <RelativeLayout
+                        android:layout_width="fill_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginBottom="8dp"
+                        android:layout_marginTop="8dp"
+                        android:layout_weight="1"
+                        >
+
+                        <TextView
+                            android:id="@+id/contact_detail_addr_txt"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_alignParentLeft="true"
+                            android:layout_centerVertical="true"
+                            android:text="@string/input_address"
+                            android:textColor="#999999"
+                            android:textSize="14.67sp"
+                            />
+
+                        <TextView
+                            android:id="@+id/contact_detail_addr"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_centerVertical="true"
+                            android:layout_marginLeft="80dp"
+                            android:textColor="#333333"
+                            android:textSize="17sp"
+                            />
+                    </RelativeLayout>
+
+                    <View
+                        android:layout_width="fill_parent"
+                        android:layout_height="2px"
+                        android:background="@drawable/tp_contact_detail_line"/>
+
+                </LinearLayout>
+
+            </ScrollView>
+
+            <!-- end 创建联系人的主体 -->
+        </LinearLayout>
+
+
+    </RelativeLayout>
+</merge>

@@ -15,9 +15,6 @@
 
 package com.huawei.te.example.activity;
 
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
-
 import android.app.Fragment;
 import android.content.Intent;
 import android.graphics.Color;
@@ -55,6 +52,9 @@ import com.huawei.te.example.menubar.MenuBarContalPanel.Mode;
 import com.huawei.te.example.utils.AddTouchEventUtil;
 import com.huawei.utils.StringUtil;
 import com.huawei.voip.data.VoiceQuality.VoiceQualityLevel;
+
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 
 /**
  * render 操作流程 stop --> remove --> add --> start
@@ -406,7 +406,7 @@ public class CallFragment extends Fragment implements OnClickListener
 		// break;
 		case MsgCallFragment.MSG_LOW_BW_UPDATE_FAIL:
 			// showToast(R.string.low_bw_update_fail, 5000);
-			Toast.makeText(getActivity(), R.string.low_bw_update_fail, 5000).show();
+			Toast.makeText(getActivity(), R.string.low_bw_update_fail, Toast.LENGTH_LONG).show();
 			break;
 		// case MsgCallFragment.MSG_LOW_BW_AUDIO_NEGO_FAIL:
 		// showToast(R.string.low_bw_nego_fail_far_end);
@@ -1090,7 +1090,7 @@ public class CallFragment extends Fragment implements OnClickListener
 	 * 
 	 * @param isVideoCall
 	 *            是否是视频通话
-	 * @param tipTxt
+	 * @param tiptxt
 	 *            提示文字
 	 */
 	private void showCallLayout(String callNumber, boolean isVideoCall, String tiptxt)
