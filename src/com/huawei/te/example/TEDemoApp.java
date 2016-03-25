@@ -36,6 +36,7 @@ import com.huawei.te.example.activity.CallComingActivity;
 
 public class TEDemoApp extends Application
 {
+	//test123
 	private static final String TAG = TEDemoApp.class.getSimpleName();
 
 	public static String getTENumber()
